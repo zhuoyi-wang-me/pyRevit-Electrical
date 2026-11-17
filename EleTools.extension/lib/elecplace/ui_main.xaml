@@ -1,0 +1,434 @@
+<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Auto-Place Fixtures from Linked Rooms"
+        Height="800" Width="1260" MinHeight="620" MinWidth="1040"
+        WindowStartupLocation="CenterScreen" ShowInTaskbar="False"
+        FontFamily="Segoe UI" FontSize="12" Background="#F3F5F8">
+
+    <!-- ================================================================ -->
+    <!-- Styles                                                            -->
+    <!-- ================================================================ -->
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Margin" Value="3"/>
+            <Setter Property="Padding" Value="12,5"/>
+            <Setter Property="MinWidth" Value="70"/>
+            <Setter Property="Background" Value="#FFFFFF"/>
+            <Setter Property="BorderBrush" Value="#B8C2CC"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <Style x:Key="PrimaryButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Background" Value="#1F6FB2"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="#1A5E97"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="Margin" Value="3"/>
+            <Setter Property="Padding" Value="4,3"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+        <Style TargetType="ComboBox">
+            <Setter Property="Margin" Value="3"/>
+            <Setter Property="Padding" Value="5,3"/>
+        </Style>
+        <Style TargetType="CheckBox">
+            <Setter Property="Margin" Value="3,5"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+        <Style x:Key="FieldLabel" TargetType="TextBlock">
+            <Setter Property="Width" Value="150"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Foreground" Value="#33414E"/>
+        </Style>
+        <Style x:Key="Hint" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#6B7785"/>
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="Margin" Value="153,0,3,5"/>
+        </Style>
+        <Style TargetType="GroupBox">
+            <Setter Property="Margin" Value="0,5,0,5"/>
+            <Setter Property="Padding" Value="6"/>
+            <Setter Property="BorderBrush" Value="#C9D2DB"/>
+        </Style>
+        <Style TargetType="DataGrid">
+            <Setter Property="AutoGenerateColumns" Value="True"/>
+            <Setter Property="IsReadOnly" Value="True"/>
+            <Setter Property="CanUserAddRows" Value="False"/>
+            <Setter Property="CanUserDeleteRows" Value="False"/>
+            <Setter Property="CanUserSortColumns" Value="False"/>
+            <Setter Property="SelectionMode" Value="Single"/>
+            <Setter Property="HeadersVisibility" Value="Column"/>
+            <Setter Property="GridLinesVisibility" Value="Horizontal"/>
+            <Setter Property="HorizontalGridLinesBrush" Value="#E3E8EE"/>
+            <Setter Property="AlternatingRowBackground" Value="#F7F9FB"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#C9D2DB"/>
+            <Setter Property="RowHeight" Value="24"/>
+            <Setter Property="Margin" Value="3"/>
+        </Style>
+    </Window.Resources>
+
+    <DockPanel>
+        <!-- ============================================================ -->
+        <!-- Header: title + link selection                               -->
+        <!-- ============================================================ -->
+        <Border DockPanel.Dock="Top" Background="#1F3A52" Padding="14,10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel>
+                    <TextBlock Text="Auto-Place Fixtures" Foreground="White" FontSize="18" FontWeight="SemiBold"/>
+                    <TextBlock Text="Electrical, mechanical and plumbing families on the walls of linked rooms"
+                               Foreground="#B9CCDD"/>
+                </StackPanel>
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="Architectural link" Foreground="White" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                    <ComboBox x:Name="cbLink" Width="380" SelectionChanged="on_link_changed"/>
+                    <TextBlock x:Name="txtRoomsInfo" Foreground="#FFD27F" VerticalAlignment="Center"
+                               Margin="10,0,0,0" FontWeight="SemiBold"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- ============================================================ -->
+        <!-- Footer: status + main actions                                -->
+        <!-- ============================================================ -->
+        <Border DockPanel.Dock="Bottom" Background="White" BorderBrush="#C9D2DB"
+                BorderThickness="0,1,0,0" Padding="10,6">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock x:Name="txtStatus" VerticalAlignment="Center" Foreground="#33414E"
+                           TextTrimming="CharacterEllipsis"/>
+                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                    <Button Content="Load template..." Click="on_load_template"/>
+                    <Button Content="Save template..." Click="on_save_template"/>
+                    <Button Content="Preview" Click="on_preview" MinWidth="90"/>
+                    <Button x:Name="btnPlace" Content="Place fixtures" Style="{StaticResource PrimaryButton}"
+                            Click="on_place" MinWidth="120"/>
+                    <Button Content="Cancel" Click="on_cancel"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <TabControl x:Name="tabs" Margin="8">
+            <!-- ======================================================== -->
+            <!-- TAB 1 - Rules                                            -->
+            <!-- ======================================================== -->
+            <TabItem Header="  1. Rules  ">
+                <Grid Margin="6">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="8"/>
+                        <ColumnDefinition Width="460"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Rule list -->
+                    <DockPanel Grid.Column="0">
+                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+                            <TextBlock Text="Placement rules" FontWeight="SemiBold" FontSize="14"
+                                       VerticalAlignment="Center" Margin="3,0,12,0"/>
+                            <Button Content="Duplicate" Click="on_duplicate_rule"/>
+                            <Button Content="Delete" Click="on_delete_rule"/>
+                            <Button Content="Move up" Click="on_move_up"/>
+                            <Button Content="Move down" Click="on_move_down"/>
+                        </StackPanel>
+                        <TextBlock DockPanel.Dock="Bottom" Style="{StaticResource Hint}" Margin="3,4"
+                                   Text="Select a rule to edit it on the right. Rules run top to bottom; later rules avoid positions used by earlier ones. The last rule set is restored the next time you open the tool."/>
+                        <DataGrid x:Name="rulesGrid" SelectionChanged="on_rule_selected"/>
+                    </DockPanel>
+
+                    <!-- Rule editor -->
+                    <Border Grid.Column="2" Background="White" BorderBrush="#C9D2DB" BorderThickness="1" CornerRadius="4">
+                        <DockPanel>
+                            <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal"
+                                        HorizontalAlignment="Right" Margin="6">
+                                <Button Content="Clear" Click="on_new_rule"/>
+                                <Button Content="Update selected" Click="on_update_rule"/>
+                                <Button Content="Add rule" Style="{StaticResource PrimaryButton}" Click="on_add_rule"/>
+                            </StackPanel>
+                            <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="10,8">
+                                <StackPanel>
+                                    <DockPanel>
+                                        <CheckBox x:Name="chkEnabled" DockPanel.Dock="Right" Content="Enabled" IsChecked="True"/>
+                                        <TextBlock x:Name="txtEditorTitle" Text="New rule" FontWeight="SemiBold" FontSize="14"/>
+                                    </DockPanel>
+
+                                    <GroupBox Header="What to place">
+                                        <StackPanel>
+                                            <DockPanel>
+                                                <TextBlock Text="Placement" Style="{StaticResource FieldLabel}"/>
+                                                <ComboBox x:Name="cbKind" SelectionChanged="on_kind_changed"/>
+                                            </DockPanel>
+                                            <DockPanel>
+                                                <TextBlock Text="Category" Style="{StaticResource FieldLabel}"/>
+                                                <ComboBox x:Name="cbCategory" SelectionChanged="on_category_changed"/>
+                                            </DockPanel>
+                                            <DockPanel>
+                                                <TextBlock Text="Family type" Style="{StaticResource FieldLabel}"/>
+                                                <ComboBox x:Name="cbType" SelectionChanged="on_type_changed"/>
+                                            </DockPanel>
+                                            <TextBlock x:Name="txtHostInfo" Style="{StaticResource Hint}"/>
+                                            <StackPanel x:Name="pnlHeight">
+                                                <DockPanel x:Name="pnlHeightRef">
+                                                    <TextBlock Text="Height measured from" Style="{StaticResource FieldLabel}"/>
+                                                    <ComboBox x:Name="cbHeightRef" SelectionChanged="on_height_ref_changed"/>
+                                                </DockPanel>
+                                                <DockPanel>
+                                                    <TextBlock x:Name="lblHeight" Text="Height above FFL" Style="{StaticResource FieldLabel}"/>
+                                                    <TextBox x:Name="txtHeight"/>
+                                                </DockPanel>
+                                                <TextBlock x:Name="txtHeightHint" Style="{StaticResource Hint}"/>
+                                            </StackPanel>
+                                            <StackPanel x:Name="pnlWallOffset">
+                                                <DockPanel>
+                                                    <TextBlock Text="Offset from wall" Style="{StaticResource FieldLabel}"/>
+                                                    <TextBox x:Name="txtWallOffset"/>
+                                                </DockPanel>
+                                                <TextBlock Style="{StaticResource Hint}"
+                                                           Text="Level-based families only: distance from the wall face into the room (e.g. half the depth of a unit whose origin is at its centre)."/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </GroupBox>
+
+                                    <GroupBox x:Name="grpQuantity" Header="How many per room">
+                                        <StackPanel>
+                                            <DockPanel>
+                                                <TextBlock Text="Quantity rule" Style="{StaticResource FieldLabel}"/>
+                                                <ComboBox x:Name="cbQtyMethod" SelectionChanged="on_qty_method_changed"/>
+                                            </DockPanel>
+                                            <DockPanel>
+                                                <TextBlock x:Name="lblQtyValue" Text="Value" Style="{StaticResource FieldLabel}"/>
+                                                <TextBox x:Name="txtQtyValue"/>
+                                            </DockPanel>
+                                            <TextBlock x:Name="txtQtyHint" Style="{StaticResource Hint}"/>
+                                            <DockPanel>
+                                                <TextBlock Text="Min / max per room" Style="{StaticResource FieldLabel}"/>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBox x:Name="txtMinQty" Width="60"/>
+                                                    <TextBlock Text="to" VerticalAlignment="Center" Margin="4,0"/>
+                                                    <TextBox x:Name="txtMaxQty" Width="60"/>
+                                                    <TextBlock Text="(0 = no limit)" VerticalAlignment="Center"
+                                                               Foreground="#6B7785" Margin="6,0"/>
+                                                </StackPanel>
+                                            </DockPanel>
+                                        </StackPanel>
+                                    </GroupBox>
+
+                                    <GroupBox x:Name="grpEquipment" Header="Equipment to serve">
+                                        <StackPanel>
+                                            <DockPanel>
+                                                <TextBlock Text="Serve categories" Style="{StaticResource FieldLabel}"/>
+                                                <StackPanel>
+                                                    <CheckBox x:Name="chkEqMech" Content="Mechanical Equipment"/>
+                                                    <CheckBox x:Name="chkEqPlumbFix" Content="Plumbing Fixtures"/>
+                                                    <CheckBox x:Name="chkEqPlumbEq" Content="Plumbing Equipment"/>
+                                                    <CheckBox x:Name="chkEqDuctAcc" Content="Duct Accessories (MSFD, VAV, dampers)"/>
+                                                    <CheckBox x:Name="chkEqPipeAcc" Content="Pipe Accessories (motorised valves)"/>
+                                                    <CheckBox x:Name="chkEqVertCirc" Content="Vertical Circulation (lifts, escalators, travelators)"/>
+                                                    <CheckBox x:Name="chkEqSpecialty" Content="Specialty Equipment (older lift / escalator families)"/>
+                                                </StackPanel>
+                                            </DockPanel>
+                                            <DockPanel>
+                                                <TextBlock Text="Family/type name contains" Style="{StaticResource FieldLabel}"/>
+                                                <TextBox x:Name="txtEquipKeywords"/>
+                                            </DockPanel>
+                                            <TextBlock Style="{StaticResource Hint}"
+                                                       Text="Optional, comma separated, e.g. MSFD or FCU, BCU - for lifts: lift, elevator, escalator, travelator. Empty = every item of the ticked categories."/>
+                                            <DockPanel>
+                                                <TextBlock Text="Only these types" Style="{StaticResource FieldLabel}"/>
+                                                <Button DockPanel.Dock="Right" Content="All" MinWidth="40" Margin="4,0,0,0"
+                                                        Click="on_clear_equip_types"/>
+                                                <Button DockPanel.Dock="Right" Content="Pick types..." MinWidth="90"
+                                                        Click="on_pick_equip_types"/>
+                                                <TextBlock x:Name="txtEquipTypes" VerticalAlignment="Center"
+                                                           TextTrimming="CharacterEllipsis" Text="All types"/>
+                                            </DockPanel>
+                                            <TextBlock Style="{StaticResource Hint}"
+                                                       Text="Pick types... lists every type of the ticked categories found in 'Equipment from', with counts. Picked types replace the name filter above; All = no type filter."/>
+                                            <DockPanel>
+                                                <TextBlock Text="Equipment from" Style="{StaticResource FieldLabel}"/>
+                                                <ComboBox x:Name="cbEquipSource"/>
+                                            </DockPanel>
+                                            <DockPanel x:Name="pnlMaxDist">
+                                                <TextBlock Text="Max. distance to wall" Style="{StaticResource FieldLabel}"/>
+                                                <TextBox x:Name="txtMaxDist"/>
+                                            </DockPanel>
+                                            <DockPanel x:Name="pnlWallFace">
+                                                <TextBlock Text="Wall face" Style="{StaticResource FieldLabel}"/>
+                                                <ComboBox x:Name="cbWallFace"/>
+                                            </DockPanel>
+                                            <StackPanel x:Name="pnlNearOffsets">
+                                                <DockPanel>
+                                                    <TextBlock Text="X / Y offset direction" Style="{StaticResource FieldLabel}"/>
+                                                    <ComboBox x:Name="cbNearAxes" SelectionChanged="on_near_axes_changed"/>
+                                                </DockPanel>
+                                                <DockPanel>
+                                                    <TextBlock Text="Measure offsets from" Style="{StaticResource FieldLabel}"/>
+                                                    <ComboBox x:Name="cbNearFrom" SelectionChanged="on_near_axes_changed"/>
+                                                </DockPanel>
+                                                <DockPanel>
+                                                    <TextBlock Text="Offset X / Y" Style="{StaticResource FieldLabel}"/>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock Text="X" VerticalAlignment="Center" Margin="3,0"/>
+                                                        <TextBox x:Name="txtNearX" Width="90"/>
+                                                        <TextBlock x:Name="lblNearY" Text="Y" VerticalAlignment="Center" Margin="10,0,3,0"/>
+                                                        <TextBox x:Name="txtNearY" Width="90"/>
+                                                    </StackPanel>
+                                                </DockPanel>
+                                                <TextBlock x:Name="txtNearHint" Style="{StaticResource Hint}"/>
+                                            </StackPanel>
+                                            <DockPanel>
+                                                <TextBlock Text="Fixtures per equipment" Style="{StaticResource FieldLabel}"/>
+                                                <TextBox x:Name="txtPerEquip"/>
+                                            </DockPanel>
+                                            <TextBlock x:Name="txtEquipHint" Style="{StaticResource Hint}"/>
+                                        </StackPanel>
+                                    </GroupBox>
+
+                                    <GroupBox x:Name="grpOnEquip" Header="Position on the equipment">
+                                        <StackPanel>
+                                            <DockPanel>
+                                                <TextBlock Text="Side of equipment" Style="{StaticResource FieldLabel}"/>
+                                                <ComboBox x:Name="cbSide" SelectionChanged="on_side_changed"/>
+                                            </DockPanel>
+                                            <DockPanel>
+                                                <TextBlock Text="Offset X / Y / Z" Style="{StaticResource FieldLabel}"/>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock Text="X" VerticalAlignment="Center" Margin="3,0"/>
+                                                    <TextBox x:Name="txtOffX" Width="70"/>
+                                                    <TextBlock Text="Y" VerticalAlignment="Center" Margin="8,0,3,0"/>
+                                                    <TextBox x:Name="txtOffY" Width="70"/>
+                                                    <TextBlock Text="Z" VerticalAlignment="Center" Margin="8,0,3,0"/>
+                                                    <TextBox x:Name="txtOffZ" Width="70"/>
+                                                </StackPanel>
+                                            </DockPanel>
+                                            <DockPanel>
+                                                <TextBlock Text="Offset Z from" Style="{StaticResource FieldLabel}"/>
+                                                <ComboBox x:Name="cbZRef"/>
+                                            </DockPanel>
+                                            <TextBlock x:Name="txtSideHint" Style="{StaticResource Hint}"/>
+                                            <TextBlock Style="{StaticResource Hint}"
+                                                       Text="Offsets use the unit's own axes (X = its right, Y = its front, Z = up), measured from the centre of the chosen side, so they follow rotated units and accessories. Negative = opposite direction. Face-based types are hosted on the unit face (host or linked, using the default {3D} view); level-based types are placed at the point."/>
+                                        </StackPanel>
+                                    </GroupBox>
+
+                                    <GroupBox Header="Target rooms">
+                                        <StackPanel>
+                                            <DockPanel>
+                                                <TextBlock Text="Rooms" Style="{StaticResource FieldLabel}"/>
+                                                <ComboBox x:Name="cbScope" SelectionChanged="on_scope_changed"/>
+                                            </DockPanel>
+                                            <DockPanel>
+                                                <TextBlock Text="Filter" Style="{StaticResource FieldLabel}"/>
+                                                <Button DockPanel.Dock="Right" Content="Pick..." MinWidth="60" Click="on_pick_rooms"/>
+                                                <TextBox x:Name="txtRoomFilter" TextChanged="on_room_filter_changed"/>
+                                            </DockPanel>
+                                            <TextBlock x:Name="txtRoomMatch" Style="{StaticResource Hint}" FontWeight="SemiBold"/>
+                                        </StackPanel>
+                                    </GroupBox>
+
+                                    <GroupBox Header="Write data to the placed fixtures">
+                                        <StackPanel>
+                                            <DockPanel>
+                                                <TextBlock Text="Fixture parameter" Style="{StaticResource FieldLabel}"/>
+                                                <ComboBox x:Name="cbParam" IsEditable="True"/>
+                                            </DockPanel>
+                                            <DockPanel>
+                                                <TextBlock Text="Value" Style="{StaticResource FieldLabel}"/>
+                                                <Button DockPanel.Dock="Right" Content="Add line" MinWidth="70" Click="on_add_data_line"/>
+                                                <ComboBox x:Name="cbToken" IsEditable="True"/>
+                                            </DockPanel>
+                                            <TextBlock Style="{StaticResource Hint}"
+                                                       Text="Pick a parameter, pick a token or type fixed text, then Add line. You can also edit the lines directly."/>
+                                            <TextBox x:Name="txtMappings" Height="96" AcceptsReturn="True"
+                                                     TextWrapping="NoWrap" FontFamily="Consolas"
+                                                     VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"/>
+                                            <TextBlock Style="{StaticResource Hint}" Margin="3,2,3,4"
+                                                       Text="One line per parameter:  Parameter = text with {tokens}. Tokens: {Room Number} {Room Name} {Room Level} {Room:any room parameter} {Equip:any parameter of the served equipment, e.g. Mark, Type Mark, System Name} {Equip Family} {Equip Type} {Equip Id} {Equip Model} {Fixture Type} {Date}. Rooms and equipment can be in linked models. Example: Comments = Serves {Equip:Mark} - Room {Room Number}"/>
+                                        </StackPanel>
+                                    </GroupBox>
+                                </StackPanel>
+                            </ScrollViewer>
+                        </DockPanel>
+                    </Border>
+                </Grid>
+            </TabItem>
+
+            <!-- ======================================================== -->
+            <!-- TAB 2 - Preview                                          -->
+            <!-- ======================================================== -->
+            <TabItem Header="  2. Preview  ">
+                <Grid Margin="6">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="200"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock x:Name="txtPreviewSummary" FontSize="13" FontWeight="SemiBold" Margin="3,3,3,6"
+                               TextWrapping="Wrap"
+                               Text="Click Preview to calculate placements. Nothing is changed in the model until you click Place fixtures."/>
+                    <DataGrid Grid.Row="1" x:Name="previewGrid"/>
+                    <TextBlock Grid.Row="2" Text="Skipped rooms, shortfalls and warnings" FontWeight="SemiBold" Margin="3,8,3,3"/>
+                    <DataGrid Grid.Row="3" x:Name="issuesGrid"/>
+                </Grid>
+            </TabItem>
+
+            <!-- ======================================================== -->
+            <!-- TAB 3 - Options                                          -->
+            <!-- ======================================================== -->
+            <TabItem Header="  3. Options  ">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel Margin="10" MaxWidth="760" HorizontalAlignment="Left">
+                        <GroupBox Header="Clearances and tolerances (millimetres)">
+                            <StackPanel>
+                                <DockPanel><TextBlock Text="Corner / wall-end clearance" Style="{StaticResource FieldLabel}" Width="260"/><TextBox x:Name="txtCornerClr" Width="120" HorizontalAlignment="Left"/></DockPanel>
+                                <DockPanel><TextBlock Text="Door / window clearance" Style="{StaticResource FieldLabel}" Width="260"/><TextBox x:Name="txtOpeningClr" Width="120" HorizontalAlignment="Left"/></DockPanel>
+                                <DockPanel><TextBlock Text="Ignore wall segments shorter than" Style="{StaticResource FieldLabel}" Width="260"/><TextBox x:Name="txtMinSeg" Width="120" HorizontalAlignment="Left"/></DockPanel>
+                                <DockPanel><TextBlock Text="Duplicate detection radius" Style="{StaticResource FieldLabel}" Width="260"/><TextBox x:Name="txtDupTol" Width="120" HorizontalAlignment="Left"/></DockPanel>
+                                <DockPanel><TextBlock Text="Spacing of fixtures per equipment" Style="{StaticResource FieldLabel}" Width="260"/><TextBox x:Name="txtEquipSpacing" Width="120" HorizontalAlignment="Left"/></DockPanel>
+                                <DockPanel><TextBlock Text="Maximum mounting height" Style="{StaticResource FieldLabel}" Width="260"/><TextBox x:Name="txtMaxHeight" Width="120" HorizontalAlignment="Left"/></DockPanel>
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox Header="Clash avoidance">
+                            <StackPanel>
+                                <CheckBox x:Name="chkAvoidClashes" Content="Keep new fixtures clear of MSFDs, duct / pipe accessories, mechanical and plumbing equipment, air terminals and other electrical items (this project + all links)"/>
+                                <CheckBox x:Name="chkClashCurves" Content="Also keep clear of ducts, pipes, cable trays and conduits (slower on large models)"/>
+                                <DockPanel><TextBlock Text="Clear gap around each new fixture" Style="{StaticResource FieldLabel}" Width="260"/><TextBox x:Name="txtClashClearance" Width="120" HorizontalAlignment="Left"/></DockPanel>
+                                <DockPanel><TextBlock Text="Max. slide to find a clear spot" Style="{StaticResource FieldLabel}" Width="260"/><TextBox x:Name="txtClashSlide" Width="120" HorizontalAlignment="Left"/></DockPanel>
+                                <DockPanel><TextBlock Text="Slide step" Style="{StaticResource FieldLabel}" Width="260"/><TextBox x:Name="txtClashStep" Width="120" HorizontalAlignment="Left"/></DockPanel>
+                                <TextBlock Style="{StaticResource Hint}" Margin="3,4"
+                                           Text="Sizes come from the real geometry of the fixture type and of each obstacle (rotated units are measured along their own axes). A clashing fixture slides along the wall - away from the unit it serves - to the nearest clear spot; the Preview notes how far it moved and what it avoided. New fixtures also avoid each other."/>
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox Header="Behaviour">
+                            <StackPanel>
+                                <CheckBox x:Name="chkAvoidOpenings" Content="Avoid door and window openings"/>
+                                <CheckBox x:Name="chkFinishBoundary" Content="Use finish-face room boundary (untick = wall centreline)"/>
+                                <CheckBox x:Name="chkBaseOffset" Content="Add the room's Base Offset to Finished Floor Level"/>
+                                <CheckBox x:Name="chkAllowLevelBased" Content="Allow level-based (non-hosted) families - needed for most mechanical / plumbing equipment"/>
+                                <CheckBox x:Name="chkScheduleLevel" Content="Set Schedule Level of face-hosted fixtures to the matching host level"/>
+                                <CheckBox x:Name="chkCsv" Content="Export CSV report after placement"/>
+                                <CheckBox x:Name="chkWriteComments" Margin="0,6,0,0"
+                                          Content="Write placement info into 'Comments' (tag | room | link | serves ...) - off = Comments left empty"/>
+                                <DockPanel Margin="0,6,0,0"><TextBlock Text="Comments tag on placed elements" Style="{StaticResource FieldLabel}" Width="260"/><TextBox x:Name="txtCommentTag" Width="200" HorizontalAlignment="Left"/></DockPanel>
+                            </StackPanel>
+                        </GroupBox>
+                        <StackPanel Orientation="Horizontal">
+                            <Button Content="Save as my defaults" Click="on_save_options"/>
+                            <TextBlock Style="{StaticResource Hint}" Margin="8,0" VerticalAlignment="Center"
+                                       Text="Options are applied automatically when you Preview or Place."/>
+                        </StackPanel>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+        </TabControl>
+    </DockPanel>
+</Window>

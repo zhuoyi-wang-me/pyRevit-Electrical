@@ -1,0 +1,9 @@
+title: Create Earthing
+  Routes
+tooltip: >-
+  EARTHING ROUTE GENERATOR. In the active Floor Plan, draws 2D orthogonal
+  earthing lines (detail lines) from the selected electrical panels to the
+  selected earth bar, going round columns, walls and MEP elements of this
+  model and of its links with the clearance you set. Preview first, then
+  create. Creates detail lines only - no 3D geometry, wires, conduits or trays.
+author: BHEEM

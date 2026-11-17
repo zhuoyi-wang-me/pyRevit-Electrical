@@ -1,0 +1,9 @@
+title: Auto Tag
+  Layout
+tooltip: >-
+  AUTO TAG LAYOUT. Tags the elements of the active view (enlarged layout) with
+  the tag family types you choose for each category. The tags are placed in a
+  column left and right of the layout, stacked without overlapping, with
+  right-angled leaders that do not cross. Creates tags only; one Undo removes
+  them all.
+author: BHEEM

@@ -1,0 +1,11 @@
+title: Connect
+tooltip: >
+  Auto-Connect Cable Trays
+
+  Select two groups of cable trays (e.g. 12 on one side, 12 on the other).
+  The tool matches trays by Family Type / Service Type, pairs them by
+  nearest proximity, and automatically generates the correct elbow,
+  transition, or union fittings to join them -- at any horizontal angle,
+  preserving size, width, height and elevation. A summary report is shown
+  at the end listing connected, skipped, and failed trays.
+author: BHEEM

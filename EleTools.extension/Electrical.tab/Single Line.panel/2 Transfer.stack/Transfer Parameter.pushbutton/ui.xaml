@@ -1,0 +1,161 @@
+<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Transfer Parameter Between Families" Height="680" Width="900"
+        WindowStartupLocation="CenterScreen" ResizeMode="CanResize"
+        Background="#F4F4F4">
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Padding" Value="12,6"/>
+            <Setter Property="Margin" Value="4"/>
+            <Setter Property="FontSize" Value="13"/>
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="Margin" Value="4,2"/>
+            <Setter Property="Padding" Value="4"/>
+        </Style>
+        <Style TargetType="ComboBox">
+            <Setter Property="Margin" Value="4,2"/>
+            <Setter Property="Padding" Value="4"/>
+        </Style>
+        <Style TargetType="Label">
+            <Setter Property="Margin" Value="4,4,4,0"/>
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#555555"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="14">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Text="Transfer Parameter Between Families" FontSize="20" FontWeight="Bold" Margin="0,0,0,10"/>
+
+        <Grid Grid.Row="1" Margin="0,0,0,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" x:Name="txtSourceInfo" Text="Source: 0 elements" FontSize="12" Foreground="#777777"/>
+            <TextBlock Grid.Column="1" x:Name="txtTargetInfo" Text="Target: 0 elements" FontSize="12" Foreground="#777777"/>
+        </Grid>
+
+        <Border Grid.Row="2" BorderBrush="#DDDDDD" BorderThickness="1" Background="White"
+                Padding="10" Margin="0,0,0,10" CornerRadius="4">
+            <StackPanel>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0" Margin="0,0,8,0">
+                        <TextBlock Text="SOURCE (copy FROM)" FontWeight="Bold" Foreground="#E65100" Margin="0,0,0,4"/>
+                        <Label Content="Source Parameter(s) - comma separated, tried in order"/>
+                        <ComboBox x:Name="cmbSourceParam" IsEditable="True"/>
+                        <Button x:Name="btnPickSource" Content="Pick Source Elements" Click="btnPickSource_Click"
+                                Background="#E65100" Foreground="White" HorizontalAlignment="Left"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="1" Margin="8,0,0,0">
+                        <TextBlock Text="TARGET (copy TO)" FontWeight="Bold" Foreground="#1565C0" Margin="0,0,0,4"/>
+                        <Label Content="Target Parameter"/>
+                        <ComboBox x:Name="cmbTargetParam" IsEditable="True"/>
+                        <Button x:Name="btnPickTarget" Content="Pick Target Elements" Click="btnPickTarget_Click"
+                                Background="#1565C0" Foreground="White" HorizontalAlignment="Left"/>
+                    </StackPanel>
+                </Grid>
+
+                <Grid Margin="0,10,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0" Orientation="Horizontal">
+                        <Label Content="Pairing Method" VerticalAlignment="Center"/>
+                        <ComboBox x:Name="cmbPairing" Width="380" SelectedIndex="0" Margin="8,0,0,0">
+                            <ComboBoxItem Content="Nearest position (handles mixed families &amp; counts)"/>
+                            <ComboBoxItem Content="Ordered - sort each side, pair by index"/>
+                            <ComboBoxItem Content="Manual - click each pair one at a time (best for far / irregularly-routed elements)"/>
+                        </ComboBox>
+                    </StackPanel>
+                    <Button Grid.Column="1" Content="Update Preview" x:Name="btnRefresh" Click="btnRefresh_Click"/>
+                </Grid>
+
+                <Grid Margin="0,6,0,0" x:Name="orderedSortPanel">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="0,0,8,0">
+                        <Label Content="Source Sort" VerticalAlignment="Center"/>
+                        <ComboBox x:Name="cmbSourceSort" SelectedIndex="0" Width="180" Margin="8,0,0,0">
+                            <ComboBoxItem Content="Selection order"/>
+                            <ComboBoxItem Content="Left to right (X)"/>
+                            <ComboBoxItem Content="Right to left (X)"/>
+                            <ComboBoxItem Content="Top to bottom (Y)"/>
+                            <ComboBoxItem Content="Bottom to top (Y)"/>
+                        </ComboBox>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="8,0,0,0">
+                        <Label Content="Target Sort" VerticalAlignment="Center"/>
+                        <ComboBox x:Name="cmbTargetSort" SelectedIndex="0" Width="180" Margin="8,0,0,0">
+                            <ComboBoxItem Content="Selection order"/>
+                            <ComboBoxItem Content="Left to right (X)"/>
+                            <ComboBoxItem Content="Right to left (X)"/>
+                            <ComboBoxItem Content="Top to bottom (Y)"/>
+                            <ComboBoxItem Content="Bottom to top (Y)"/>
+                        </ComboBox>
+                    </StackPanel>
+                </Grid>
+
+                <Grid Margin="0,6,0,0" x:Name="manualPairPanel">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" x:Name="txtManualCount" Text="0 manual pair(s) added"
+                               VerticalAlignment="Center" Foreground="#555555"/>
+                    <Button Grid.Column="1" x:Name="btnAddPair" Content="+ Add Pair (click source, then target)"
+                            Click="btnAddPair_Click" Background="#6A1B9A" Foreground="White"/>
+                    <Button Grid.Column="2" x:Name="btnUndoPair" Content="Undo Last Pair" Click="btnUndoPair_Click"/>
+                </Grid>
+
+                <CheckBox x:Name="chkOverwrite" Content="Overwrite existing target values (uncheck to only fill blanks)"
+                          IsChecked="True" Margin="0,8,0,0"/>
+            </StackPanel>
+        </Border>
+
+        <DataGrid Grid.Row="3" x:Name="dgPreview" AutoGenerateColumns="False"
+                   CanUserAddRows="False" IsReadOnly="True" Margin="0,0,0,10"
+                   AlternatingRowBackground="#F7F7F7" GridLinesVisibility="Horizontal"
+                   HeadersVisibility="Column" RowHeaderWidth="0">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="#" Binding="{Binding Order}" Width="35"/>
+                <DataGridTextColumn Header="Source Id" Binding="{Binding SourceId}" Width="70"/>
+                <DataGridTextColumn Header="Source Type" Binding="{Binding SourceType}" Width="*"/>
+                <DataGridTextColumn Header="Matched Param" Binding="{Binding MatchedParam}" Width="110"/>
+                <DataGridTextColumn Header="Source Value" Binding="{Binding SourceValue}" Width="130"/>
+                <DataGridTextColumn Header="Target Id" Binding="{Binding TargetId}" Width="70"/>
+                <DataGridTextColumn Header="Target Type" Binding="{Binding TargetType}" Width="*"/>
+                <DataGridTextColumn Header="Current Target Value" Binding="{Binding CurrentTargetValue}" Width="130"/>
+                <DataGridTextColumn Header="New Target Value" Binding="{Binding NewTargetValue}" Width="130"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <TextBlock Grid.Row="4" x:Name="txtStatus" Text="" Foreground="#B00020" Margin="0,0,0,6" TextWrapping="Wrap"/>
+
+        <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button x:Name="btnCancel" Content="Cancel" Width="100" Click="btnCancel_Click"/>
+            <Button x:Name="btnApply" Content="Apply Transfer" Width="150" Click="btnApply_Click"
+                    Background="#2E7D32" Foreground="White" FontWeight="Bold"/>
+        </StackPanel>
+    </Grid>
+</Window>

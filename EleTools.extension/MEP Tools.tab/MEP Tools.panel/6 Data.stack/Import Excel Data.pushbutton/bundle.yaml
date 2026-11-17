@@ -1,0 +1,11 @@
+title: Excel to Revit MEP
+tooltip: >
+  Two-way Excel exchange for every MEP discipline - HVAC, piping, plumbing,
+  electrical, fire protection and fabrication - plus generic models and detail
+  items. Export by category or by schedule to .xlsx, edit, then import back
+  with an Element Id round-trip. Several schedules can be exported at once:
+  one sheet per schedule, all on one sheet, or one workbook each.
+  Elements can be filtered by parameter value, the preview lists matching
+  elements first, and a whole setup can be saved as a named template.
+  Microsoft Excel is not required.
+author: BHEEM

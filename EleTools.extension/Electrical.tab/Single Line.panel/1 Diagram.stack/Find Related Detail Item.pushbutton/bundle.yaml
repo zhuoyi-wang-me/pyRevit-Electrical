@@ -1,0 +1,10 @@
+title: Find Related Detail Item
+tooltip: >-
+  Modeless finder for Detail Items in any view (drafting views and plans used as single-line diagrams).
+  1) Set the Detail Item parameter (default MEE_Component, remembered).
+  2) Select an electrical element - its Panel Name / Panel / any parameter is used as the value.
+  3) Search (Exact, Loose, Contains, Starts with, Show ALL) and double-click to open.
+author: BHEEM
+context: doc-project
+engine:
+  persistent: true

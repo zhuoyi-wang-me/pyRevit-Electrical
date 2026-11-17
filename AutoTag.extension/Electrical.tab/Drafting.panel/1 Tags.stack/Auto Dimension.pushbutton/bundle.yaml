@@ -1,0 +1,9 @@
+title: Auto
+  Dimension
+tooltip: >-
+  AUTO DIMENSION. Dimensions the electrical equipment and fixtures of the
+  active plan or section: one chain along each row of equipment - wall,
+  equipment, gap, equipment ... wall - and, in sections, the height of the
+  equipment and the distance from the level to its top. Uses a dimension
+  style of the project. Creates dimensions only; one Undo removes them all.
+author: BHEEM

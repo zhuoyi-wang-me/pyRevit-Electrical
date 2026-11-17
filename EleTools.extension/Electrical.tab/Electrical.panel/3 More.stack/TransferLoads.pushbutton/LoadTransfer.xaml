@@ -1,0 +1,389 @@
+<Window
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="Load Transfer"
+    Width="1280"
+    Height="820"
+    MinWidth="900"
+    MinHeight="560"
+    ResizeMode="CanResizeWithGrip"
+    WindowStartupLocation="CenterScreen"
+    FontFamily="Segoe UI"
+    FontSize="12"
+    Background="#F4F6F8">
+
+    <!-- Layout: settings in a scrollable column on the LEFT, the Match Preview using the full
+         window height on the RIGHT. The old one-column layout stacked everything above the
+         preview grid with a 900 px minimum window height, so on a laptop screen the grid was
+         squeezed to a few rows (or pushed below the screen). ui.py also sizes the window to the
+         screen's working area when it opens. -->
+    <Window.Resources>
+        <Style TargetType="GroupBox">
+            <Setter Property="Margin" Value="0,0,0,8" />
+            <Setter Property="Padding" Value="6" />
+            <Setter Property="Background" Value="White" />
+            <Setter Property="BorderBrush" Value="#C9D1DA" />
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="Padding" Value="8,2" />
+        </Style>
+        <Style x:Key="Hint" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#6B7280" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+        </Style>
+        <Style TargetType="DataGrid">
+            <Setter Property="Background" Value="White" />
+            <Setter Property="RowBackground" Value="White" />
+            <Setter Property="AlternatingRowBackground" Value="#F7F9FB" />
+            <Setter Property="GridLinesVisibility" Value="Horizontal" />
+            <Setter Property="HorizontalGridLinesBrush" Value="#E3E8EE" />
+            <Setter Property="BorderBrush" Value="#C9D1DA" />
+            <Setter Property="RowHeaderWidth" Value="0" />
+            <Setter Property="ColumnHeaderHeight" Value="30" />
+            <Setter Property="MinRowHeight" Value="26" />
+        </Style>
+        <Style TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="#E8EEF5" />
+            <Setter Property="Foreground" Value="#1F2937" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Padding" Value="6,0" />
+            <Setter Property="BorderBrush" Value="#C9D1DA" />
+            <Setter Property="BorderThickness" Value="0,0,1,1" />
+        </Style>
+        <Style x:Key="WrapCell" TargetType="TextBlock">
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="Padding" Value="4,3" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+        <Style x:Key="Cell" TargetType="TextBlock">
+            <Setter Property="Padding" Value="4,0" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+            <Setter Property="ToolTip" Value="{Binding Text, RelativeSource={RelativeSource Self}}" />
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="440" MinWidth="360" />
+            <ColumnDefinition Width="6" />
+            <ColumnDefinition Width="*" MinWidth="420" />
+        </Grid.ColumnDefinitions>
+
+        <!-- ============================================================ LEFT: settings -->
+        <ScrollViewer Grid.Row="0" Grid.Column="0" VerticalScrollBarVisibility="Auto"
+                      HorizontalScrollBarVisibility="Disabled">
+            <StackPanel Margin="0,0,4,0">
+
+                <!-- 1. Template -->
+                <GroupBox Header="1. Saved setup">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <ComboBox Name="cmbTemplates" Grid.Column="0" Height="26" />
+                        <Button Name="btnLoadTemplate" Grid.Column="1" Content="Load" Height="26" Margin="6,0,0,0" />
+                        <Button Name="btnSaveTemplate" Grid.Column="2" Content="Save As..." Height="26" Margin="6,0,0,0" />
+                        <Button Name="btnDeleteTemplate" Grid.Column="3" Content="Delete" Height="26" Margin="6,0,0,0" />
+                    </Grid>
+                </GroupBox>
+
+                <!-- 2. Source + target -->
+                <GroupBox Header="2. Source elements and target detail item">
+                    <StackPanel>
+                        <WrapPanel>
+                            <CheckBox Name="chkEquipment" Content="Electrical Equipment (panels)" IsChecked="True" Margin="0,2,16,2" />
+                            <CheckBox Name="chkFixtures" Content="Electrical Fixtures" IsChecked="True" Margin="0,2,0,2" />
+                        </WrapPanel>
+                        <!-- Source models: the equipment / fixtures may be in this model and / or in linked models -->
+                        <Border BorderBrush="#E3E8EE" BorderThickness="1" Padding="6" Margin="0,6,0,0" Background="#FAFBFC">
+                            <StackPanel>
+                                <TextBlock Text="Source models  -  read equipment / fixtures from these models (linked models are only read)"
+                                           Style="{StaticResource Hint}" />
+                                <ListBox Name="lstSourceModels" MaxHeight="110" Margin="0,4,0,0" BorderBrush="#C9D1DA"
+                                         ToolTip="Tick 'This model' and / or the linked models that contain the electrical equipment and fixtures. The values are written into the detail items of THIS model." />
+                                <TextBlock Name="txtSourceModelsSummary" Style="{StaticResource Hint}" Margin="0,4,0,0" />
+                            </StackPanel>
+                        </Border>
+                        <!-- Electrical Fixture filter: only the ticked family : types are used as sources -->
+                        <Border Name="brdFixtureFilter" BorderBrush="#E3E8EE" BorderThickness="1" Padding="6" Margin="0,6,0,0" Background="#FAFBFC">
+                            <StackPanel>
+                                <TextBlock Text="Electrical Fixture filter  -  only ticked family : types are used as sources"
+                                           Style="{StaticResource Hint}" />
+                                <Grid Margin="0,4,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBox Name="txtFixtureSearch" Grid.Column="0" Height="24" VerticalContentAlignment="Center"
+                                             ToolTip="Type to narrow the list. Space-separated words all have to appear, in any order -- 'iso tpn' finds 'MEE_ELF_IS03_ThreePhaseTPN+E Isolator : ...'." />
+                                    <Button Name="btnClearFixtureSearch" Grid.Column="1" Content="Clear" Height="24" Margin="6,0,0,0" />
+                                </Grid>
+                                <ListBox Name="lstFixtureTypes" Height="150" Margin="0,4,0,0" BorderBrush="#C9D1DA"
+                                         ToolTip="Untick the fixture types that must NOT be used as a source." />
+                                <Grid Margin="0,4,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Button Name="btnFixturesAll" Grid.Column="0" Content="Tick shown" Height="24"
+                                            ToolTip="Tick every type currently shown in the list (after the search)." />
+                                    <Button Name="btnFixturesNone" Grid.Column="1" Content="Untick shown" Height="24" Margin="6,0,0,0"
+                                            ToolTip="Untick every type currently shown in the list (after the search)." />
+                                    <TextBlock Name="txtFixtureSummary" Grid.Column="2" Style="{StaticResource Hint}"
+                                               VerticalAlignment="Center" Margin="8,0,0,0" />
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+                        <TextBlock Text="Target detail item  (family : type)" Style="{StaticResource Hint}" Margin="0,8,0,2" />
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBox Name="txtDetailSearch" Grid.Column="0" Height="24" VerticalContentAlignment="Center"
+                                     ToolTip="Type to narrow the list below. Space-separated words all have to appear, in any order -- 'iso l03' finds 'S_EC_Isolator : L03-Type2'." />
+                            <Button Name="btnClearDetailSearch" Grid.Column="1" Content="Clear" Height="24" Margin="6,0,0,0"
+                                    ToolTip="Show every detail item family : type again." />
+                        </Grid>
+                        <ComboBox Name="cmbDetailFamily" Height="26" Margin="0,6,0,0" />
+                        <TextBlock Name="txtDetailSearchSummary" Style="{StaticResource Hint}" Margin="0,4,0,0" />
+                    </StackPanel>
+                </GroupBox>
+
+                <!-- 3. Matching -->
+                <GroupBox Header="3. Match source to target by">
+                    <StackPanel>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,4,0">
+                                <TextBlock Text="On source" Style="{StaticResource Hint}" />
+                                <ComboBox Name="cmbMatchSource" Height="26" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Margin="4,0,0,0">
+                                <TextBlock Text="On target (detail item)" Style="{StaticResource Hint}" />
+                                <ComboBox Name="cmbMatchTarget" Height="26" Margin="0,2,0,0" />
+                            </StackPanel>
+                        </Grid>
+                        <Button Name="btnPreview" Content="PREVIEW MATCHES" Height="32" Margin="0,8,0,0"
+                                FontWeight="Bold" Background="#1565C0" Foreground="White" />
+                    </StackPanel>
+                </GroupBox>
+
+                <!-- 4. Transfer filter -->
+                <GroupBox Header="4. Transfer filter (which matched items get written)">
+                    <StackPanel>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="Only where" VerticalAlignment="Center" Margin="0,0,6,0" />
+                            <ComboBox Name="cmbFilterField" Grid.Column="1" Height="26" />
+                            <ComboBox Name="cmbFilterMode" Grid.Column="2" Height="26" Margin="6,0,0,0" />
+                        </Grid>
+                        <TextBox Name="txtTransferFilter" Height="24" Margin="0,6,0,0" VerticalContentAlignment="Center"
+                                 ToolTip="Comma-separated, e.g.  AHU, HRU  -- wildcards allowed, e.g. AHU-0*. Leave blank to transfer everything matched." />
+                        <Grid Margin="0,6,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <CheckBox Name="chkFilterExclude" Grid.Column="0" Content="Exclude these instead" VerticalAlignment="Center" />
+                            <Button Name="btnApplyFilter" Grid.Column="1" Content="Apply Filter" Height="26" />
+                        </Grid>
+                        <Grid Margin="0,6,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Button Name="btnIncludeAll" Grid.Column="0" Content="Include All" Height="24" Margin="0,0,3,0" />
+                            <Button Name="btnIncludeNone" Grid.Column="1" Content="Include None" Height="24" Margin="3,0,0,0" />
+                        </Grid>
+                    </StackPanel>
+                </GroupBox>
+
+                <!-- 5. Parameter mapping -->
+                <GroupBox Header="5. Parameters to transfer">
+                    <StackPanel>
+                        <TextBlock Style="{StaticResource Hint}" Margin="0,0,0,6"
+                                   Text="Multiplier applies to numbers only (0.001 converts W to kW). Double-click a row to edit it." />
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="60" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,4,0">
+                                <TextBlock Text="Source parameter" Style="{StaticResource Hint}" />
+                                <ComboBox Name="cmbPickSourceParam" Height="26" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Margin="4,0">
+                                <TextBlock Text="Target parameter" Style="{StaticResource Hint}" />
+                                <ComboBox Name="cmbPickTargetParam" Height="26" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <StackPanel Grid.Column="2" Margin="4,0,0,0">
+                                <TextBlock Text="Multiplier" Style="{StaticResource Hint}" />
+                                <TextBox Name="txtPickMultiplier" Text="1" Height="26" Margin="0,2,0,0" VerticalContentAlignment="Center" />
+                            </StackPanel>
+                        </Grid>
+                        <Button Name="btnAddMapping" Content="Add Mapping" Height="26" Margin="0,6,0,0" />
+                        <DataGrid Name="dgParamMap"
+                                  Height="130"
+                                  Margin="0,6,0,0"
+                                  AutoGenerateColumns="False"
+                                  CanUserAddRows="False"
+                                  CanUserDeleteRows="False"
+                                  SelectionMode="Extended"
+                                  SelectionUnit="FullRow"
+                                  IsReadOnly="False"
+                                  ToolTip="Double-click a row to load it into the pickers above for editing.">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Source" Binding="{Binding SourceParam}" IsReadOnly="True" Width="*"
+                                                    ElementStyle="{StaticResource Cell}" />
+                                <DataGridTextColumn Header="Target" Binding="{Binding TargetParam}" IsReadOnly="True" Width="*"
+                                                    ElementStyle="{StaticResource Cell}" />
+                                <DataGridTextColumn Header="x" Binding="{Binding Multiplier, UpdateSourceTrigger=PropertyChanged}"
+                                                    IsReadOnly="False" Width="60" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <WrapPanel Margin="0,6,0,0">
+                            <Button Name="btnEditMapRow" Content="Edit Selected" Height="26" Margin="0,0,6,4"
+                                    ToolTip="Load the selected mapping back into the pickers above, then press Update Mapping." />
+                            <Button Name="btnRemoveMapRow" Content="Remove Selected" Height="26" Margin="0,0,6,4"
+                                    ToolTip="Delete every selected mapping row. Ctrl+click or Shift+click to select more than one." />
+                            <Button Name="btnClearMapRows" Content="Clear All" Height="26" Margin="0,0,6,4"
+                                    ToolTip="Remove every mapping row." />
+                        </WrapPanel>
+                        <Grid Margin="0,2,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Button Name="btnPreviewValues" Grid.Column="0" Content="Preview Values" Height="30" Margin="0,0,3,0"
+                                    ToolTip="Fill the 'current -> new' column of the Match Preview." />
+                            <Button Name="btnReviewChanges" Grid.Column="1" Content="Review Old vs New" Height="30" Margin="3,0,0,0"
+                                    ToolTip="Open the full before/after table for every value that would be written." />
+                        </Grid>
+                    </StackPanel>
+                </GroupBox>
+            </StackPanel>
+        </ScrollViewer>
+
+        <GridSplitter Grid.Row="0" Grid.Column="1" Width="6" HorizontalAlignment="Stretch"
+                      Background="Transparent" ToolTip="Drag to resize" />
+
+        <!-- ============================================================ RIGHT: match preview -->
+        <GroupBox Grid.Row="0" Grid.Column="2" Header="Match Preview" Margin="0,0,0,8">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="Search (view only):" VerticalAlignment="Center" Margin="0,0,6,0" />
+                    <TextBox Name="txtMatchSearch" Grid.Column="1" Height="24" VerticalContentAlignment="Center"
+                             ToolTip="Narrows what the grid SHOWS. It never changes what gets transferred." />
+                    <Button Name="btnSelectInModel" Grid.Column="2" Content="Select Source + Target in Model" Height="26" Margin="8,0,0,0" />
+                </Grid>
+                <TextBlock Name="txtFilterSummary" Grid.Row="1" Margin="0,6,0,6" FontWeight="SemiBold"
+                           Foreground="#1F6FB2" TextWrapping="Wrap"
+                           Text="Run Preview Matches to see what the filter will catch." />
+
+                <DataGrid Name="dgMatches"
+                          Grid.Row="2"
+                          AutoGenerateColumns="False"
+                          CanUserAddRows="False"
+                          CanUserDeleteRows="False"
+                          IsReadOnly="True"
+                          SelectionMode="Single"
+                          EnableRowVirtualization="True">
+                    <DataGrid.RowStyle>
+                        <Style TargetType="DataGridRow">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding RowKind}" Value="ambiguous">
+                                    <Setter Property="Background" Value="#FFF3D6" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding RowKind}" Value="unmatched">
+                                    <Setter Property="Foreground" Value="#8A8A8A" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding RowKind}" Value="blocked">
+                                    <Setter Property="Background" Value="#FDECEC" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Include}" Value="False">
+                                    <Setter Property="Opacity" Value="0.65" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGrid.RowStyle>
+                    <DataGrid.Columns>
+                        <!-- A template column (not DataGridCheckBoxColumn) so a single click toggles it
+                             even though the grid itself is read-only for the text columns. -->
+                        <DataGridTemplateColumn Header="Include" Width="60">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox IsChecked="{Binding Include, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                              IsEnabled="{Binding CanTransfer}"
+                                              HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"
+                                              ToolTip="Untick to leave this detail item untouched. Disabled for unmatched/ambiguous rows." />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn Header="Match Value" Binding="{Binding MatchValue}" Width="110" ElementStyle="{StaticResource Cell}" />
+                        <DataGridTextColumn Header="Target Detail Item" Binding="{Binding TargetName}" Width="*" ElementStyle="{StaticResource Cell}" />
+                        <DataGridTextColumn Header="Matched Source" Binding="{Binding SourceName}" Width="*" ElementStyle="{StaticResource Cell}" />
+                        <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="110" ElementStyle="{StaticResource Cell}" />
+                        <DataGridTextColumn Header="Value Preview (current -&gt; new)" Binding="{Binding ValuePreview}" Width="2.2*"
+                                            MinWidth="220" ElementStyle="{StaticResource WrapCell}" />
+                    </DataGrid.Columns>
+                </DataGrid>
+
+                <WrapPanel Grid.Row="3" Margin="0,6,0,0">
+                    <Border Background="White" BorderBrush="#C9D1DA" BorderThickness="1" Width="14" Height="14" Margin="0,0,4,0" />
+                    <TextBlock Text="Matched" Margin="0,0,14,0" Style="{StaticResource Hint}" />
+                    <Border Background="#FFF3D6" BorderBrush="#C9D1DA" BorderThickness="1" Width="14" Height="14" Margin="0,0,4,0" />
+                    <TextBlock Text="Ambiguous (skipped)" Margin="0,0,14,0" Style="{StaticResource Hint}" />
+                    <Border Background="#FDECEC" BorderBrush="#C9D1DA" BorderThickness="1" Width="14" Height="14" Margin="0,0,4,0" />
+                    <TextBlock Text="A value would be blocked" Margin="0,0,14,0" Style="{StaticResource Hint}" />
+                    <TextBlock Text="Grey text = no source match" Style="{StaticResource Hint}" />
+                </WrapPanel>
+            </Grid>
+        </GroupBox>
+
+        <!-- ============================================================ bottom: transfer -->
+        <Border Grid.Row="1" Grid.ColumnSpan="3" Background="White" BorderBrush="#C9D1DA" BorderThickness="1" Padding="10,6">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="220" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Name="txtStatus" Grid.Column="0" VerticalAlignment="Center" TextWrapping="Wrap"
+                           Foreground="#374151" Margin="0,0,10,0"
+                           Text="Run Preview Matches before transferring." />
+                <Button Name="btnTransfer" Grid.Column="1" Content="TRANSFER LOADS" FontWeight="Bold" Height="38"
+                        Background="#2E7D32" Foreground="White" />
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

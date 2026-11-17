@@ -1,0 +1,7 @@
+{
+  "type": "extension",
+  "name": "FamilyGenerator",
+  "description": "Family Generator: parametric Electrical Equipment families (.rfa) built from a family spec - phase 1 of the AI family generator.",
+  "author": "Bheem",
+  "rocket_mode_compatible": "False"
+}

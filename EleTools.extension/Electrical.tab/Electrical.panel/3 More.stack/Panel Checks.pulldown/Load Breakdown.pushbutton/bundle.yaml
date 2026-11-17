@@ -1,0 +1,5 @@
+title: Load Breakdown
+tooltip: >
+  Export a Load Breakdown workbook (kVA by load classification, grouped by
+  distribution board) from the model's electrical circuits.
+author: BHEEM

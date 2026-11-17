@@ -1,0 +1,352 @@
+<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Panel Schedule Manager" Height="700" Width="1040"
+        WindowStartupLocation="CenterScreen"
+        Background="#F4F6F9" FontFamily="Segoe UI">
+
+    <Window.Resources>
+        <SolidColorBrush x:Key="AccentBrush" Color="#2563EB"/>
+        <SolidColorBrush x:Key="AccentDarkBrush" Color="#1D4ED8"/>
+        <SolidColorBrush x:Key="SidebarBrush" Color="#111827"/>
+        <SolidColorBrush x:Key="SidebarTextBrush" Color="#9CA3AF"/>
+        <SolidColorBrush x:Key="SidebarActiveTextBrush" Color="#FFFFFF"/>
+        <SolidColorBrush x:Key="CardBrush" Color="#FFFFFF"/>
+        <SolidColorBrush x:Key="BorderBrush2" Color="#E5E7EB"/>
+        <SolidColorBrush x:Key="TextPrimaryBrush" Color="#111827"/>
+        <SolidColorBrush x:Key="TextSecondaryBrush" Color="#6B7280"/>
+        <SolidColorBrush x:Key="SuccessBrush" Color="#16A34A"/>
+        <SolidColorBrush x:Key="WarnBrush" Color="#D97706"/>
+
+        <Style x:Key="PrimaryButton" TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource AccentBrush}"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Padding" Value="18,9"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="6" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="{StaticResource AccentDarkBrush}"/>
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Opacity" Value="0.45"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="SecondaryButton" TargetType="Button" BasedOn="{StaticResource PrimaryButton}">
+            <Setter Property="Background" Value="#E5E7EB"/>
+            <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#D1D5DB"/>
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Opacity" Value="0.45"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="DangerButton" TargetType="Button" BasedOn="{StaticResource PrimaryButton}">
+            <Setter Property="Background" Value="#DC2626"/>
+        </Style>
+
+        <Style x:Key="SidebarItem" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{StaticResource SidebarTextBrush}"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Margin" Value="0,0,0,22"/>
+        </Style>
+
+        <Style x:Key="CardBorder" TargetType="Border">
+            <Setter Property="Background" Value="{StaticResource CardBrush}"/>
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BorderBrush2}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="20"/>
+        </Style>
+
+        <Style x:Key="SectionTitle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}"/>
+            <Setter Property="Margin" Value="0,0,0,4"/>
+        </Style>
+
+        <Style x:Key="SectionSubtitle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Foreground" Value="{StaticResource TextSecondaryBrush}"/>
+            <Setter Property="Margin" Value="0,0,0,16"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+        </Style>
+
+        <Style TargetType="DataGrid">
+            <Setter Property="AutoGenerateColumns" Value="False"/>
+            <Setter Property="CanUserAddRows" Value="False"/>
+            <Setter Property="HeadersVisibility" Value="Column"/>
+            <Setter Property="GridLinesVisibility" Value="Horizontal"/>
+            <Setter Property="HorizontalGridLinesBrush" Value="#EEF0F3"/>
+            <Setter Property="RowHeight" Value="34"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Background" Value="Transparent"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="210"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- ===================== LEFT NAV / STEP INDICATOR ===================== -->
+        <Border Grid.Column="0" Background="{StaticResource SidebarBrush}">
+            <StackPanel Margin="24,28,24,0">
+                <TextBlock Text="PANEL SCHEDULE" Foreground="White" FontSize="16" FontWeight="Bold"/>
+                <TextBlock Text="MANAGER" Foreground="{StaticResource AccentBrush}" FontSize="16" FontWeight="Bold" Margin="0,0,0,30"/>
+
+                <TextBlock Text="1. Select Panels" Style="{StaticResource SidebarItem}"/>
+                <TextBlock Text="2. Balancing Rules" Style="{StaticResource SidebarItem}"/>
+                <TextBlock Text="3. Spare &amp; Space" Style="{StaticResource SidebarItem}"/>
+                <TextBlock Text="4. Preview Changes" Style="{StaticResource SidebarItem}"/>
+                <TextBlock Text="5. Execute" Style="{StaticResource SidebarItem}"/>
+
+                <Border Height="1" Background="#1F2937" Margin="0,10,0,16"/>
+                <TextBlock Text="{Binding StepIndicatorText}" Foreground="{StaticResource SidebarActiveTextBrush}" FontWeight="SemiBold"/>
+            </StackPanel>
+        </Border>
+
+        <!-- ===================== RIGHT CONTENT AREA ===================== -->
+        <Grid Grid.Column="1" Margin="28,24,28,20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- ===== STEP CONTENT ===== -->
+            <Grid Grid.Row="0">
+
+                <!-- STEP 1: SELECT PANELS -->
+                <Border Style="{StaticResource CardBorder}" Visibility="{Binding Step1Visibility}">
+                    <DockPanel>
+                        <StackPanel DockPanel.Dock="Top">
+                            <TextBlock Text="Select Panels" Style="{StaticResource SectionTitle}"/>
+                            <TextBlock Text="Loaded from your current Revit selection by default - select the panels you want in Revit first (Project Browser, a view, or the panel elements themselves), or use 'Scan All Panels' to browse the whole model instead. Single-phase and three-phase panels are both supported and can be mixed in one batch."
+                                       Style="{StaticResource SectionSubtitle}"/>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                                <Button Content="Use Current Selection" Style="{StaticResource SecondaryButton}" Command="{Binding RefreshPanelsCommand}" Margin="0,0,8,0"/>
+                                <Button Content="Scan All Panels" Style="{StaticResource SecondaryButton}" Command="{Binding ScanAllPanelsCommand}" Margin="0,0,8,0"/>
+                                <Button Content="Select All" Style="{StaticResource SecondaryButton}" Command="{Binding SelectAllCommand}" Margin="0,0,8,0"/>
+                                <Button Content="Select None" Style="{StaticResource SecondaryButton}" Command="{Binding SelectNoneCommand}"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                                <TextBlock Text="Panel schedule template:" VerticalAlignment="Center" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,8,0"/>
+                                <ComboBox ItemsSource="{Binding AvailableTemplates}" SelectedItem="{Binding SelectedTemplate}"
+                                          DisplayMemberPath="Name" Width="260" Padding="6,4"/>
+                            </StackPanel>
+                        </StackPanel>
+                        <DataGrid ItemsSource="{Binding AllPanels}" AlternatingRowBackground="#FAFAFB">
+                            <DataGrid.Columns>
+                                <DataGridCheckBoxColumn Header="" Binding="{Binding IsSelected, Mode=TwoWay}" Width="34"/>
+                                <DataGridTextColumn Header="Panel Name" Binding="{Binding Name}" Width="2*"/>
+                                <DataGridTextColumn Header="Phase Config" Binding="{Binding PhaseConfig}" Width="*"/>
+                                <DataGridTextColumn Header="Slots" Binding="{Binding NumSlots}" Width="70"/>
+                                <DataGridTextColumn Header="Circuits" Binding="{Binding CircuitCount}" Width="80"/>
+                                <DataGridTextColumn Header="Existing Schedule" Binding="{Binding HasExistingSchedule}" Width="130"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </DockPanel>
+                </Border>
+
+                <!-- STEP 2: BALANCING RULES -->
+                <Border Style="{StaticResource CardBorder}" Visibility="{Binding Step2Visibility}">
+                    <StackPanel>
+                        <TextBlock Text="Configure Balancing Rules" Style="{StaticResource SectionTitle}"/>
+                        <TextBlock Text="Branch circuit loads are analyzed and redistributed across R, Y and B phase legs to minimize imbalance. Multi-pole circuits are never split - their load moves as one tied block to preserve circuit integrity."
+                                   Style="{StaticResource SectionSubtitle}"/>
+
+                        <CheckBox Content="Enable automatic load balancing" IsChecked="{Binding BalancingEnabled}" Margin="0,4,0,16" FontSize="14"/>
+
+                        <TextBlock Text="Target maximum phase imbalance (%)" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,4"/>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
+                            <Slider Minimum="0" Maximum="25" Width="320" Value="{Binding MaxImbalancePct}" TickFrequency="1" IsSnapToTickEnabled="True"/>
+                            <TextBlock Text="{Binding MaxImbalancePct, StringFormat={}{0:0}%}" Margin="12,0,0,0" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                        </StackPanel>
+
+                        <CheckBox Content="Respect locked / pinned circuits (do not move)" IsChecked="{Binding RespectLockedCircuits}" Margin="0,0,0,12" FontSize="14"/>
+                        <CheckBox Content="Arrange circuits in R-Y-B sequence after balancing" IsChecked="{Binding ArrangeRYBAfterBalance}" FontSize="14"/>
+                        <CheckBox Content="Preserve existing panel schedules (panels that already have a schedule are NOT balanced)" IsChecked="{Binding PreserveExistingSchedule}" Margin="0,12,0,0" FontSize="14"
+                                  ToolTip="Ticked: no circuit is moved and the panel is not resized on any panel that already has a panel schedule - only spares / spaces are added. Leave it unticked to balance those panels."/>
+                        <TextBlock Text="Panels that already have a schedule keep their exact circuit layout. They are balanced by distributing the new spare load across the phases instead of relocating connected circuits." TextWrapping="Wrap" Foreground="#666666" FontSize="12" Margin="24,4,0,0"/>
+
+                        <Border Background="#EFF6FF" CornerRadius="8" Padding="14" Margin="0,26,0,0">
+                            <TextBlock TextWrapping="Wrap" Foreground="#1E3A8A" FontSize="12">
+                                Balancing uses a largest-load-first greedy assignment: each single-pole circuit is assigned, in descending order of connected load, to whichever phase currently carries the least load. This keeps the phase spread tight without requiring manual trial and error.
+                            </TextBlock>
+                        </Border>
+                    </StackPanel>
+                </Border>
+
+                <!-- STEP 3: SPARE & SPACE -->
+                <Border Style="{StaticResource CardBorder}" Visibility="{Binding Step3Visibility}">
+                    <DockPanel>
+                        <StackPanel DockPanel.Dock="Top">
+                            <TextBlock Text="Configure Spare &amp; Space Settings" Style="{StaticResource SectionTitle}"/>
+                            <TextBlock Text="Standard Ways Table mode (recommended) looks up Spare/Space quotas from your panel's connected circuit count against standard panel sizes, and assigns spare breaker rating/poles from your panel-name-prefix table below - growing the panel's capacity automatically if needed. Percentage mode instead takes a flat percentage of the panel's current slot count."
+                                       Style="{StaticResource SectionSubtitle}"/>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,14">
+                                <RadioButton Content="Standard Ways Table" IsChecked="{Binding IsWaysTableMode}" GroupName="SpareSpaceMode" Margin="0,0,20,0" VerticalAlignment="Center"/>
+                                <RadioButton Content="Percentage of capacity" IsChecked="{Binding IsPercentageMode}" GroupName="SpareSpaceMode" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <Grid>
+                            <!-- Ways Table mode -->
+                            <StackPanel Visibility="{Binding WaysTableModeVisibility}" x:Name="waysTablePanel">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Column="0" Margin="0,0,8,0">
+                                        <TextBlock Text="Ways -&gt; Spare/Space counts" FontWeight="SemiBold" Margin="0,0,0,6"/>
+                                        <DataGrid ItemsSource="{Binding WaysRows}" Height="180" CanUserAddRows="False" AlternatingRowBackground="#FAFAFB">
+                                            <DataGrid.Columns>
+                                                <DataGridTextColumn Header="Ways" Binding="{Binding Ways}" Width="*"/>
+                                                <DataGridTextColumn Header="Spare" Binding="{Binding Spare}" Width="*"/>
+                                                <DataGridTextColumn Header="Space" Binding="{Binding Space}" Width="*"/>
+                                            </DataGrid.Columns>
+                                        </DataGrid>
+                                        <Button Content="+ Add row" Style="{StaticResource SecondaryButton}" Command="{Binding AddWaysRowCommand}" HorizontalAlignment="Left" Margin="0,6,0,0"/>
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="1" Margin="8,0,0,0">
+                                        <TextBlock Text="Panel type -&gt; spare breaker rating" FontWeight="SemiBold" Margin="0,0,0,6"/>
+                                        <DataGrid ItemsSource="{Binding TypeConfigRows}" Height="180" CanUserAddRows="False" AlternatingRowBackground="#FAFAFB">
+                                            <DataGrid.Columns>
+                                                <DataGridTextColumn Header="Prefix" Binding="{Binding Prefix}" Width="*"/>
+                                                <DataGridTextColumn Header="Rating (A)" Binding="{Binding SpareRating}" Width="*"/>
+                                                <DataGridTextColumn Header="Poles" Binding="{Binding Poles}" Width="*"/>
+                                            </DataGrid.Columns>
+                                        </DataGrid>
+                                        <Button Content="+ Add row" Style="{StaticResource SecondaryButton}" Command="{Binding AddTypeConfigRowCommand}" HorizontalAlignment="Left" Margin="0,6,0,0"/>
+                                    </StackPanel>
+                                </Grid>
+                                <TextBlock Text="Ways table entries are matched by rounding a panel's connected circuit count UP to the smallest sufficient bracket. Type prefixes are matched against the start of the panel name (longest prefix wins), falling back to 20A / 1-pole if nothing matches." Style="{StaticResource SectionSubtitle}" Margin="0,10,0,0"/>
+                            </StackPanel>
+
+                            <!-- Percentage mode -->
+                            <StackPanel Visibility="{Binding PercentageModeVisibility}" x:Name="percentagePanel">
+                                <TextBlock Text="Spare percentage" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,4"/>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
+                                    <Slider Minimum="0" Maximum="50" Width="320" Value="{Binding SparePercentage}" TickFrequency="5" IsSnapToTickEnabled="True"/>
+                                    <TextBlock Text="{Binding SparePercentage, StringFormat={}{0:0}%}" Margin="12,0,0,0" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                </StackPanel>
+
+                                <TextBlock Text="Space percentage" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,4"/>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
+                                    <Slider Minimum="0" Maximum="50" Width="320" Value="{Binding SpacePercentage}" TickFrequency="5" IsSnapToTickEnabled="True"/>
+                                    <TextBlock Text="{Binding SpacePercentage, StringFormat={}{0:0}%}" Margin="12,0,0,0" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                </StackPanel>
+
+                                <TextBlock Text="Reserved slots (untouched, e.g. future tenant fit-out)" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,4"/>
+                                <TextBox Text="{Binding ReservedSlots, UpdateSourceTrigger=PropertyChanged}" Width="80" HorizontalAlignment="Left" Padding="6,4" Margin="0,0,0,16"/>
+
+                                <CheckBox Content="Automatically fill all remaining unused slots as Space" IsChecked="{Binding AutoFillRemaining}" FontSize="14"/>
+                            </StackPanel>
+                        </Grid>
+                    </DockPanel>
+                </Border>
+
+                <!-- STEP 4: PREVIEW -->
+                <Border Style="{StaticResource CardBorder}" Visibility="{Binding Step4Visibility}">
+                    <DockPanel>
+                        <StackPanel DockPanel.Dock="Top">
+                            <TextBlock Text="Preview Changes" Style="{StaticResource SectionTitle}"/>
+                            <TextBlock Text="Review the calculated before/after phase loads, imbalance improvement, and spare/space counts (with breaker rating) before writing anything to the model. Nothing is changed in Revit until you click Execute."
+                                       Style="{StaticResource SectionSubtitle}"/>
+                        </StackPanel>
+                        <DataGrid ItemsSource="{Binding PreviewRows}" AlternatingRowBackground="#FAFAFB">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Panel" Binding="{Binding PanelName}" Width="1.6*"/>
+                                <DataGridTextColumn Header="R (before)" Binding="{Binding BeforeR}" Width="*"/>
+                                <DataGridTextColumn Header="Y (before)" Binding="{Binding BeforeY}" Width="*"/>
+                                <DataGridTextColumn Header="B (before)" Binding="{Binding BeforeB}" Width="*"/>
+                                <DataGridTextColumn Header="R (after)" Binding="{Binding AfterR}" Width="*"/>
+                                <DataGridTextColumn Header="Y (after)" Binding="{Binding AfterY}" Width="*"/>
+                                <DataGridTextColumn Header="B (after)" Binding="{Binding AfterB}" Width="*"/>
+                                <DataGridTextColumn Header="Imb. before %" Binding="{Binding BeforeImbalance}" Width="*"/>
+                                <DataGridTextColumn Header="Imb. after %" Binding="{Binding AfterImbalance}" Width="*"/>
+                                <DataGridTextColumn Header="Spares" Binding="{Binding SparesAdded}" Width="60"/>
+                                <DataGridTextColumn Header="Spaces" Binding="{Binding SpacesAdded}" Width="60"/>
+                                <DataGridTextColumn Header="Rating (A)" Binding="{Binding SpareRating}" Width="70"/>
+                                <DataGridTextColumn Header="Poles" Binding="{Binding Poles}" Width="55"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </DockPanel>
+                </Border>
+
+                <!-- STEP 5: EXECUTE -->
+                <Border Style="{StaticResource CardBorder}" Visibility="{Binding Step5Visibility}">
+                    <DockPanel>
+                        <StackPanel DockPanel.Dock="Top">
+                            <TextBlock Text="Execute Process" Style="{StaticResource SectionTitle}"/>
+                            <TextBlock Text="Runs load balancing, R-Y-B arrangement, spare/space fill, and panel schedule creation/update against the Revit model in a single, undoable transaction group."
+                                       Style="{StaticResource SectionSubtitle}"/>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,14">
+                                <Button Content="Run" Style="{StaticResource PrimaryButton}" Command="{Binding RunBatchCommand}" Margin="0,0,8,0"/>
+                                <Button Content="Cancel" Style="{StaticResource DangerButton}" Command="{Binding CancelCommand}" Margin="0,0,8,0"/>
+                                <Button Content="Export Report" Style="{StaticResource SecondaryButton}" Command="{Binding ExportReportCommand}"/>
+                            </StackPanel>
+                            <ProgressBar Height="10" Minimum="0" Maximum="{Binding ProgressMax}" Value="{Binding ProgressValue}" Margin="0,0,0,8"/>
+                            <TextBlock Text="{Binding StatusMessage}" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,10"/>
+                            <Border Background="#F0FDF4" CornerRadius="8" Padding="12" Margin="0,0,0,14">
+                                <TextBlock Text="{Binding ResultsSummary}" TextWrapping="Wrap" Foreground="{StaticResource SuccessBrush}" FontWeight="SemiBold"/>
+                            </Border>
+                        </StackPanel>
+                        <DataGrid ItemsSource="{Binding ResultRows}" AlternatingRowBackground="#FAFAFB">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Panel" Binding="{Binding Panel}" Width="1.6*"/>
+                                <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="2.4*"/>
+                                <DataGridTextColumn Header="Total Load (W)" Binding="{Binding TotalConnectedLoadW}" Width="*"/>
+                                <DataGridTextColumn Header="R (W)" Binding="{Binding RLoadW}" Width="*"/>
+                                <DataGridTextColumn Header="Y (W)" Binding="{Binding YLoadW}" Width="*"/>
+                                <DataGridTextColumn Header="B (W)" Binding="{Binding BLoadW}" Width="*"/>
+                                <DataGridTextColumn Header="Total Load (VA)" Binding="{Binding TotalConnectedLoadVA}" Width="*"/>
+                                <DataGridTextColumn Header="Imb. before %" Binding="{Binding ImbalanceBeforePct}" Width="*"/>
+                                <DataGridTextColumn Header="Imb. after %" Binding="{Binding ImbalanceAfterPct}" Width="*"/>
+                                <DataGridTextColumn Header="3-Pole R-Y-B" Binding="{Binding RYBStatus}" Width="2*"/>
+                                <DataGridTextColumn Header="Circuits Moved" Binding="{Binding CircuitsMoved}" Width="*"/>
+                                <!-- These three come from the 26th/27th corrections. They
+                                     were present in the report rows and in the HTML export
+                                     but had no column here, so a PRESERVED panel looked in
+                                     the UI like the tool had done nothing to it: identical
+                                     before/after imbalance, no circuits moved, and no sign
+                                     of the spare capacity it had actually booked. -->
+                                <DataGridTextColumn Header="Schedule" Binding="{Binding Schedule}" Width="*"/>
+                                <DataGridTextColumn Header="Spare Load (VA)" Binding="{Binding SpareLoadBookedVA}" Width="*"/>
+                                <DataGridTextColumn Header="Imb. incl. spares %" Binding="{Binding ImbalanceInclSparesPct}" Width="*"/>
+                                <DataGridTextColumn Header="Spares" Binding="{Binding SparesAdded}" Width="60"/>
+                                <DataGridTextColumn Header="Spaces" Binding="{Binding SpacesAdded}" Width="60"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </DockPanel>
+                </Border>
+            </Grid>
+
+            <!-- ===== NAV BUTTONS ===== -->
+            <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,16,0,0">
+                <Button Content="Back" Style="{StaticResource SecondaryButton}" Command="{Binding BackCommand}" Margin="0,0,8,0" Width="100"/>
+                <Button Content="Next" Style="{StaticResource PrimaryButton}" Command="{Binding NextCommand}" Margin="0,0,8,0" Width="100"/>
+                <Button Content="Close" Style="{StaticResource SecondaryButton}" Command="{Binding CloseCommand}" Width="100"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>

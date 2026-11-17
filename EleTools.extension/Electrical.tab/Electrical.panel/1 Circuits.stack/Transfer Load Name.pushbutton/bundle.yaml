@@ -1,0 +1,10 @@
+# Double quotes are required here: in a YAML *plain* scalar, \n is a literal
+# backslash-n, so the caption would render as "Transfer\nLoad Name".
+title: "Transfer Load Name"
+tooltip: >-
+  Copy text from any string parameter - on the circuit itself or on a
+  connected element - into each circuit's Load Name
+  (BuiltInParameter.RBS_ELEC_CIRCUIT_NAME). Circuits can be picked directly or
+  through electrical fixtures, electrical equipment and other devices, and
+  filtered by a parameter value. Everything is previewed before it is applied.
+author: BHEEM

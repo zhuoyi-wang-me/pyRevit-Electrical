@@ -1,0 +1,14 @@
+{
+  "match_source_param": "MEE_ToServe", 
+  "mappings": [
+    {
+      "source": "Elec Apparent Power", 
+      "target": "MEE-TotalConnectedLoad", 
+      "multiplier": "0.001"
+    }
+  ], 
+  "target_family_key": "MEE_DTI_S_EC_Isolator : Unknown Type", 
+  "include_fixtures": true, 
+  "include_equipment": false, 
+  "match_target_param": "MEE-Component"
+}

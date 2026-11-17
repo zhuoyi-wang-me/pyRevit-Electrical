@@ -1,0 +1,97 @@
+<!--
+    MEP Clash Detector - Clash Scope dialog (modal)
+    Rows in models_panel and the checkboxes in arc_panel / str_panel are
+    created in code by ScopeWindow (script.py). No event attributes here.
+-->
+<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MEP Clash Detector - Clash Scope"
+        Width="780" SizeToContent="Height" MaxHeight="920"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize" ShowInTaskbar="False"
+        Background="#FFF3F5F7">
+    <Window.Resources>
+        <Style x:Key="Btn" TargetType="Button">
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="MinWidth" Value="110"/>
+            <Setter Property="Margin" Value="8,0,0,0"/>
+            <Setter Property="Padding" Value="10,0,10,0"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#FFB9C2CC"/>
+        </Style>
+        <Style x:Key="Small" TargetType="Button">
+            <Setter Property="Height" Value="22"/>
+            <Setter Property="MinWidth" Value="50"/>
+            <Setter Property="Margin" Value="6,0,0,0"/>
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#FFB9C2CC"/>
+        </Style>
+        <Style TargetType="GroupBox">
+            <Setter Property="Margin" Value="0,0,0,10"/>
+            <Setter Property="Padding" Value="8,6,8,8"/>
+            <Setter Property="BorderBrush" Value="#FFB9C2CC"/>
+            <Setter Property="Background" Value="White"/>
+        </Style>
+    </Window.Resources>
+
+    <StackPanel Margin="14">
+        <TextBlock Text="Clash Scope" FontSize="18" FontWeight="Bold" Foreground="#FF1F4E79"/>
+        <TextBlock TextWrapping="Wrap" Foreground="#FF5A6772" FontSize="11" Margin="0,2,0,10"
+                   Text="Choose which models provide MEP elements and which provide Architecture / Structure elements, then pick the ARC and STR categories to check the MEP against. Your choices are remembered for this model."/>
+
+        <!-- models -->
+        <GroupBox Header="Models">
+            <StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
+                    <TextBlock Text="Model" Width="470" FontWeight="SemiBold"/>
+                    <TextBlock Text="Use its MEP" Width="120" FontWeight="SemiBold"/>
+                    <TextBlock Text="Use its ARC / STR" Width="120" FontWeight="SemiBold"/>
+                </StackPanel>
+                <ScrollViewer MaxHeight="220" VerticalScrollBarVisibility="Auto">
+                    <StackPanel x:Name="models_panel"/>
+                </ScrollViewer>
+            </StackPanel>
+        </GroupBox>
+
+        <!-- architecture -->
+        <GroupBox>
+            <GroupBox.Header>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Architecture categories (ARC)" VerticalAlignment="Center"/>
+                    <Button x:Name="btn_arc_all" Style="{StaticResource Small}" Content="All"/>
+                    <Button x:Name="btn_arc_none" Style="{StaticResource Small}" Content="None"/>
+                </StackPanel>
+            </GroupBox.Header>
+            <WrapPanel x:Name="arc_panel"/>
+        </GroupBox>
+
+        <!-- structure -->
+        <GroupBox>
+            <GroupBox.Header>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Structure categories (STR)" VerticalAlignment="Center"/>
+                    <Button x:Name="btn_str_all" Style="{StaticResource Small}" Content="All"/>
+                    <Button x:Name="btn_str_none" Style="{StaticResource Small}" Content="None"/>
+                </StackPanel>
+            </GroupBox.Header>
+            <WrapPanel x:Name="str_panel"/>
+        </GroupBox>
+
+        <!-- options -->
+        <GroupBox Header="Options">
+            <StackPanel>
+                <CheckBox x:Name="mep_vs_mep" Margin="0,2,0,6"
+                          Content="Also check MEP vs MEP (cable tray / duct / pipe and fittings, across all ticked models)"/>
+                <TextBlock TextWrapping="Wrap" FontSize="11" Foreground="#FF5A6772"
+                           Text="Walls and floors are split by their Structural checkbox: tick 'Structural Wall' / 'Structural Floor / Slab' under STR for load-bearing elements. Linked elements are taken inside the view crop region and view range. Linked elements cannot be colour-overridden or stored in selection filters - they are selected and zoomed to when you click a clash."/>
+            </StackPanel>
+        </GroupBox>
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button x:Name="btn_run" Style="{StaticResource Btn}" Content="Run Clash Detection"
+                    Background="#FF1F4E79" Foreground="White" FontWeight="SemiBold" IsDefault="True"/>
+            <Button x:Name="btn_cancel" Style="{StaticResource Btn}" Content="Cancel" IsCancel="True"/>
+        </StackPanel>
+    </StackPanel>
+</Window>

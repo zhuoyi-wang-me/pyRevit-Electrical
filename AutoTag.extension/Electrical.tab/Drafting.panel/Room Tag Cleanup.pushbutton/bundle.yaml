@@ -1,0 +1,15 @@
+title: Room Tag
+  Cleanup
+tooltip: >-
+  ROOM TAG CLEANUP. Removes room tags that sit on top of each other in the
+  active view, the views selected in the Project Browser, or every view on
+  sheets. Overlapping tags of the SAME room are deleted (the best one is kept:
+  inside its room, without leader, oldest), and so are overlapping tags with
+  identical text (the same room reached through two links). Optionally deletes orphaned tags,
+  tags that show only "?" (room missing / not placed / blank values) and same-room
+  duplicates elsewhere in the view. Overlapping tags of
+  DIFFERENT rooms are never deleted: tick the option to move them to their
+  room centre, else they are listed for you to move. Summary first, nothing
+  changes until you press Clean up; one Undo.
+author: BHEEM
+context: doc-project

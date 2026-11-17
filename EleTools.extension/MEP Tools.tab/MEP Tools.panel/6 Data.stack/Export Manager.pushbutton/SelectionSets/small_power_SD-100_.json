@@ -1,0 +1,225 @@
+{
+  "mode": "Sheets", 
+  "items": [
+    {
+      "name": "SMALL POWER LAYOUT LEVEL 00 ZONE Z0A", 
+      "id": 4722238, 
+      "number": "KSS-KS01-POP-1000-Z0A-00-1EP-02-620301"
+    }, 
+    {
+      "name": "SMALL POWER LAYOUT LEVEL 01 ZONE Z0A", 
+      "id": 4722254, 
+      "number": "KSS-KS01-POP-1000-Z0A-01-1EP-02-620401"
+    }, 
+    {
+      "name": "SMALL POWER LAYOUT LEVEL 02 ZONE Z0A", 
+      "id": 4722270, 
+      "number": "KSS-KS01-POP-1000-Z0A-02-1EP-02-620501"
+    }, 
+    {
+      "name": "SMALL POWER LAYOUT LEVEL 03 ZONE Z0A", 
+      "id": 4722286, 
+      "number": "KSS-KS01-POP-1000-Z0A-03-1EP-02-620601"
+    }, 
+    {
+      "name": "SMALL POWER LAYOUT LEVEL 04 ZONE Z0A", 
+      "id": 4722302, 
+      "number": "KSS-KS01-POP-1000-Z0A-04-1EP-02-620701"
+    }, 
+    {
+      "name": "SMALL POWER LAYOUT LEVEL 05 ZONE Z0A", 
+      "id": 4722318, 
+      "number": "KSS-KS01-POP-1000-Z0A-05-1EP-02-620801"
+    }, 
+    {
+      "name": "SMALL POWER LAYOUT LEVEL 06 ZONE Z0A", 
+      "id": 4722334, 
+      "number": "KSS-KS01-POP-1000-Z0A-06-1EP-02-620901"
+    }, 
+    {
+      "name": "SMALL POWER LAYOUT LEVEL 07 ZONE Z0A", 
+      "id": 4722350, 
+      "number": "KSS-KS01-POP-1000-Z0A-07-1EP-02-621001"
+    }, 
+    {
+      "name": "SMALL POWER LAYOUT LEVEL B1 ZONE Z0A", 
+      "id": 4722222, 
+      "number": "KSS-KS01-POP-1000-Z0A-B1-1EP-02-620201"
+    }, 
+    {
+      "name": "SMALL POWER LAYOUT LEVEL B2 ZONE Z0A", 
+      "id": 4722206, 
+      "number": "KSS-KS01-POP-1000-Z0A-B2-1EP-02-620101"
+    }, 
+    {
+      "name": "SMALL POWER LAYOUT LEVEL RF ZONE Z0A", 
+      "id": 4722366, 
+      "number": "KSS-KS01-POP-1000-Z0A-RF-1EP-02-621201"
+    }, 
+    {
+      "name": "SMALL POWER LAYOUT LEVEL 00 ZONE Z0B", 
+      "id": 4722414, 
+      "number": "KSS-KS01-POP-1000-Z0B-00-1EP-02-620302"
+    }, 
+    {
+      "name": "SMALL POWER LAYOUT LEVEL 01 ZONE Z0B", 
+      "id": 4722430, 
+      "number": "KSS-KS01-POP-1000-Z0B-01-1EP-02-620402"
+    }, 
+    {
+      "name": "SMALL POWER LAYOUT LEVEL 02 ZONE Z0B", 
+      "id": 4722446, 
+      "number": "KSS-KS01-POP-1000-Z0B-02-1EP-02-620502"
+    }, 
+    {
+      "name": "SMALL POWER LAYOUT LEVEL 03 ZONE Z0B", 
+      "id": 4722462, 
+      "number": "KSS-KS01-POP-1000-Z0B-03-1EP-02-620602"
+    }, 
+    {
+      "name": "SMALL POWER LAYOUT LEVEL 04 ZONE Z0B", 
+      "id": 4722478, 
+      "number": "KSS-KS01-POP-1000-Z0B-04-1EP-02-620702"
+    }, 
+    {
+      "name": "SMALL POWER LAYOUT LEVEL 05 ZONE Z0B", 
+      "id": 4722494, 
+      "number": "KSS-KS01-POP-1000-Z0B-05-1EP-02-620802"
+    }, 
+    {
+      "name": "SMALL POWER LAYOUT LEVEL 06 ZONE Z0B", 
+      "id": 4722510, 
+      "number": "KSS-KS01-POP-1000-Z0B-06-1EP-02-620902"
+    }, 
+    {
+      "name": "SMALL POWER LAYOUT LEVEL 07 ZONE Z0B", 
+      "id": 4722526, 
+      "number": "KSS-KS01-POP-1000-Z0B-07-1EP-02-621002"
+    }, 
+    {
+      "name": "SMALL POWER LAYOUT LEVEL B1 ZONE Z0B", 
+      "id": 4722398, 
+      "number": "KSS-KS01-POP-1000-Z0B-B1-1EP-02-620202"
+    }, 
+    {
+      "name": "SMALL POWER LAYOUT LEVEL B2 ZONE Z0B", 
+      "id": 4722382, 
+      "number": "KSS-KS01-POP-1000-Z0B-B2-1EP-02-620102"
+    }, 
+    {
+      "name": "SMALL POWER LAYOUT LEVEL RF ZONE Z0B", 
+      "id": 4722542, 
+      "number": "KSS-KS01-POP-1000-Z0B-RF-1EP-02-621202"
+    }, 
+    {
+      "name": "SMALL POWER LAYOUT LEVEL 00 ZONE Z0C", 
+      "id": 4722590, 
+      "number": "KSS-KS01-POP-1000-Z0C-00-1EP-02-620303"
+    }, 
+    {
+      "name": "SMALL POWER LAYOUT LEVEL 01 ZONE Z0C", 
+      "id": 4722606, 
+      "number": "KSS-KS01-POP-1000-Z0C-01-1EP-02-620403"
+    }, 
+    {
+      "name": "SMALL POWER LAYOUT LEVEL 02 ZONE Z0C", 
+      "id": 4722622, 
+      "number": "KSS-KS01-POP-1000-Z0C-02-1EP-02-620503"
+    }, 
+    {
+      "name": "SMALL POWER LAYOUT LEVEL 03 ZONE Z0C", 
+      "id": 4722638, 
+      "number": "KSS-KS01-POP-1000-Z0C-03-1EP-02-620603"
+    }, 
+    {
+      "name": "SMALL POWER LAYOUT LEVEL 04 ZONE Z0C", 
+      "id": 4722654, 
+      "number": "KSS-KS01-POP-1000-Z0C-04-1EP-02-620703"
+    }, 
+    {
+      "name": "SMALL POWER LAYOUT LEVEL 05 ZONE Z0C", 
+      "id": 4722670, 
+      "number": "KSS-KS01-POP-1000-Z0C-05-1EP-02-620803"
+    }, 
+    {
+      "name": "SMALL POWER LAYOUT LEVEL 06 ZONE Z0C", 
+      "id": 4722686, 
+      "number": "KSS-KS01-POP-1000-Z0C-06-1EP-02-620903"
+    }, 
+    {
+      "name": "SMALL POWER LAYOUT LEVEL 07 ZONE Z0C", 
+      "id": 4722702, 
+      "number": "KSS-KS01-POP-1000-Z0C-07-1EP-02-621003"
+    }, 
+    {
+      "name": "SMALL POWER LAYOUT LEVEL B1 ZONE Z0C", 
+      "id": 4722574, 
+      "number": "KSS-KS01-POP-1000-Z0C-B1-1EP-02-620203"
+    }, 
+    {
+      "name": "SMALL POWER LAYOUT LEVEL B2 ZONE Z0C", 
+      "id": 4722558, 
+      "number": "KSS-KS01-POP-1000-Z0C-B2-1EP-02-620103"
+    }, 
+    {
+      "name": "SMALL POWER LAYOUT LEVEL RF ZONE Z0C", 
+      "id": 4722718, 
+      "number": "KSS-KS01-POP-1000-Z0C-RF-1EP-02-621203"
+    }, 
+    {
+      "name": "SMALL POWER LAYOUT LEVEL 00 ZONE Z0D", 
+      "id": 4722766, 
+      "number": "KSS-KS01-POP-1000-Z0D-00-1EP-02-620304"
+    }, 
+    {
+      "name": "SMALL POWER LAYOUT LEVEL 01 ZONE Z0D", 
+      "id": 4722782, 
+      "number": "KSS-KS01-POP-1000-Z0D-01-1EP-02-620404"
+    }, 
+    {
+      "name": "SMALL POWER LAYOUT LEVEL 02 ZONE Z0D", 
+      "id": 4722798, 
+      "number": "KSS-KS01-POP-1000-Z0D-02-1EP-02-620504"
+    }, 
+    {
+      "name": "SMALL POWER LAYOUT LEVEL 03 ZONE Z0D", 
+      "id": 4722814, 
+      "number": "KSS-KS01-POP-1000-Z0D-03-1EP-02-620604"
+    }, 
+    {
+      "name": "SMALL POWER LAYOUT LEVEL 04 ZONE Z0D", 
+      "id": 4722830, 
+      "number": "KSS-KS01-POP-1000-Z0D-04-1EP-02-620704"
+    }, 
+    {
+      "name": "SMALL POWER LAYOUT LEVEL 05 ZONE Z0D", 
+      "id": 4722846, 
+      "number": "KSS-KS01-POP-1000-Z0D-05-1EP-02-620804"
+    }, 
+    {
+      "name": "SMALL POWER LAYOUT LEVEL 06 ZONE Z0D", 
+      "id": 4722862, 
+      "number": "KSS-KS01-POP-1000-Z0D-06-1EP-02-620904"
+    }, 
+    {
+      "name": "SMALL POWER LAYOUT LEVEL 07 ZONE Z0D", 
+      "id": 4722878, 
+      "number": "KSS-KS01-POP-1000-Z0D-07-1EP-02-621004"
+    }, 
+    {
+      "name": "SMALL POWER LAYOUT LEVEL B1 ZONE Z0D", 
+      "id": 4722750, 
+      "number": "KSS-KS01-POP-1000-Z0D-B1-1EP-02-620204"
+    }, 
+    {
+      "name": "SMALL POWER LAYOUT LEVEL B2 ZONE Z0D", 
+      "id": 4722734, 
+      "number": "KSS-KS01-POP-1000-Z0D-B2-1EP-02-620104"
+    }, 
+    {
+      "name": "SMALL POWER LAYOUT LEVEL RF ZONE Z0D", 
+      "id": 4722894, 
+      "number": "KSS-KS01-POP-1000-Z0D-RF-1EP-02-621204"
+    }
+  ]
+}

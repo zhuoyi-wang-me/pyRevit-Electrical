@@ -1,0 +1,8 @@
+title: Electrical Load Report
+tooltip: >-
+  Export electrical loads by panel, circuit and load classification to a formatted
+  Excel workbook (no Excel install required). Circuited or direct-parameter mode,
+  phase filter, panel reconciliation and diagnostics sheets.
+author: BHEEM
+engine:
+  type: ironpython

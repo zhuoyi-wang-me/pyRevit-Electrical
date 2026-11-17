@@ -1,0 +1,12 @@
+title: Enlarged
+  Electrical Rooms
+tooltip: >-
+  Creates an enlarged floor plan view for each electrical room (LV, LVSG, TX,
+  UPS, Electrical, MDB, SMDB, DB room) of the architectural link: at the
+  room's level, named EL-{ROOM NAME}-{ROOM NUMBER}, with your scale and view
+  template, cropped around the room (link transform applied) plus an offset;
+  the crop is turned parallel to the room's walls when the room is not
+  square to North.
+  Existing views are updated or skipped - never duplicated. Creates and
+  updates floor plan views only; one Undo.
+author: BHEEM

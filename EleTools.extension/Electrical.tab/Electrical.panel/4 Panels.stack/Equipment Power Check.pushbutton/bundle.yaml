@@ -1,0 +1,16 @@
+title: Equipment
+  Power Check
+tooltip: >-
+  EQUIPMENT POWER CHECK. Cross-checks that every mechanical equipment item
+  (this project and/or linked MEP models; optionally plumbing equipment and
+  lifts / escalators) has an electrical fixture - isolator, spur, socket.
+  A fixture counts when its tag parameter matches the equipment's
+  (MEE_ToServe by default; the type name when it is empty) or when it is
+  within a set distance of the unit. Units sharing a tag each need their own
+  fixture. Items that need no power (plinths, chambers...) can be excluded by
+  name, and fixtures tagged GENERAL are ignored.
+  Report lists MISSING items first, tag disagreements and fixtures whose tag
+  matches no equipment, with clickable ids; a CSV is saved to
+  Documents\EquipmentPowerCheck. Read-only: the model is never changed.
+author: BHEEM
+context: doc-project

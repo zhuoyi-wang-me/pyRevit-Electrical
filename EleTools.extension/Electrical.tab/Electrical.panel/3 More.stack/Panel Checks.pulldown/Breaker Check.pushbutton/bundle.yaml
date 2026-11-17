@@ -1,0 +1,9 @@
+title: Breaker
+  Check
+tooltip: >-
+  BREAKER CHECK. Compares the breaker rating of every circuit of the selected
+  panels with the current of its load: OK, UNDERSIZED, NO RATING or NO LOAD.
+  Where they do not match, a new rating from your own list is proposed and can
+  be written to the circuit. The model is changed only after you tick the
+  circuits, press Update and confirm.
+author: BHEEM

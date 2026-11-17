@@ -1,0 +1,42 @@
+{
+    "name": "QTC Original", 
+    "version": 1, 
+    "items": [
+        {
+            "Parameter": "MEE-Project", 
+            "Separator": "-"
+        }, 
+        {
+            "Parameter": "MEE-Origniator", 
+            "Separator": "-"
+        }, 
+        {
+            "Parameter": "MEE-Contract", 
+            "Separator": "-"
+        }, 
+        {
+            "Parameter": "MEE-Type", 
+            "Separator": "-"
+        }, 
+        {
+            "Parameter": "MEE-Role", 
+            "Separator": "-"
+        }, 
+        {
+            "Parameter": "MEE-Zone", 
+            "Separator": "-"
+        }, 
+        {
+            "Parameter": "MEE_BuildingRef", 
+            "Separator": "-"
+        }, 
+        {
+            "Parameter": "Sheet Number", 
+            "Separator": "_"
+        }, 
+        {
+            "Parameter": "Current Revision", 
+            "Separator": ""
+        }
+    ]
+}

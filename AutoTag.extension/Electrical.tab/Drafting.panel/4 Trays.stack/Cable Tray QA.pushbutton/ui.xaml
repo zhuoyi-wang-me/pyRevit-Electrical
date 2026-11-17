@@ -1,0 +1,361 @@
+<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Cable Tray QA/QC" Width="1380" Height="860" MinWidth="1080" MinHeight="620"
+        WindowStartupLocation="CenterScreen" ResizeMode="CanResizeWithGrip"
+        Background="#EEF4FF" FontFamily="Segoe UI" FontSize="12" ShowInTaskbar="True">
+
+  <Window.Resources>
+    <SolidColorBrush x:Key="Blue" Color="#1E88E5"/>
+    <SolidColorBrush x:Key="Green" Color="#00B85C"/>
+    <SolidColorBrush x:Key="Orange" Color="#FB8C00"/>
+    <SolidColorBrush x:Key="Red" Color="#E53935"/>
+    <SolidColorBrush x:Key="Ink" Color="#1F2D3D"/>
+    <SolidColorBrush x:Key="Muted" Color="#5C6B8A"/>
+
+    <Style TargetType="Button">
+      <Setter Property="Background" Value="White"/>
+      <Setter Property="Foreground" Value="#1565C0"/>
+      <Setter Property="BorderBrush" Value="#64B5F6"/>
+      <Setter Property="BorderThickness" Value="1.5"/>
+      <Setter Property="FontWeight" Value="SemiBold"/>
+      <Setter Property="Height" Value="32"/>
+      <Setter Property="Padding" Value="14,0"/>
+      <Setter Property="Margin" Value="0,0,8,0"/>
+      <Setter Property="Cursor" Value="Hand"/>
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="Button">
+            <Border x:Name="bd" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="6" SnapsToDevicePixels="True">
+              <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="{TemplateBinding Padding}"/>
+            </Border>
+            <ControlTemplate.Triggers>
+              <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="bd" Property="Opacity" Value="0.82"/>
+              </Trigger>
+              <Trigger Property="IsPressed" Value="True">
+                <Setter TargetName="bd" Property="Opacity" Value="0.65"/>
+              </Trigger>
+              <Trigger Property="IsEnabled" Value="False">
+                <Setter TargetName="bd" Property="Opacity" Value="0.4"/>
+              </Trigger>
+            </ControlTemplate.Triggers>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+    <Style x:Key="GreenBtn" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+      <Setter Property="Background" Value="{StaticResource Green}"/>
+      <Setter Property="BorderBrush" Value="{StaticResource Green}"/>
+      <Setter Property="Foreground" Value="White"/>
+    </Style>
+    <Style x:Key="BlueBtn" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+      <Setter Property="Background" Value="{StaticResource Blue}"/>
+      <Setter Property="BorderBrush" Value="{StaticResource Blue}"/>
+      <Setter Property="Foreground" Value="White"/>
+    </Style>
+    <Style x:Key="OrangeBtn" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+      <Setter Property="Background" Value="{StaticResource Orange}"/>
+      <Setter Property="BorderBrush" Value="{StaticResource Orange}"/>
+      <Setter Property="Foreground" Value="White"/>
+    </Style>
+    <Style x:Key="RedBtn" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+      <Setter Property="Background" Value="{StaticResource Red}"/>
+      <Setter Property="BorderBrush" Value="{StaticResource Red}"/>
+      <Setter Property="Foreground" Value="White"/>
+    </Style>
+
+    <Style x:Key="Card" TargetType="Border">
+      <Setter Property="Background" Value="White"/>
+      <Setter Property="BorderBrush" Value="#C5D5F0"/>
+      <Setter Property="BorderThickness" Value="1"/>
+      <Setter Property="CornerRadius" Value="8"/>
+      <Setter Property="Padding" Value="12,10"/>
+    </Style>
+    <!-- summary tile: Tag = accent colour -->
+    <Style x:Key="Tile" TargetType="Border">
+      <Setter Property="Background" Value="White"/>
+      <Setter Property="CornerRadius" Value="8"/>
+      <Setter Property="Margin" Value="0,0,8,0"/>
+      <Setter Property="Padding" Value="12,8"/>
+      <Setter Property="BorderThickness" Value="0,0,0,4"/>
+    </Style>
+    <Style x:Key="TileValue" TargetType="TextBlock">
+      <Setter Property="FontSize" Value="24"/>
+      <Setter Property="FontWeight" Value="Bold"/>
+      <Setter Property="Text" Value="-"/>
+    </Style>
+    <Style x:Key="TileLabel" TargetType="TextBlock">
+      <Setter Property="FontSize" Value="11"/>
+      <Setter Property="Foreground" Value="{StaticResource Muted}"/>
+      <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+    </Style>
+    <Style x:Key="FieldLabel" TargetType="TextBlock">
+      <Setter Property="FontSize" Value="11"/>
+      <Setter Property="FontWeight" Value="Bold"/>
+      <Setter Property="Foreground" Value="#1E88E5"/>
+      <Setter Property="VerticalAlignment" Value="Center"/>
+      <Setter Property="Margin" Value="0,0,10,0"/>
+    </Style>
+
+    <!-- Status cell: coloured by its value (same colours as the Excel report) -->
+    <Style x:Key="StatusCell" TargetType="DataGridCell">
+      <Setter Property="FontWeight" Value="Bold"/>
+      <Setter Property="BorderThickness" Value="0"/>
+      <Style.Triggers>
+        <DataTrigger Binding="{Binding Status}" Value="PASS">
+          <Setter Property="Background" Value="#C6EFCE"/><Setter Property="Foreground" Value="#006100"/>
+        </DataTrigger>
+        <DataTrigger Binding="{Binding Status}" Value="MISSING">
+          <Setter Property="Background" Value="#FFC7CE"/><Setter Property="Foreground" Value="#9C0006"/>
+        </DataTrigger>
+        <DataTrigger Binding="{Binding Status}" Value="EXTRA">
+          <Setter Property="Background" Value="#FFD9A8"/><Setter Property="Foreground" Value="#8A4B00"/>
+        </DataTrigger>
+        <DataTrigger Binding="{Binding Status}" Value="WIDTH MISMATCH">
+          <Setter Property="Background" Value="#FFC7CE"/><Setter Property="Foreground" Value="#9C0006"/>
+        </DataTrigger>
+        <DataTrigger Binding="{Binding Status}" Value="HEIGHT MISMATCH">
+          <Setter Property="Background" Value="#FFC7CE"/><Setter Property="Foreground" Value="#9C0006"/>
+        </DataTrigger>
+        <DataTrigger Binding="{Binding Status}" Value="WIDTH + HEIGHT MISMATCH">
+          <Setter Property="Background" Value="#FF9AA2"/><Setter Property="Foreground" Value="#7A0006"/>
+        </DataTrigger>
+        <DataTrigger Binding="{Binding Status}" Value="DUPLICATE">
+          <Setter Property="Background" Value="#FFEB9C"/><Setter Property="Foreground" Value="#7F6000"/>
+        </DataTrigger>
+        <DataTrigger Binding="{Binding Status}" Value="NOT TAGGED ON SHEET">
+          <Setter Property="Background" Value="#FBD0F0"/><Setter Property="Foreground" Value="#8A0A6B"/>
+        </DataTrigger>
+        <DataTrigger Binding="{Binding Status}" Value="INVALID ANNOTATION">
+          <Setter Property="Background" Value="#E1D5F0"/><Setter Property="Foreground" Value="#4B2E83"/>
+        </DataTrigger>
+      </Style.Triggers>
+    </Style>
+    <Style x:Key="Num" TargetType="TextBlock">
+      <Setter Property="HorizontalAlignment" Value="Right"/>
+      <Setter Property="Margin" Value="0,0,8,0"/>
+    </Style>
+  </Window.Resources>
+
+  <Grid Margin="14">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="*"/>
+      <RowDefinition Height="Auto"/>
+    </Grid.RowDefinitions>
+
+    <!-- ================= HEADER ================= -->
+    <Border Grid.Row="0" Padding="18,12" CornerRadius="10" Margin="0,0,0,10">
+      <Border.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+          <GradientStop Color="#1E88E5" Offset="0"/>
+          <GradientStop Color="#00ACC1" Offset="0.55"/>
+          <GradientStop Color="#00B85C" Offset="1"/>
+        </LinearGradientBrush>
+      </Border.Background>
+      <DockPanel>
+        <TextBlock x:Name="model_tb" DockPanel.Dock="Right" VerticalAlignment="Center" Foreground="White"
+                   TextAlignment="Right" FontSize="12"/>
+        <StackPanel>
+          <TextBlock Text="Cable Tray QA/QC" Foreground="White" FontSize="21" FontWeight="Bold"/>
+          <TextBlock Text="Checks the cable tray calculation list (Excel) against the cable trays in the model and / or their annotations on the sheets. Nothing in the model is changed, except the view colours you ask for with Colour by issue."
+                     Foreground="#EAF7FF" Margin="0,2,0,0"/>
+        </StackPanel>
+      </DockPanel>
+    </Border>
+
+    <!-- ================= SETUP ================= -->
+    <Border Grid.Row="1" Style="{StaticResource Card}" Margin="0,0,0,10">
+      <StackPanel>
+        <DockPanel Margin="0,0,0,8">
+          <TextBlock Text="1  EXCEL" Style="{StaticResource FieldLabel}" Width="92"/>
+          <Button x:Name="btn_run" DockPanel.Dock="Right" Content="▶  Run check" Width="140" Margin="8,0,0,0"
+                  Style="{StaticResource GreenBtn}" FontSize="13"
+                  ToolTip="Scan the sheets and compare with the Excel list"/>
+          <Button x:Name="btn_browse" DockPanel.Dock="Right" Content="Select Excel..." Width="130" Margin="8,0,0,0"
+                  Style="{StaticResource BlueBtn}"/>
+          <TextBox x:Name="excel_tb" Height="32" IsReadOnly="True" VerticalContentAlignment="Center" Padding="8,0"
+                   BorderBrush="#00B85C" BorderThickness="1.5" Background="White"/>
+        </DockPanel>
+        <TextBlock x:Name="excel_info_tb" Margin="102,0,0,8" Foreground="{StaticResource Muted}" FontSize="11"
+                   TextWrapping="Wrap" Text="Select the cable tray calculation workbook. It needs the columns Calculation_Tag, Width and Height."/>
+        <!-- WHAT is checked: the trays in the model, their annotations on sheets, or both -->
+        <WrapPanel Margin="0,0,0,8">
+          <TextBlock Text="2  CHECK" Style="{StaticResource FieldLabel}" Width="92"/>
+          <RadioButton x:Name="rb_model" GroupName="checkmode" Content="Cable trays in the model" VerticalAlignment="Center"
+                       FontWeight="SemiBold" Margin="0,0,20,0"
+                       ToolTip="Every cable tray in the model: the tag is read from a tray parameter and the tray's real width and height are compared with the Excel. Sheets and views play no part."/>
+          <RadioButton x:Name="rb_sheets" GroupName="checkmode" Content="Annotations on sheets" VerticalAlignment="Center"
+                       FontWeight="SemiBold" Margin="0,0,20,0"
+                       ToolTip="The cable tray tags printed on the sheets."/>
+          <RadioButton x:Name="rb_both" GroupName="checkmode" Content="Both" VerticalAlignment="Center" FontWeight="SemiBold"/>
+        </WrapPanel>
+        <WrapPanel x:Name="ann_panel">
+          <TextBlock Text="   ANNOTATIONS" Style="{StaticResource FieldLabel}" Width="92"/>
+          <CheckBox x:Name="chk_tags" Content="Cable tray tags" VerticalAlignment="Center" Margin="0,0,16,0"
+                    ToolTip="Real Revit tags (IndependentTag) on cable trays - the preferred source. The tagged tray is read too."/>
+          <CheckBox x:Name="chk_text" Content="Text notes" VerticalAlignment="Center" Margin="0,0,16,0"
+                    ToolTip="Text notes that contain a tray size (e.g. 1x225x100) or a tag from the Excel."/>
+          <CheckBox x:Name="chk_generic" Content="Generic annotation families" VerticalAlignment="Center" Margin="0,0,22,0"
+                    ToolTip="Annotation families whose text is in parameters. The parameter names are set in config.py."/>
+          <CheckBox x:Name="chk_sheets" Content="Only views placed on sheets" VerticalAlignment="Center" Margin="0,0,22,0"/>
+          <TextBlock Text="Duplicate means:" VerticalAlignment="Center" Foreground="{StaticResource Muted}" Margin="0,0,6,0"/>
+          <ComboBox x:Name="dup_cb" Width="270" Height="26" VerticalContentAlignment="Center"/>
+        </WrapPanel>
+        <WrapPanel x:Name="trays_panel" Margin="0,8,0,0">
+          <TextBlock Text="   CABLE TRAYS" Style="{StaticResource FieldLabel}" Width="92"/>
+          <!-- driven by the CHECK choice above; kept (hidden) as the single on/off switch -->
+          <CheckBox x:Name="chk_trays" Visibility="Collapsed"/>
+          <TextBlock Text="Tag parameter:" VerticalAlignment="Center" Foreground="{StaticResource Muted}" Margin="0,0,6,0"/>
+          <ComboBox x:Name="tray_param_cb" Width="250" Height="26" VerticalContentAlignment="Center" Margin="0,0,16,0"
+                    ToolTip="The cable tray parameter that holds the calculation tag. Auto-detect uses every text parameter in which a tag from the Excel is found."/>
+          <CheckBox x:Name="chk_untagged" Content="List cable trays that have no tag" VerticalAlignment="Center" Margin="0,0,16,0"
+                    ToolTip="Off: trays without a tag are only counted. On: they are listed as INVALID ANNOTATION, grouped by size."/>
+          <CheckBox x:Name="chk_cover" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="#8A0A6B"
+                    ToolTip="A cable tray run that has a calculation tag in its parameter but carries no tag on any checked sheet is reported as NOT TAGGED ON SHEET. One tagged segment is enough for the whole run.">
+            <TextBlock Text="Flag trays that are not tagged on a sheet"/>
+          </CheckBox>
+        </WrapPanel>
+        <DockPanel x:Name="sheets_panel" Margin="0,8,0,0">
+          <TextBlock Text="   SHEETS" Style="{StaticResource FieldLabel}" Width="92"/>
+          <Button x:Name="btn_sheets" Content="Choose sheets..." Height="28" Style="{StaticResource BlueBtn}"
+                  ToolTip="Pick which sheets are checked, with search and filters by number series or any sheet parameter."/>
+          <Button x:Name="btn_all_sheets" Content="All sheets" Height="28"
+                  ToolTip="Go back to checking every sheet in the project."/>
+          <TextBlock x:Name="sheets_tb" VerticalAlignment="Center" Foreground="#283593" FontWeight="SemiBold"
+                     TextTrimming="CharacterEllipsis" Margin="4,0,0,0"/>
+        </DockPanel>
+      </StackPanel>
+    </Border>
+
+    <!-- ================= SUMMARY ================= -->
+    <UniformGrid Grid.Row="2" Rows="1" Margin="0,0,-8,10">
+      <Border Style="{StaticResource Tile}" BorderBrush="#1E88E5">
+        <StackPanel><TextBlock x:Name="t_excel" Style="{StaticResource TileValue}" Foreground="#1E88E5"/>
+          <TextBlock Text="Excel tags" Style="{StaticResource TileLabel}"/></StackPanel>
+      </Border>
+      <Border Style="{StaticResource Tile}" BorderBrush="#00ACC1">
+        <StackPanel><TextBlock x:Name="t_revit" Style="{StaticResource TileValue}" Foreground="#00ACC1"/>
+          <TextBlock Text="Revit tags" Style="{StaticResource TileLabel}"/></StackPanel>
+      </Border>
+      <Border Style="{StaticResource Tile}" BorderBrush="#00B85C">
+        <StackPanel><TextBlock x:Name="t_matched" Style="{StaticResource TileValue}" Foreground="#00B85C"/>
+          <TextBlock Text="Matched" Style="{StaticResource TileLabel}"/></StackPanel>
+      </Border>
+      <Border Style="{StaticResource Tile}" BorderBrush="#E53935">
+        <StackPanel><TextBlock x:Name="t_missing" Style="{StaticResource TileValue}" Foreground="#E53935"/>
+          <TextBlock Text="Missing" Style="{StaticResource TileLabel}"/></StackPanel>
+      </Border>
+      <Border Style="{StaticResource Tile}" BorderBrush="#FB8C00">
+        <StackPanel><TextBlock x:Name="t_extra" Style="{StaticResource TileValue}" Foreground="#FB8C00"/>
+          <TextBlock Text="Extra" Style="{StaticResource TileLabel}"/></StackPanel>
+      </Border>
+      <Border Style="{StaticResource Tile}" BorderBrush="#E53935">
+        <StackPanel><TextBlock x:Name="t_width" Style="{StaticResource TileValue}" Foreground="#E53935"/>
+          <TextBlock Text="Width mismatch" Style="{StaticResource TileLabel}"/></StackPanel>
+      </Border>
+      <Border Style="{StaticResource Tile}" BorderBrush="#E53935">
+        <StackPanel><TextBlock x:Name="t_height" Style="{StaticResource TileValue}" Foreground="#E53935"/>
+          <TextBlock Text="Height mismatch" Style="{StaticResource TileLabel}"/></StackPanel>
+      </Border>
+      <Border Style="{StaticResource Tile}" BorderBrush="#F9A825">
+        <StackPanel><TextBlock x:Name="t_dup" Style="{StaticResource TileValue}" Foreground="#C17900"/>
+          <TextBlock Text="Duplicates" Style="{StaticResource TileLabel}"/></StackPanel>
+      </Border>
+      <Border Style="{StaticResource Tile}" BorderBrush="#FF00BE">
+        <StackPanel><TextBlock x:Name="t_nottag" Style="{StaticResource TileValue}" Foreground="#C4008F"/>
+          <TextBlock Text="Not tagged" Style="{StaticResource TileLabel}" ToolTip="Cable tray runs with a calculation tag in their parameter but no tag on a checked sheet"/></StackPanel>
+      </Border>
+      <Border Style="{StaticResource Tile}" BorderBrush="#8E24AA">
+        <StackPanel><TextBlock x:Name="t_invalid" Style="{StaticResource TileValue}" Foreground="#8E24AA"/>
+          <TextBlock Text="Invalid" Style="{StaticResource TileLabel}"/></StackPanel>
+      </Border>
+      <Border x:Name="errors_tile" Style="{StaticResource Tile}" BorderBrush="#1F2D3D" Background="#1F2D3D">
+        <StackPanel><TextBlock x:Name="t_errors" Style="{StaticResource TileValue}" Foreground="White"/>
+          <TextBlock Text="Overall errors" Style="{StaticResource TileLabel}" Foreground="#C9D6EA"/></StackPanel>
+      </Border>
+    </UniformGrid>
+
+    <!-- ================= FILTER ================= -->
+    <DockPanel Grid.Row="3" Margin="0,0,0,8">
+      <TextBlock Text="Show" VerticalAlignment="Center" Foreground="{StaticResource Muted}" Margin="0,0,6,0"/>
+      <ComboBox x:Name="status_cb" Width="230" Height="28" VerticalContentAlignment="Center"/>
+      <TextBlock x:Name="shown_tb" DockPanel.Dock="Right" VerticalAlignment="Center" Margin="12,0,0,0"
+                 Foreground="#283593" FontWeight="SemiBold"/>
+      <Border BorderBrush="#90CAF9" BorderThickness="1.5" CornerRadius="5" Background="White" Margin="10,0,0,0">
+        <Grid>
+          <TextBlock x:Name="search_hint" Text="Search tag, sheet, view, description or comment..."
+                     Foreground="#9AA5B1" Margin="9,0,0,0" VerticalAlignment="Center" IsHitTestVisible="False"/>
+          <TextBox x:Name="search_tb" Height="26" BorderThickness="0" Background="Transparent"
+                   VerticalContentAlignment="Center" Padding="6,0"/>
+        </Grid>
+      </Border>
+    </DockPanel>
+
+    <!-- ================= RESULTS ================= -->
+    <DataGrid x:Name="grid" Grid.Row="4" AutoGenerateColumns="False" IsReadOnly="True"
+              CanUserAddRows="False" CanUserDeleteRows="False" SelectionMode="Extended" SelectionUnit="FullRow"
+              HeadersVisibility="Column" GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="#E3EAF5"
+              BorderBrush="#C5D5F0" Background="White" RowHeight="26" AlternatingRowBackground="#F8FAFF"
+              EnableRowVirtualization="True" VirtualizingPanel.IsVirtualizing="True"
+              VirtualizingPanel.VirtualizationMode="Recycling">
+      <DataGrid.ColumnHeaderStyle>
+        <Style TargetType="DataGridColumnHeader">
+          <Setter Property="Background" Value="#1F3A5F"/>
+          <Setter Property="Foreground" Value="White"/>
+          <Setter Property="FontWeight" Value="SemiBold"/>
+          <Setter Property="Padding" Value="8,6"/>
+          <Setter Property="BorderBrush" Value="#3B5B86"/>
+          <Setter Property="BorderThickness" Value="0,0,1,0"/>
+        </Style>
+      </DataGrid.ColumnHeaderStyle>
+      <DataGrid.Columns>
+        <DataGridTextColumn Header="STATUS" Binding="{Binding Status}" Width="178" CellStyle="{StaticResource StatusCell}"/>
+        <DataGridTextColumn Header="TAG" Binding="{Binding Tag}" Width="190"/>
+        <DataGridTextColumn Header="SHEET" Binding="{Binding Sheet}" Width="90"/>
+        <DataGridTextColumn Header="SHEET NAME" Binding="{Binding SheetName}" Width="1.2*" MinWidth="110"/>
+        <DataGridTextColumn Header="VIEW" Binding="{Binding View}" Width="1.2*" MinWidth="110"/>
+        <DataGridTextColumn Header="EXCEL W" Binding="{Binding ExcelW}" Width="70" ElementStyle="{StaticResource Num}"/>
+        <DataGridTextColumn Header="EXCEL H" Binding="{Binding ExcelH}" Width="70" ElementStyle="{StaticResource Num}"/>
+        <DataGridTextColumn Header="REVIT W" Binding="{Binding RevitW}" Width="70" ElementStyle="{StaticResource Num}"/>
+        <DataGridTextColumn Header="REVIT H" Binding="{Binding RevitH}" Width="70" ElementStyle="{StaticResource Num}"/>
+        <DataGridTextColumn Header="QTY" Binding="{Binding Qty}" Width="46" ElementStyle="{StaticResource Num}"/>
+        <DataGridTextColumn Header="DESCRIPTION" Binding="{Binding Description}" Width="1.4*" MinWidth="120"/>
+        <DataGridTextColumn Header="COMMENTS" Binding="{Binding Comments}" Width="2.4*" MinWidth="160"/>
+        <DataGridTextColumn Header="ANNOTATION TYPE" Binding="{Binding Family}" Width="1.4*" MinWidth="120"/>
+        <DataGridTextColumn Header="ELEMENT ID" Binding="{Binding ElementId}" Width="86" ElementStyle="{StaticResource Num}"/>
+      </DataGrid.Columns>
+    </DataGrid>
+
+    <!-- ================= ACTIONS ================= -->
+    <DockPanel Grid.Row="5" Margin="0,10,0,0">
+      <!-- colour of each kind of issue in the model; click one to show only that kind -->
+      <DockPanel DockPanel.Dock="Top" Margin="0,0,0,8">
+        <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+          <Button x:Name="btn_colour" Content="Colour by issue" Height="28" Style="{StaticResource OrangeBtn}"
+                  ToolTip="Colours the elements of the rows that are SHOWN in the list, in the active Revit view: one colour per kind of issue. This writes view graphic overrides (one transaction, Ctrl+Z undoes it)."/>
+          <Button x:Name="btn_uncolour" Content="Remove colours" Height="28" Margin="0"
+                  ToolTip="Takes the colours off again in the active view. It also removes any other per-element override those elements had in this view."/>
+        </StackPanel>
+        <TextBlock Text="MODEL COLOURS" Style="{StaticResource FieldLabel}"/>
+        <WrapPanel x:Name="legend_panel" VerticalAlignment="Center"/>
+      </DockPanel>
+      <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+        <Button x:Name="btn_highlight" Content="Highlight Errors" Style="{StaticResource RedBtn}"
+                ToolTip="Selects the error annotations (and their cable trays) in Revit. Selection only - nothing is changed."/>
+        <Button x:Name="btn_clear" Content="Clear Highlights"/>
+        <Button x:Name="btn_sheet" Content="Open Sheet" Style="{StaticResource BlueBtn}"
+                ToolTip="Opens the sheet of the selected row and selects its annotation. Double-clicking a row does the same."/>
+        <Button x:Name="btn_view" Content="Open View"
+                ToolTip="Opens the model view of the selected row and zooms to the annotation."/>
+        <Button x:Name="btn_export" Content="Export QA Report" Style="{StaticResource OrangeBtn}"/>
+        <Button x:Name="btn_close" Content="Close" Margin="0"/>
+      </StackPanel>
+      <TextBlock x:Name="status_tb" VerticalAlignment="Center" Foreground="#283593" TextWrapping="Wrap" Margin="0,0,12,0"/>
+    </DockPanel>
+  </Grid>
+</Window>

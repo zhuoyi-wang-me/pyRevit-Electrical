@@ -1,0 +1,18 @@
+{
+    "items": [
+        {
+            "Separator": "+", 
+            "Parameter": "Sheet Number"
+        }, 
+        {
+            "Separator": "()", 
+            "Parameter": "Current Revision"
+        }, 
+        {
+            "Separator": "-", 
+            "Parameter": "Sheet Name"
+        }
+    ], 
+    "version": 1, 
+    "name": "My Format"
+}

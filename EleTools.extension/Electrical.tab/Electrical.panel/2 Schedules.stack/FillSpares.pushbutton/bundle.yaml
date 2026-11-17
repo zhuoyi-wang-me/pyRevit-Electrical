@@ -1,0 +1,8 @@
+title: Fill Spare/
+      Space
+tooltip: >
+  Auto-assign Spare and Space circuits (with correct breaker rating) across
+  panel schedules, based on a way-count table and per-panel-type standards
+  (PP, LP, ELP, UDB, ACP). Opens an interface to review and configure before
+  running.
+author: BHEEM

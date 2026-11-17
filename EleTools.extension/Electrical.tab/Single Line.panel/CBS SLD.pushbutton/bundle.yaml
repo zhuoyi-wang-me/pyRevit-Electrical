@@ -1,0 +1,9 @@
+title: CBS SLD
+tooltip: >
+  Draws the single line diagram of central battery (CBS) panels from their
+  circuits - as in the panel schedule (odd slots left, even right): EM /
+  addressable module and EXIT symbols with the number of fittings per
+  circuit, CKT NO., and the FA / BMS / DLS / data / DC power interfaces.
+  Detail lines and text in a drafting view, with your own text types and
+  line styles. Redraw replaces only the tool's own lines and text.
+author: BHEEM

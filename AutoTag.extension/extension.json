@@ -1,0 +1,7 @@
+{
+  "type": "extension",
+  "name": "AutoTag",
+  "description": "Auto Tag Layout: tags the elements of an enlarged layout view with chosen tag types, stacked at the sides without overlapping.",
+  "author": "Bheem",
+  "rocket_mode_compatible": "False"
+}

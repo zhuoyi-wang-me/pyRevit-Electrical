@@ -1,0 +1,7 @@
+{
+  "type": "extension",
+  "name": "CableTrayLayout",
+  "description": "Cable Tray Layout: drafting views of cable tray cross-sections (cables, spacing, 20% future space) from an Excel or CSV cable schedule.",
+  "author": "Bheem",
+  "rocket_mode_compatible": "False"
+}

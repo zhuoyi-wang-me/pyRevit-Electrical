@@ -1,0 +1,4 @@
+Clash ID,Status,Clash Test,Title,Element ID 1,Model 1,Category 1,Element ID 2,Model 2,Category 2,Distance
+C-001,Open,ELE vs STR,Cable tray vs beam,123456,ELE_Model.rvt,Cable Trays,654321,STR_Model.rvt,Structural Framing,-0.052 m
+C-002,In progress,ELE vs MEC,Cable tray vs duct,123457,ELE_Model.rvt,Cable Trays,777001,MEC_Model.rvt,Ducts,-35 mm
+C-003,Solved,ELE vs ARC,Conduit vs wall,123458,ELE_Model.rvt,Conduits,888002,ARC_Model.rvt,Walls,-0.010 m

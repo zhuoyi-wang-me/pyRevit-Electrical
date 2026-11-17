@@ -1,0 +1,9 @@
+title: Tag Tray
+  Runs
+tooltip: >-
+  TAG TRAY RUNS. For containment plans: tags every cable tray (and conduit) run
+  of the active plan, and repeats the tag every N metres along long runs (15 m
+  to start with). Each tag stands beside its tray, clear of other trays, tags
+  and text notes, inside the annotation crop. One tag per run and tag text;
+  linked trays optional. Modeless window; one Undo removes all tags.
+author: BHEEM

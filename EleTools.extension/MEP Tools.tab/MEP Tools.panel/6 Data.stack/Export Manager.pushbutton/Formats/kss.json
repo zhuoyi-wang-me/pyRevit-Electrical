@@ -1,0 +1,14 @@
+{
+    "version": 1, 
+    "name": "kss", 
+    "items": [
+        {
+            "Parameter": "Sheet Number", 
+            "Separator": "_"
+        }, 
+        {
+            "Parameter": "Current Revision", 
+            "Separator": ""
+        }
+    ]
+}

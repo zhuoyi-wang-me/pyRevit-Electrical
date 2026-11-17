@@ -1,0 +1,165 @@
+{
+  "items": [
+    {
+      "number": "KSS-KS01-POP-1000-Z0A-00-1EA-05-600351", 
+      "name": "PLANT ROOMS LEVEL 00 ZONE Z0A", 
+      "id": 5479971
+    }, 
+    {
+      "number": "KSS-KS01-POP-1000-Z0A-01-1EA-05-600451", 
+      "name": "PLANT ROOMS LEVEL 01 ZONE Z0A", 
+      "id": 5493338
+    }, 
+    {
+      "number": "KSS-KS01-POP-1000-Z0A-02-1EA-05-600551", 
+      "name": "PLANT ROOMS LEVEL 02 ZONE Z0A", 
+      "id": 5520015
+    }, 
+    {
+      "number": "KSS-KS01-POP-1000-Z0A-03-1EA-05-600651", 
+      "name": "PLANT ROOMS LEVEL 03 ZONE Z0A", 
+      "id": 5688791
+    }, 
+    {
+      "number": "KSS-KS01-POP-1000-Z0A-04-1EA-05-600751", 
+      "name": "PLANT ROOMS LEVEL 04 ZONE Z0A", 
+      "id": 5729808
+    }, 
+    {
+      "number": "KSS-KS01-POP-1000-Z0A-05-1EA-05-600851", 
+      "name": "PLANT ROOMS LEVEL 05 ZONE Z0A", 
+      "id": 5984381
+    }, 
+    {
+      "number": "KSS-KS01-POP-1000-Z0A-B1-1EA-05-600251", 
+      "name": "PLANT ROOMS LEVEL B1 ZONE Z0A", 
+      "id": 5331317
+    }, 
+    {
+      "number": "KSS-KS01-POP-1000-Z0A-B2-1EA-05-600151", 
+      "name": "PLANT ROOMS LEVEL B2 ZONE Z0A", 
+      "id": 5314455
+    }, 
+    {
+      "number": "KSS-KS01-POP-1000-Z0B-00-1EA-05-600352", 
+      "name": "PLANT ROOMS LEVEL 00 ZONE Z0B", 
+      "id": 5479954
+    }, 
+    {
+      "number": "KSS-KS01-POP-1000-Z0B-01-1EA-05-600452", 
+      "name": "PLANT ROOMS LEVEL 01 ZONE Z0B", 
+      "id": 5493312
+    }, 
+    {
+      "number": "KSS-KS01-POP-1000-Z0B-02-1EA-05-600552", 
+      "name": "PLANT ROOMS LEVEL 02 ZONE Z0B", 
+      "id": 5519989
+    }, 
+    {
+      "number": "KSS-KS01-POP-1000-Z0B-03-1EA-05-600652", 
+      "name": "PLANT ROOMS LEVEL 03 ZONE Z0B", 
+      "id": 5688774
+    }, 
+    {
+      "number": "KSS-KS01-POP-1000-Z0B-04-1EA-05-600752", 
+      "name": "PLANT ROOMS LEVEL 04 ZONE Z0B", 
+      "id": 5729791
+    }, 
+    {
+      "number": "KSS-KS01-POP-1000-Z0B-05-1EA-05-600852", 
+      "name": "PLANT ROOMS LEVEL 05 ZONE Z0B", 
+      "id": 5997782
+    }, 
+    {
+      "number": "KSS-KS01-POP-1000-Z0B-B1-1EA-05-600252", 
+      "name": "PLANT ROOMS LEVEL B1 ZONE Z0B", 
+      "id": 5331291
+    }, 
+    {
+      "number": "KSS-KS01-POP-1000-Z0B-B2-1EA-05-600152", 
+      "name": "PLANT ROOMS LEVEL B2 ZONE Z0B", 
+      "id": 5314530
+    }, 
+    {
+      "number": "KSS-KS01-POP-1000-Z0C-00-1EA-05-600353", 
+      "name": "PLANT ROOMS LEVEL 00 ZONE Z0C", 
+      "id": 5479937
+    }, 
+    {
+      "number": "KSS-KS01-POP-1000-Z0C-01-1EA-05-600453", 
+      "name": "PLANT ROOMS LEVEL 01 ZONE Z0C", 
+      "id": 5493286
+    }, 
+    {
+      "number": "KSS-KS01-POP-1000-Z0C-02-1EA-05-600553", 
+      "name": "PLANT ROOMS LEVEL 02 ZONE Z0C", 
+      "id": 5519963
+    }, 
+    {
+      "number": "KSS-KS01-POP-1000-Z0C-03-1EA-05-600653", 
+      "name": "PLANT ROOMS LEVEL 03 ZONE Z0C", 
+      "id": 5688757
+    }, 
+    {
+      "number": "KSS-KS01-POP-1000-Z0C-04-1EA-05-600753", 
+      "name": "PLANT ROOMS LEVEL 04 ZONE Z0C", 
+      "id": 5729774
+    }, 
+    {
+      "number": "KSS-KS01-POP-1000-Z0C-05-1EA-05-600853", 
+      "name": "PLANT ROOMS LEVEL 05 ZONE Z0C", 
+      "id": 5997808
+    }, 
+    {
+      "number": "KSS-KS01-POP-1000-Z0C-B1-1EA-05-600253", 
+      "name": "PLANT ROOMS LEVEL B1 ZONE Z0C", 
+      "id": 5331265
+    }, 
+    {
+      "number": "KSS-KS01-POP-1000-Z0C-B2-1EA-05-600153", 
+      "name": "PLANT ROOMS LEVEL B2 ZONE Z0C", 
+      "id": 5314505
+    }, 
+    {
+      "number": "KSS-KS01-POP-1000-Z0D-00-1EA-05-600354", 
+      "name": "PLANT ROOMS LEVEL 00 ZONE Z0D", 
+      "id": 5479920
+    }, 
+    {
+      "number": "KSS-KS01-POP-1000-Z0D-01-1EA-05-600454", 
+      "name": "PLANT ROOMS LEVEL 01 ZONE Z0D", 
+      "id": 5493260
+    }, 
+    {
+      "number": "KSS-KS01-POP-1000-Z0D-02-1EA-05-600554", 
+      "name": "PLANT ROOMS LEVEL 02 ZONE Z0D", 
+      "id": 5519937
+    }, 
+    {
+      "number": "KSS-KS01-POP-1000-Z0D-03-1EA-05-600654", 
+      "name": "PLANT ROOMS LEVEL 03 ZONE Z0D", 
+      "id": 5688740
+    }, 
+    {
+      "number": "KSS-KS01-POP-1000-Z0D-04-1EA-05-600754", 
+      "name": "PLANT ROOMS LEVEL 04 ZONE Z0D", 
+      "id": 5729757
+    }, 
+    {
+      "number": "KSS-KS01-POP-1000-Z0D-05-1EA-05-600854", 
+      "name": "PLANT ROOMS LEVEL 05 ZONE Z0D", 
+      "id": 5997834
+    }, 
+    {
+      "number": "KSS-KS01-POP-1000-Z0D-B1-1EA-05-600254", 
+      "name": "PLANT ROOMS LEVEL B1 ZONE Z0D", 
+      "id": 5331239
+    }, 
+    {
+      "number": "KSS-KS01-POP-1000-Z0D-B2-1EA-05-600154", 
+      "name": "PLANT ROOMS LEVEL B2 ZONE Z0D", 
+      "id": 5314480
+    }
+  ], 
+  "mode": "Sheets"
+}

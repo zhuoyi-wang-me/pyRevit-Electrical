@@ -1,0 +1,217 @@
+<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Auto Tag Layout" Width="760" Height="740" MinWidth="640" MinHeight="520"
+        WindowStartupLocation="CenterScreen" FontFamily="Segoe UI Variable Text, Segoe UI" FontSize="13"
+        Background="#F3F3F3" Foreground="#1B1B1B" UseLayoutRounding="True" TextOptions.TextFormattingMode="Display">
+    <Window.Resources>
+        <!-- ============ Windows 11 look: buttons ============ -->
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="#FBFBFB"/>
+            <Setter Property="Foreground" Value="#1B1B1B"/>
+            <Setter Property="BorderBrush" Value="#D6D6D6"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="16,0"/>
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="b" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="4">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="b" Property="Background" Value="#F2F2F2"/></Trigger>
+                            <Trigger Property="IsPressed" Value="True"><Setter TargetName="b" Property="Background" Value="#E9E9E9"/></Trigger>
+                            <Trigger Property="IsEnabled" Value="False"><Setter Property="Opacity" Value="0.45"/></Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="Accent" TargetType="Button">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Padding" Value="18,0"/>
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="b" Background="#005FB8" CornerRadius="4">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="b" Property="Background" Value="#1A6FBF"/></Trigger>
+                            <Trigger Property="IsPressed" Value="True"><Setter TargetName="b" Property="Background" Value="#3380C6"/></Trigger>
+                            <Trigger Property="IsEnabled" Value="False"><Setter TargetName="b" Property="Background" Value="#BDBDBD"/></Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- ============ text field: rounded, accent line when in use ============ -->
+        <Style x:Key="Field" TargetType="TextBox">
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="Padding" Value="8,0"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Foreground" Value="#1B1B1B"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border x:Name="b" Background="White" BorderBrush="#D6D6D6" BorderThickness="1" CornerRadius="4">
+                            <Grid>
+                                <ScrollViewer x:Name="PART_ContentHost" Margin="{TemplateBinding Padding}" VerticalAlignment="Center"/>
+                                <Border x:Name="line" Height="1" VerticalAlignment="Bottom" Background="#8A8A8A" CornerRadius="0,0,4,4" Margin="1,0"/>
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="b" Property="Background" Value="#F9F9F9"/></Trigger>
+                            <Trigger Property="IsKeyboardFocused" Value="True">
+                                <Setter TargetName="line" Property="Background" Value="#005FB8"/>
+                                <Setter TargetName="line" Property="Height" Value="2"/>
+                                <Setter TargetName="b" Property="Background" Value="White"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- ============ check box ============ -->
+        <Style TargetType="CheckBox">
+            <Setter Property="Foreground" Value="#1B1B1B"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="CheckBox">
+                        <StackPanel Orientation="Horizontal" Background="Transparent">
+                            <Border x:Name="box" Width="18" Height="18" CornerRadius="4" BorderThickness="1" BorderBrush="#8A8A8A" Background="White" VerticalAlignment="Center">
+                                <Path x:Name="tick" Data="M 3,8 L 6.5,11.5 L 13,4.5" Stroke="White" StrokeThickness="1.6" Visibility="Collapsed"
+                                      StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeLineJoin="Round"/>
+                            </Border>
+                            <ContentPresenter Margin="8,0,0,0" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="box" Property="BorderBrush" Value="#005FB8"/></Trigger>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="box" Property="Background" Value="#005FB8"/>
+                                <Setter TargetName="box" Property="BorderBrush" Value="#005FB8"/>
+                                <Setter TargetName="tick" Property="Visibility" Value="Visible"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- ============ cards ============ -->
+        <Style x:Key="Card" TargetType="Border">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#E5E5E5"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="8"/>
+        </Style>
+        <Style x:Key="Stat" TargetType="Border" BasedOn="{StaticResource Card}">
+            <Setter Property="Padding" Value="16,10"/>
+            <Setter Property="Margin" Value="0,0,10,0"/>
+            <Setter Property="MinWidth" Value="140"/>
+        </Style>
+        <Style x:Key="StatNumber" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="26"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontFamily" Value="Segoe UI Variable Display, Segoe UI"/>
+        </Style>
+        <Style x:Key="Caption" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#5C5C5C"/>
+            <Setter Property="FontSize" Value="12"/>
+        </Style>
+        <Style TargetType="ComboBox">
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="20,16,20,16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0">
+            <TextBlock Text="Auto Tag Layout" FontSize="22" FontWeight="SemiBold" FontFamily="Segoe UI Variable Display, Segoe UI"/>
+            <TextBlock x:Name="lblView" Style="{StaticResource Caption}" Margin="0,2,0,0" TextTrimming="CharacterEllipsis"/>
+        </StackPanel>
+
+        <Grid Grid.Row="1" Margin="2,16,2,6">
+            <TextBlock Text="Tick what to tag and choose the tag for it" FontWeight="SemiBold"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button x:Name="btnRefresh" Content="Refresh" Height="26" Padding="10,0" Margin="0,0,14,0"
+                        ToolTip="Read the active view and the selection in Revit again."/>
+                <Button x:Name="btnAll" Content="Select all" Height="26" Padding="10,0"/>
+                <Button x:Name="btnNone" Content="Clear" Height="26" Padding="10,0" Margin="6,0,0,0"/>
+            </StackPanel>
+        </Grid>
+
+        <!-- one row for each category found in the view -->
+        <Border Grid.Row="2" Style="{StaticResource Card}" Padding="6,6">
+            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                <StackPanel x:Name="pnlGroups"/>
+            </ScrollViewer>
+        </Border>
+
+        <!-- options -->
+        <Border Grid.Row="3" Style="{StaticResource Card}" Padding="16,12" Margin="0,12,0,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0">
+                    <CheckBox x:Name="chkSelected" Content="Only the elements selected in Revit" Margin="0,0,0,10"/>
+                    <CheckBox x:Name="chkSkip" Content="Leave elements that already have a tag" Margin="0,0,0,10"/>
+                    <CheckBox x:Name="chkOne" Content="One tag for the pieces of one run (connected, or stacked like a riser)" Margin="0,0,0,10"
+                              ToolTip="A tray run is made of many pieces with the same tag text: only one of them is tagged. Separate trays with the same name and size (risers side by side, parallel trays) are each tagged."/>
+                    <CheckBox x:Name="chkLinks" Content="Also elements of linked models" Margin="0,0,0,10"/>
+                    <CheckBox x:Name="chkInside" Content="Keep the tags inside the annotation crop"
+                              ToolTip="When the view has an annotation crop, the tags are placed inside it so that none is hidden."/>
+                </StackPanel>
+                <Grid Grid.Column="1" Margin="16,0,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="120"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="1" Text="Distance from the layout (mm on the sheet)" VerticalAlignment="Center" TextWrapping="Wrap"/>
+                    <TextBox x:Name="txtOffset" Grid.Row="1" Grid.Column="1" Style="{StaticResource Field}" Margin="0,0,0,8" HorizontalContentAlignment="Center"/>
+                    <TextBlock Grid.Row="2" Text="Space between tags (mm on the sheet)" VerticalAlignment="Center" TextWrapping="Wrap"/>
+                    <TextBox x:Name="txtGap" Grid.Row="2" Grid.Column="1" Style="{StaticResource Field}" Margin="0,0,0,8" HorizontalContentAlignment="Center"/>
+                    <TextBlock Grid.Row="3" Text="Space between leader arrows (mm on the sheet)" VerticalAlignment="Center" TextWrapping="Wrap"/>
+                    <TextBox x:Name="txtLeaderGap" Grid.Row="3" Grid.Column="1" Style="{StaticResource Field}" HorizontalContentAlignment="Center"
+                             ToolTip="Arrows on trays slide along the tray to keep this distance from each other."/>
+                </Grid>
+            </Grid>
+        </Border>
+
+        <Border x:Name="barMessages" Grid.Row="4" CornerRadius="6" Padding="14,8" Margin="0,12,0,0" Background="#F9F9F9" BorderBrush="#E5E5E5" BorderThickness="1">
+            <TextBox x:Name="txtMessages" IsReadOnly="True" TextWrapping="Wrap" MaxHeight="110" VerticalScrollBarVisibility="Auto"
+                     BorderThickness="0" Background="Transparent"/>
+        </Border>
+
+        <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,12,0,0">
+            <Button x:Name="btnPreview" Content="Preview options..." Style="{StaticResource Accent}"
+                    ToolTip="Shows the possible arrangements as small drawings. Nothing is created until you choose one."/>
+            <Button x:Name="btnCreate" Content="Create recommended" Margin="8,0,0,0"
+                    ToolTip="Creates the best-ranked arrangement at once: everything inside the annotation crop, few corners, short leaders."/>
+            <Button x:Name="btnClose" Content="Close" Margin="8,0,0,0"/>
+        </StackPanel>
+    </Grid>
+</Window>

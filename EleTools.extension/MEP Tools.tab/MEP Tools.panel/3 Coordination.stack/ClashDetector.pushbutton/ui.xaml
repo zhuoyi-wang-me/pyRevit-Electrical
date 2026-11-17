@@ -1,0 +1,282 @@
+<!--
+    MEP Clash Detector - MODELESS results window
+    ==================================================================
+    Loaded by pyrevit.forms.WPFWindow. There is NO x:Class attribute and
+    NO event attributes: every handler is wired in code by
+    ClashResultsWindow._wire_events() in script.py, using the x:Name
+    values below. Every Revit action goes through an ExternalEvent.
+
+    Left pane : clash SETS (clashes within the set radius of each other)
+    Right pane: clashes of the selected set (or all listed clashes)
+-->
+<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MEP Clash Detector - Results"
+        Height="800" Width="1500"
+        MinHeight="520" MinWidth="1000"
+        WindowStartupLocation="CenterScreen"
+        ShowInTaskbar="True"
+        ResizeMode="CanResizeWithGrip"
+        Background="#FFF3F5F7">
+
+    <Window.Resources>
+        <Style x:Key="ToolButton" TargetType="Button">
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="MinWidth" Value="120"/>
+            <Setter Property="Margin" Value="0,0,8,0"/>
+            <Setter Property="Padding" Value="10,0,10,0"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Background" Value="#FFFFFFFF"/>
+            <Setter Property="BorderBrush" Value="#FFB9C2CC"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+
+        <Style x:Key="PrimaryButton" TargetType="Button" BasedOn="{StaticResource ToolButton}">
+            <Setter Property="Background" Value="#FF1F4E79"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+        </Style>
+
+        <Style x:Key="SmallButton" TargetType="Button" BasedOn="{StaticResource ToolButton}">
+            <Setter Property="Height" Value="26"/>
+            <Setter Property="MinWidth" Value="70"/>
+            <Setter Property="Margin" Value="0"/>
+        </Style>
+
+        <Style x:Key="LegendChip" TargetType="Border">
+            <Setter Property="Width" Value="14"/>
+            <Setter Property="Height" Value="14"/>
+            <Setter Property="CornerRadius" Value="3"/>
+            <Setter Property="Margin" Value="10,0,4,0"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+
+        <Style x:Key="PaneTitle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#FF1F4E79"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+
+        <Style TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="#FF1F4E79"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="8,6,8,6"/>
+            <Setter Property="BorderBrush" Value="#FF15334F"/>
+            <Setter Property="BorderThickness" Value="0,0,1,0"/>
+        </Style>
+
+        <!-- shared look of both grids -->
+        <Style TargetType="DataGrid">
+            <Setter Property="AutoGenerateColumns" Value="False"/>
+            <Setter Property="IsReadOnly" Value="True"/>
+            <Setter Property="CanUserSortColumns" Value="True"/>
+            <Setter Property="CanUserResizeRows" Value="False"/>
+            <Setter Property="SelectionMode" Value="Single"/>
+            <Setter Property="SelectionUnit" Value="FullRow"/>
+            <Setter Property="HeadersVisibility" Value="Column"/>
+            <Setter Property="GridLinesVisibility" Value="Horizontal"/>
+            <Setter Property="HorizontalGridLinesBrush" Value="#FFE0E5EA"/>
+            <Setter Property="AlternatingRowBackground" Value="#FFF7F9FB"/>
+            <Setter Property="RowBackground" Value="White"/>
+            <Setter Property="BorderBrush" Value="#FFB9C2CC"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="RowHeight" Value="24"/>
+            <Setter Property="EnableRowVirtualization" Value="True"/>
+            <Setter Property="EnableColumnVirtualization" Value="True"/>
+            <Setter Property="VirtualizingStackPanel.IsVirtualizing" Value="True"/>
+            <Setter Property="VirtualizingStackPanel.VirtualizationMode" Value="Recycling"/>
+            <Setter Property="ScrollViewer.CanContentScroll" Value="True"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>   <!-- header          -->
+            <RowDefinition Height="Auto"/>   <!-- filters         -->
+            <RowDefinition Height="Auto"/>   <!-- actions         -->
+            <RowDefinition Height="Auto"/>   <!-- legend          -->
+            <RowDefinition Height="*"/>      <!-- sets | clashes  -->
+            <RowDefinition Height="Auto"/>   <!-- summary         -->
+            <RowDefinition Height="Auto"/>   <!-- status bar      -->
+        </Grid.RowDefinitions>
+
+        <!-- ================= HEADER ================= -->
+        <StackPanel Grid.Row="0" Margin="0,0,0,10">
+            <TextBlock Text="MEP Clash Detector"
+                       FontSize="20" FontWeight="Bold" Foreground="#FF1F4E79"/>
+            <TextBlock Text="MEP vs MEP and MEP vs Architecture / Structure - host and linked models - active floor plan - window stays open while you work"
+                       FontSize="11" Foreground="#FF5A6772" Margin="0,2,0,0"/>
+        </StackPanel>
+
+        <!-- ================= FILTERS + GROUPING ================= -->
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,8">
+            <TextBlock Text="Search:" VerticalAlignment="Center" Margin="0,0,6,0" FontSize="12"/>
+            <TextBox x:Name="search_box" Width="240" Height="28"
+                     VerticalContentAlignment="Center" Padding="6,0,6,0"
+                     ToolTip="Filter on any field: id, set, family, type, system, level..."/>
+
+            <TextBlock Text="Clash type:" VerticalAlignment="Center" Margin="14,0,6,0" FontSize="12"/>
+            <ComboBox x:Name="type_filter" Width="210" Height="28" VerticalContentAlignment="Center"/>
+            <TextBlock Text="Class:" VerticalAlignment="Center" Margin="14,0,6,0" FontSize="12"/>
+            <ComboBox x:Name="class_filter" Width="130" Height="28" VerticalContentAlignment="Center"
+                      ToolTip="MEP vs MEP / MEP vs ARC / MEP vs STR"/>
+
+            <Border Width="1" Background="#FFB9C2CC" Margin="14,2,14,2"/>
+
+            <TextBlock Text="Set radius:" VerticalAlignment="Center" Margin="0,0,6,0" FontSize="12"/>
+            <TextBox x:Name="radius_box" Width="70" Height="28"
+                     VerticalContentAlignment="Center" HorizontalContentAlignment="Right"
+                     Padding="4,0,4,0"
+                     ToolTip="Clashes whose clash points are closer than this (mm, 3D) form one set. 0 = no grouping. Press Enter to apply."/>
+            <TextBlock Text="mm" VerticalAlignment="Center" Margin="4,0,8,0" FontSize="12"/>
+            <Button x:Name="btn_regroup" Style="{StaticResource SmallButton}" Content="Regroup"
+                    ToolTip="Rebuild the clash sets with the new radius (no model change)"/>
+            <CheckBox x:Name="multi_only" Content="Multi-clash sets only"
+                      VerticalAlignment="Center" Margin="14,0,0,0" FontSize="12"
+                      ToolTip="Hide sets that contain a single clash"/>
+        </StackPanel>
+
+        <!-- ================= ACTIONS ================= -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,0,0,8">
+            <Button x:Name="btn_export" Style="{StaticResource PrimaryButton}"
+                    Content="Export to Excel"
+                    ToolTip="Clashes, Clash Sets and Summary sheets in one .xlsx"/>
+            <Button x:Name="btn_save_sets" Style="{StaticResource PrimaryButton}"
+                    Content="Save Selection Sets"
+                    ToolTip="Create one Revit Selection Filter per clash set (Manage &gt; Selection &gt; Load)"/>
+            <Button x:Name="btn_scope" Style="{StaticResource ToolButton}"
+                    Content="Change Scope..."
+                    ToolTip="Choose models (host / links) and ARC / STR categories, then re-run"/>
+            <Button x:Name="btn_refresh" Style="{StaticResource ToolButton}"
+                    Content="Refresh"
+                    ToolTip="Re-run the clash detection on the view (after you fixed clashes)"/>
+            <Button x:Name="btn_isolate" Style="{StaticResource ToolButton}"
+                    Content="Isolate"
+                    ToolTip="Isolate the selected clash, else the selected set, else every listed clash"/>
+            <Button x:Name="btn_clear" Style="{StaticResource ToolButton}"
+                    Content="Clear Highlights"
+                    ToolTip="Remove the graphic overrides and reset temporary hide/isolate"/>
+        </StackPanel>
+
+        <!-- ================= COLOUR LEGEND ================= -->
+        <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="0,0,0,8">
+            <TextBlock Text="Legend:" VerticalAlignment="Center" FontSize="11" Foreground="#FF5A6772"/>
+            <Border Style="{StaticResource LegendChip}" Background="Red"/>
+            <TextBlock Text="Cable Tray" VerticalAlignment="Center" FontSize="11"/>
+            <Border Style="{StaticResource LegendChip}" Background="#FF0046FF"/>
+            <TextBlock Text="Duct" VerticalAlignment="Center" FontSize="11"/>
+            <Border Style="{StaticResource LegendChip}" Background="#FF00AA3C"/>
+            <TextBlock Text="Pipe" VerticalAlignment="Center" FontSize="11"/>
+            <Border Style="{StaticResource LegendChip}" Background="Magenta"/>
+            <TextBlock Text="Fittings" VerticalAlignment="Center" FontSize="11"/>
+            <Border Style="{StaticResource LegendChip}" Background="#FFFF8C00"/>
+            <TextBlock Text="Arch / Struct (host)" VerticalAlignment="Center" FontSize="11"/>
+            <TextBlock Text="   Linked elements are not coloured - click = select + zoom, double click = isolate; bold sets hold several clashes"
+                       VerticalAlignment="Center" FontSize="11" Foreground="#FF8895A1"/>
+        </StackPanel>
+
+        <!-- ================= SETS | CLASHES ================= -->
+        <Grid Grid.Row="4">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="520" MinWidth="280"/>
+                <ColumnDefinition Width="6"/>
+                <ColumnDefinition Width="*" MinWidth="300"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- clash sets pane -->
+            <DockPanel Grid.Column="0">
+                <DockPanel DockPanel.Dock="Top" Margin="0,0,0,4" LastChildFill="False">
+                    <TextBlock DockPanel.Dock="Left" Text="Clash Sets" Style="{StaticResource PaneTitle}"/>
+                    <Button DockPanel.Dock="Right" x:Name="btn_all_sets" Style="{StaticResource SmallButton}"
+                            Content="Show all" ToolTip="Clear the set selection and list every clash"/>
+                </DockPanel>
+                <DataGrid x:Name="set_grid">
+                    <DataGrid.RowStyle>
+                        <Style TargetType="DataGridRow">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Kind}" Value="Multiple">
+                                    <Setter Property="FontWeight" Value="SemiBold"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGrid.RowStyle>
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Set"         Binding="{Binding SetName}"      SortMemberPath="SetId"        Width="70"/>
+                        <DataGridTextColumn Header="Clashes"     Binding="{Binding ClashCount}"   SortMemberPath="ClashCount"   Width="62"/>
+                        <DataGridTextColumn Header="Elements"    Binding="{Binding ElementCount}" SortMemberPath="ElementCount" Width="68"/>
+                        <DataGridTextColumn Header="Level"       Binding="{Binding Level}"        SortMemberPath="Level"        Width="90"/>
+                        <DataGridTextColumn Header="Linked"      Binding="{Binding LinkedCount}"  SortMemberPath="LinkedCount"  Width="58"/>
+                        <DataGridTextColumn Header="Classes"     Binding="{Binding ClashClasses}" SortMemberPath="ClashClasses" Width="150"/>
+                        <DataGridTextColumn Header="Clash Types" Binding="{Binding ClashTypes}"   SortMemberPath="ClashTypes"   Width="220"/>
+                        <DataGridTextColumn Header="Sources"     Binding="{Binding Sources}"      SortMemberPath="Sources"      Width="200"/>
+                        <DataGridTextColumn Header="Extent (ft)" Binding="{Binding Extent}"       SortMemberPath="ExtentRaw"    Width="80"/>
+                        <DataGridTextColumn Header="X"           Binding="{Binding X}"            SortMemberPath="CenterX"      Width="75"/>
+                        <DataGridTextColumn Header="Y"           Binding="{Binding Y}"            SortMemberPath="CenterY"      Width="75"/>
+                        <DataGridTextColumn Header="Z"           Binding="{Binding Z}"            SortMemberPath="CenterZ"      Width="75"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </DockPanel>
+
+            <GridSplitter Grid.Column="1" Width="6" HorizontalAlignment="Stretch"
+                          Background="Transparent" ResizeBehavior="PreviousAndNext"/>
+
+            <!-- clashes pane -->
+            <DockPanel Grid.Column="2">
+                <TextBlock DockPanel.Dock="Top" x:Name="clash_header" Text="All listed clashes"
+                           Style="{StaticResource PaneTitle}" Margin="0,0,0,4" Height="26"/>
+                <DataGrid x:Name="clash_grid">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="#"            Binding="{Binding ClashId}"    SortMemberPath="ClashId"    Width="48"/>
+                        <DataGridTextColumn Header="Clash Name"   Binding="{Binding ClashName}"  SortMemberPath="ClashName"  Width="95"/>
+                        <DataGridTextColumn Header="Set"          Binding="{Binding SetName}"    SortMemberPath="SetId"      Width="70"/>
+                        <DataGridTextColumn Header="Class"        Binding="{Binding ClashClass}" SortMemberPath="ClashClass" Width="95"/>
+                        <DataGridTextColumn Header="Clash Type"   Binding="{Binding ClashType}"  SortMemberPath="ClashType"  Width="190"/>
+                        <DataGridTextColumn Header="Source A"     Binding="{Binding SourceA}"    SortMemberPath="SourceA"    Width="120"/>
+                        <DataGridTextColumn Header="Element A ID" Binding="{Binding ElementAId}" SortMemberPath="ElementAId" Width="95"/>
+                        <DataGridTextColumn Header="Category A"   Binding="{Binding CategoryA}"  SortMemberPath="CategoryA"  Width="120"/>
+                        <DataGridTextColumn Header="Family A"     Binding="{Binding FamilyA}"    SortMemberPath="FamilyA"    Width="150"/>
+                        <DataGridTextColumn Header="Type A"       Binding="{Binding TypeA}"      SortMemberPath="TypeA"      Width="130"/>
+                        <DataGridTextColumn Header="System A"     Binding="{Binding SystemA}"    SortMemberPath="SystemA"    Width="120"/>
+                        <DataGridTextColumn Header="Source B"     Binding="{Binding SourceB}"    SortMemberPath="SourceB"    Width="140"/>
+                        <DataGridTextColumn Header="Disc. B"      Binding="{Binding DisciplineB}" SortMemberPath="DisciplineB" Width="55"/>
+                        <DataGridTextColumn Header="Element B ID" Binding="{Binding ElementBId}" SortMemberPath="ElementBId" Width="95"/>
+                        <DataGridTextColumn Header="Category B"   Binding="{Binding CategoryB}"  SortMemberPath="CategoryB"  Width="160"/>
+                        <DataGridTextColumn Header="Family B"     Binding="{Binding FamilyB}"    SortMemberPath="FamilyB"    Width="150"/>
+                        <DataGridTextColumn Header="Type B"       Binding="{Binding TypeB}"      SortMemberPath="TypeB"      Width="130"/>
+                        <DataGridTextColumn Header="System B"     Binding="{Binding SystemB}"    SortMemberPath="SystemB"    Width="120"/>
+                        <DataGridTextColumn Header="Level"        Binding="{Binding Level}"      SortMemberPath="Level"      Width="110"/>
+                        <DataGridTextColumn Header="X"            Binding="{Binding X}"          SortMemberPath="PointX"     Width="80"/>
+                        <DataGridTextColumn Header="Y"            Binding="{Binding Y}"          SortMemberPath="PointY"     Width="80"/>
+                        <DataGridTextColumn Header="Z"            Binding="{Binding Z}"          SortMemberPath="PointZ"     Width="80"/>
+                        <DataGridTextColumn Header="Vol (ft3)"    Binding="{Binding Volume}"     SortMemberPath="VolumeRaw"  Width="80"/>
+                        <DataGridTextColumn Header="View"         Binding="{Binding ViewName}"   SortMemberPath="ViewName"   Width="150"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </DockPanel>
+        </Grid>
+
+        <!-- ================= SUMMARY ================= -->
+        <Border Grid.Row="5" Background="White" BorderBrush="#FFB9C2CC"
+                BorderThickness="1" Padding="8,6,8,6" Margin="0,8,0,0">
+            <TextBlock x:Name="summary_text" FontSize="11" TextWrapping="Wrap"
+                       Foreground="#FF33414C" Text="Summary"/>
+        </Border>
+
+        <!-- ================= STATUS BAR ================= -->
+        <Grid Grid.Row="6" Margin="0,6,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" x:Name="status_text" FontSize="11"
+                       VerticalAlignment="Center" Foreground="#FF5A6772"
+                       TextTrimming="CharacterEllipsis" Text="Ready."/>
+            <Button Grid.Column="1" x:Name="btn_close" Style="{StaticResource ToolButton}"
+                    Content="Close" MinWidth="90"
+                    ToolTip="Close the window - the highlights stay in the view"/>
+        </Grid>
+    </Grid>
+</Window>

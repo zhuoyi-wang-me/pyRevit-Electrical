@@ -1,0 +1,9 @@
+{
+    "name": "EleTools",
+    "type": "extension",
+    "description": "Electrical and MEP tools: circuiting, panel schedules, single-line diagrams, fixtures, containment, coordination, views and export.",
+    "author": "Bheem",
+    "version": "1.0.0",
+    "rocket_mode_compatible": "False",
+    "min_revit_version": "2022"
+}

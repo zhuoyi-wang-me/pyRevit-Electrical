@@ -1,0 +1,9 @@
+# Double quotes are required: in a YAML plain scalar, \n is a literal
+# backslash-n, so the caption would render as "Panel MCB\nCheck".
+title: "Panel MCB Check"
+tooltip: >-
+  Compare every panel's MCB Rating with the Rating of each circuit it feeds.
+  Flags panels where a circuit is larger than the incomer, suggests the next
+  standard rating (32 / 40 / 63 / 80 / 100 / 125 A) and can write it back.
+  The check is read-only; the model changes only if you choose to update.
+author: BHEEM

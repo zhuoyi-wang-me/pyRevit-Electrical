@@ -1,0 +1,17 @@
+title: Place Views
+  on Sheet
+tooltip: >
+  Places several views on a sheet in a clean grid: row by row from the
+  top-left, never overlapping, at least 50 mm apart (titles included), the
+  whole layout centred on the sheet. Views already on another sheet are
+  skipped with a warning (legends may go on several sheets). Views that do
+  not fit can go on new sheets with the same title block.
+
+  Floor / ceiling / structural / area plans, sections, elevations, detail and
+  drafting views, legends and 3D views. One Undo removes everything.
+
+  Shift+click: spacing, sheet margins (title strip) and order.
+
+  Revit 2022 - 2025.
+author: BHEEM
+context: doc-project

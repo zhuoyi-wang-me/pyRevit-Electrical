@@ -1,0 +1,10 @@
+title: Revision
+  Clouds
+tooltip: >-
+  UPDATE REVISION CLOUDS. Gives the revision clouds of many sheets a new
+  revision at once. Tick the sheets (Project Browser selection / active sheet
+  pre-ticked), choose which clouds to change (any revision or one revision) and
+  the new revision. Optionally includes the clouds inside the views placed on
+  the sheets. Clouds of issued revisions are locked by Revit and are skipped and
+  reported. One Undo puts everything back.
+author: BHEEM

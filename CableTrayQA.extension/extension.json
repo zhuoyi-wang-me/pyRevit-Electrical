@@ -1,0 +1,8 @@
+{
+  "type": "extension",
+  "name": "CableTrayQA",
+  "description": "Cable Tray QA/QC: checks the cable tray calculation Excel against the cable tray annotations on Revit sheets.",
+  "author": "Ele BIM Tools",
+  "version": "1.0.0",
+  "rocket_mode_compatible": "True"
+}

@@ -1,0 +1,7 @@
+{
+  "type": "extension",
+  "name": "CableCalc",
+  "description": "Breaker and Cable Calculator: preliminary circuit-breaker and cable checks for panel boards, from a project data file. Results require review by a qualified electrical engineer.",
+  "author": "Bheem",
+  "rocket_mode_compatible": "False"
+}

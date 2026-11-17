@@ -1,0 +1,21 @@
+title:
+  en_us: Fix MEP Levels
+
+tooltip:
+  en_us: >
+    Corrects the Reference Level / Level association of MEP elements based on
+    their real physical elevation, recalculating offsets so that no element
+    moves. Includes a category picker, a preview dialog and a CSV report.
+
+author: BHEEM
+
+
+# The IronPython engine is used deliberately: WPF data binding to Python view
+# models is the most reliable there across Revit 2022-2026. Do not add a
+# "#! python3" shebang to script.py unless the UI has been re-tested.
+engine:
+  clean: false
+  persistent: false
+
+min_revit_version: 2022
+max_revit_version: 2026

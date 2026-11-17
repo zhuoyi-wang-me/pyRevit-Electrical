@@ -1,0 +1,11 @@
+﻿Name,Status,Visible,Projection_Line_Color,Projection_Line_Pattern,Projection_Line_Weight,Surface_Fill_Foreground_Color,Surface_Fill_Foreground_Pattern,Surface_Fill_Background_Color,Surface_Fill_Background_Pattern,Cut_Line_Color,Cut_Line_Pattern,Cut_Line_Weight,Cut_Fill_Foreground_Color,Cut_Fill_Foreground_Pattern,Cut_Fill_Background_Color,Cut_Fill_Background_Pattern,Transparency,Halftone,Surface_Fill_Foreground_Visible,Surface_Fill_Background_Visible,Cut_Fill_Foreground_Visible,Cut_Fill_Background_Visible,Detail_Level
+﻿A - Ceiling Elements,Enabled,No,Default,Default,-1,Default,Default,Default,Default,Default,Default,-1,Default,Default,Default,Default,0,No,Yes,Yes,Yes,Yes,Default
+﻿A - Digital Screen Soffit,Enabled,No,Default,Default,-1,Default,Default,Default,Default,Default,Default,-1,Default,Default,Default,Default,0,No,Yes,Yes,Yes,Yes,Default
+﻿A - Enscape,Enabled,No,Default,Default,-1,Default,Default,Default,Default,Default,Default,-1,Default,Default,Default,Default,0,No,Yes,Yes,Yes,Yes,Default
+﻿E - Circuited,Disabled,Yes,"RGB(0,255,0)",Default,-1,Default,Default,Default,Default,Default,Default,-1,Default,Default,Default,Default,0,No,Yes,Yes,Yes,Yes,Default
+﻿E - Elevations,Enabled,No,Default,Default,-1,Default,Default,Default,Default,Default,Default,-1,Default,Default,Default,Default,0,No,Yes,Yes,Yes,Yes,Default
+﻿E - Not Circuited,Disabled,Yes,"RGB(255,0,0)",Default,-1,Default,Default,Default,Default,Default,Default,-1,Default,Default,Default,Default,0,No,Yes,Yes,Yes,Yes,Default
+﻿E - Sections,Enabled,No,Default,Default,-1,Default,Default,Default,Default,Default,Default,-1,Default,Default,Default,Default,0,No,Yes,Yes,Yes,Yes,Default
+﻿FS - Soda Conduit,Enabled,No,Default,Default,-1,Default,Default,Default,Default,Default,Default,-1,Default,Default,Default,Default,0,No,Yes,Yes,Yes,Yes,Default
+﻿Link - Grids,Enabled,No,Default,Default,-1,Default,Default,Default,Default,Default,Default,-1,Default,Default,Default,Default,0,No,Yes,Yes,Yes,Yes,Default
+﻿Link - Levels,Enabled,No,Default,Default,-1,Default,Default,Default,Default,Default,Default,-1,Default,Default,Default,Default,0,No,Yes,Yes,Yes,Yes,Default

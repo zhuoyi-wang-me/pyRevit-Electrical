@@ -1,0 +1,23 @@
+﻿title: Electrical
+  Calculator
+tooltip: >-
+  ELECTRICAL CALCULATOR. An always-open window you can keep beside the model
+  while you work (click the button again to bring it to the front).
+  FROM MODEL: select electrical fixtures / equipment / panels in Revit and
+  click "Use current selection" (or "Pick in model") - their Apparent Load,
+  voltage, poles and pf are read; each element's Load Classification is
+  resolved and the project's Demand Factor for that classification is
+  applied (same rules as Revit panel schedules; panels use their own Total
+  Demand Load) to give demand kVA, kW, design current and breaker; send the
+  result straight to cable sizing. A manual single factor is also available. Also: load current (kW / kVA / A, 1- and 3-phase), voltage drop (mV/A/m),
+  cable and breaker sizing (BS 7671, Cu SWA, PVC / XLPE, Ca Cg Ci factors),
+  power factor correction (kVAr), transformer fault level (kA) and
+  ISOLATOR rating - one isolator per selected load (or a single load):
+  Ib x margin (125 % motors) -> next standard size, DP / TP / TP+N,
+  AC-23A for motor loads, AC-22A for others - and transfer the rating to
+  the related isolator fixture's Rating parameter (matched by MEE_ToServe
+  tag, else nearest fixture; asks first, one Undo step).
+  Results update as you type; "Copy result" puts the active tab on the
+  clipboard. Only "Write ratings to fixtures" changes the model.
+author: BHEEM
+context: zero-doc

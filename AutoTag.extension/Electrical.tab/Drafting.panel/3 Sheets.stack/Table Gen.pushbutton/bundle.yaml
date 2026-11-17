@@ -1,0 +1,10 @@
+title: Table
+  Gen
+tooltip: >-
+  TABLE GEN. Brings an Excel table into Revit with its Excel look: a drafting
+  view with the cell texts (number formats, fonts, bold, colours, alignment,
+  wrap), merged cells, borders and cell colours, at paper size - ready to place
+  on sheets. Choose the .xlsx / .xlsm / .csv file, the worksheet and the range
+  (empty = print area). UPDATE re-reads the Excel and redraws the tables you
+  tick: their viewports on sheets stay in place. Works without Excel installed.
+author: BHEEM

@@ -1,0 +1,10 @@
+title: Category Route
+tooltip: >
+  Select detail lines (single view - Tab while hovering grabs a whole
+  connected chain) and automatically generate a connected MEP route in
+  the category you choose: Cable Tray, Conduit, Duct, or Pipe. Straight
+  segments are sized to your chosen type/size (mm) and elevation (mm),
+  with elbows, tees, crosses, unions and transitions inserted at every
+  junction. Locations where a fitting couldn't be placed are reported
+  at the end.
+author: Akhil

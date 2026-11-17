@@ -1,0 +1,5 @@
+title: Auto Circuit
+tooltip: >-
+  Automatically create power and lighting circuits by room, load classification,
+  panel type and distribution region. Includes preview mode and CSV/Excel reports.
+author: BHEEM

@@ -1,0 +1,8 @@
+title: Feed From Panel
+tooltip: >
+  Pick ONE source panel/board (e.g. its MEE-Component value), then pick
+  ALL the connected cables/breakers, isolators, and sub-panels it feeds,
+  and write that single value into their MEE-FedFrom (or any parameter)
+  in one go - a one-to-many broadcast rather than a pair-by-pair
+  transfer.
+author: BHEEM

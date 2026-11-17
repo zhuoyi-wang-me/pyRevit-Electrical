@@ -1,0 +1,12 @@
+title: Reload Selected Links
+tooltip: >-
+  Reload several Revit links in one go, without restarting Revit.
+
+  Lists every Revit link in the active project with its status, source
+  and path. Tick the links you need and click Reload Selected: each link
+  is reloaded in turn (the same operation as Manage Links > Reload),
+  failures are skipped and reported, and a summary is shown at the end.
+
+  Nested links reload together with their parent link. Like the native
+  command, reloading clears Revit's Undo history.
+author: BHEEM

@@ -1,0 +1,7 @@
+title: Transfer Parameter
+tooltip: >
+  Copy a parameter value from one family (e.g. an Isolator's MEE-Component)
+  into a parameter on a different family (e.g. a Cable's MEE-Feeder).
+  Pick a SOURCE set and a TARGET set, match them by position or selection
+  order, review every pair in a live preview, then apply.
+author: BHEEM

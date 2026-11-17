@@ -1,0 +1,9 @@
+title: Tray
+  Layout
+tooltip: >-
+  CABLE TRAY LAYOUT. Reads a cable schedule (Excel .xlsx or CSV) and creates
+  one drafting view per tray, "Cable Tray - <Tray ID>", with the tray outline,
+  every cable as a circle, the spacing between neighbouring cables and a
+  summary with the 20% future space. Warns when the required width exceeds
+  the tray width. Creates detail lines and text notes only.
+author: BHEEM

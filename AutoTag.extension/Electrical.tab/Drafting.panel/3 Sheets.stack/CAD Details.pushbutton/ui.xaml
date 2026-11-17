@@ -1,0 +1,153 @@
+<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="CAD Details" Width="1220" Height="800" MinWidth="980" MinHeight="620"
+        WindowStartupLocation="CenterScreen" Background="#F4F6F8" FontFamily="Segoe UI" FontSize="12">
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Padding" Value="12,5"/>
+            <Setter Property="Margin" Value="0,0,8,0"/>
+            <Setter Property="MinWidth" Value="90"/>
+        </Style>
+        <Style x:Key="Head" TargetType="TextBlock">
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="#1F3A5F"/>
+            <Setter Property="Margin" Value="0,0,0,6"/>
+        </Style>
+        <Style x:Key="Label" TargetType="TextBlock">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="0,0,8,0"/>
+        </Style>
+    </Window.Resources>
+    <DockPanel>
+        <Border DockPanel.Dock="Top" Background="#1F3A5F" Padding="16,10">
+            <StackPanel>
+                <TextBlock Text="CAD DETAILS" Foreground="White" FontSize="18" FontWeight="Bold"/>
+                <TextBlock Foreground="#C9D6E6" Margin="0,2,0,0" TextWrapping="Wrap"
+                           Text="Typical installation details from a DWG -> native Revit drafting views: detail lines, text notes and filled regions. One DWG sheet with many details is split into one drafting view per detail (by its frames, else by the gaps between them)."/>
+            </StackPanel>
+        </Border>
+        <Border DockPanel.Dock="Bottom" Background="#E3E8EE" Padding="12,6">
+            <TextBlock x:Name="status_tb" TextWrapping="Wrap" Text="Pick a DWG and press Read Details."/>
+        </Border>
+        <Grid Margin="12">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <!-- 1 the file -->
+            <StackPanel Grid.Row="0" Margin="0,0,0,10">
+                <TextBlock Style="{StaticResource Head}" Text="1   DWG FILE"/>
+                <DockPanel>
+                    <Button DockPanel.Dock="Right" x:Name="btn_read" Content="Read Details" Click="read_click" FontWeight="Bold" Margin="8,0,0,0"/>
+                    <Button DockPanel.Dock="Right" x:Name="btn_browse" Content="Browse..." Click="browse_click" Margin="8,0,0,0"/>
+                    <TextBox x:Name="file_tb" Padding="4,4" VerticalContentAlignment="Center"/>
+                </DockPanel>
+            </StackPanel>
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="420"/>
+                    <ColumnDefinition Width="12"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <!-- 2 the details -->
+                <DockPanel Grid.Column="0">
+                    <TextBlock DockPanel.Dock="Top" Style="{StaticResource Head}" Text="2   DETAILS FOUND (tick, rename)"/>
+                    <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Margin="0,6,0,0">
+                        <TextBlock Text="Gap between details" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                        <TextBox x:Name="gap_tb" Width="70" Padding="3,2" VerticalContentAlignment="Center"
+                                 ToolTip="CAD mm. Drawings closer than this are one detail. Smaller: more, smaller details; larger: fewer. Empty = automatic."/>
+                        <TextBlock Text="mm" VerticalAlignment="Center" Margin="4,0,8,0"/>
+                        <Button x:Name="btn_split" Content="Split again" Click="split_click" MinWidth="80"/>
+                    </StackPanel>
+                    <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Margin="0,6,0,0">
+                        <Button x:Name="btn_all" Content="Tick all" Click="all_click"/>
+                        <Button x:Name="btn_none" Content="Untick all" Click="none_click"/>
+                        <TextBlock x:Name="count_tb" VerticalAlignment="Center" Foreground="#5F5F5F"/>
+                    </StackPanel>
+                    <Border BorderBrush="#C9D1DA" BorderThickness="1" Background="White">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                            <StackPanel x:Name="list_sp" Margin="4"/>
+                        </ScrollViewer>
+                    </Border>
+                </DockPanel>
+                <!-- preview + settings -->
+                <Grid Grid.Column="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <DockPanel Grid.Row="0">
+                        <TextBlock DockPanel.Dock="Top" x:Name="preview_head" Style="{StaticResource Head}" Text="PREVIEW"/>
+                        <Border BorderBrush="#C9D1DA" BorderThickness="1" Background="White" ClipToBounds="True">
+                            <Canvas x:Name="preview_cv"/>
+                        </Border>
+                    </DockPanel>
+                    <Grid Grid.Row="1" Margin="0,10,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="16"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" Grid.ColumnSpan="5" Style="{StaticResource Head}" Text="3   SETTINGS"/>
+                        <TextBlock Grid.Row="1" Grid.Column="0" Style="{StaticResource Label}" Text="CAD to Revit scale"/>
+                        <ComboBox Grid.Row="1" Grid.Column="1" x:Name="cad_cb" Margin="0,0,0,6"
+                                  ToolTip="How many times larger the CAD is drawn than it must be in Revit: 1 : 10 makes 4000 in the CAD 400 mm in Revit"/>
+                        <TextBlock Grid.Row="1" Grid.Column="3" Style="{StaticResource Label}" Text="View scale"/>
+                        <ComboBox Grid.Row="1" Grid.Column="4" x:Name="scale_cb" Margin="0,0,0,6"/>
+                        <TextBlock Grid.Row="2" Grid.Column="0" Style="{StaticResource Label}" Text="Text type (all texts)"/>
+                        <ComboBox Grid.Row="2" Grid.Column="1" x:Name="texttype_cb" Margin="0,0,0,6"/>
+                        <TextBlock Grid.Row="2" Grid.Column="3" Style="{StaticResource Label}" Text="Line style (all lines)"/>
+                        <ComboBox Grid.Row="2" Grid.Column="4" x:Name="style_cb" Margin="0,0,0,6"/>
+                        <TextBlock Grid.Row="3" Grid.Column="0" Style="{StaticResource Label}" Text="DWG units"/>
+                        <ComboBox Grid.Row="3" Grid.Column="1" x:Name="units_cb" Margin="0,0,0,6"/>
+                        <TextBlock Grid.Row="3" Grid.Column="3" Style="{StaticResource Label}" Text="Patterned hatches as"/>
+                        <ComboBox Grid.Row="3" Grid.Column="4" x:Name="pattern_cb" Margin="0,0,0,6"/>
+                        <TextBlock Grid.Row="4" Grid.Column="0" Style="{StaticResource Label}" Text="Create"/>
+                        <StackPanel Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="4" Orientation="Horizontal" Margin="0,0,0,6">
+                            <RadioButton x:Name="rb_views" Content="One drafting view per detail" IsChecked="True" Margin="0,0,16,0" VerticalAlignment="Center"/>
+                            <RadioButton x:Name="rb_single" Content="All ticked details in ONE view named" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                            <TextBox x:Name="single_tb" Width="220" Padding="3,2" Text="CAD Details"/>
+                        </StackPanel>
+                        <TextBlock Grid.Row="5" Grid.Column="0" Style="{StaticResource Label}" Text="View name prefix"/>
+                        <TextBox Grid.Row="5" Grid.Column="1" x:Name="prefix_tb" Padding="3,2" Margin="0,0,0,6"/>
+                        <StackPanel Grid.Row="5" Grid.Column="3" Grid.ColumnSpan="2" Orientation="Horizontal" Margin="0,0,0,6">
+                            <CheckBox x:Name="chk_text" Content="Text" IsChecked="True" Margin="0,0,14,0" VerticalAlignment="Center"/>
+                            <CheckBox x:Name="chk_fills" Content="Hatches (filled regions)" IsChecked="True" Margin="0,0,14,0" VerticalAlignment="Center"/>
+                            <CheckBox x:Name="chk_frames" Content="Split by frames" IsChecked="True" VerticalAlignment="Center"
+                                      ToolTip="Each closed rectangle that holds a drawing is one detail; off: split only by the gaps between drawings"/>
+                        </StackPanel>
+                        <Border Grid.Row="6" Grid.ColumnSpan="5" Background="#EEF4FB" BorderBrush="#C9D9EE" BorderThickness="1" Padding="8,5">
+                            <TextBlock x:Name="hint_tb" TextWrapping="Wrap" Foreground="#1F3A5F"/>
+                        </Border>
+                    </Grid>                </Grid>
+            </Grid>
+            <!-- 4 create -->
+            <Grid Grid.Row="2" Margin="0,10,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBox x:Name="report_tb" Height="110" IsReadOnly="True" FontFamily="Consolas" TextWrapping="Wrap"
+                         VerticalScrollBarVisibility="Auto" Background="White"/>
+                <StackPanel Grid.Column="1" Margin="12,0,0,0" VerticalAlignment="Bottom">
+                    <CheckBox x:Name="chk_open" Content="Open the first new view" IsChecked="True" Margin="0,0,0,8"/>
+                    <Button x:Name="btn_create" Content="Create Drafting Views" Click="create_click" FontWeight="Bold"
+                            Background="#2E7D32" Foreground="White" MinWidth="170" IsEnabled="False" Margin="0,0,0,8"/>
+                    <Button x:Name="btn_close" Content="Close" Click="close_click" Margin="0"/>
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </DockPanel>
+</Window>

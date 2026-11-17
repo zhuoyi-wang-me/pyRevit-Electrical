@@ -1,0 +1,12 @@
+title: Visibility
+   Manager
+tooltip: >
+  Visibility Manager - Filters, V/G, Revit Links and Worksets
+
+  Copy, reset, export and import view filters, host-model category and
+  subcategory overrides/visibility, worksets, and Revit Link visibility,
+  halftone and display settings
+  across views and view templates. View-template aware.
+
+  Works on Revit 2023 - 2026.
+author: BHEEM

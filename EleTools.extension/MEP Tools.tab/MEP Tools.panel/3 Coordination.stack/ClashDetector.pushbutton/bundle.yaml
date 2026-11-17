@@ -1,0 +1,46 @@
+# ---------------------------------------------------------------------------
+# MEP Clash Detector - push button bundle definition
+# Read by pyRevit when the extension is parsed at Revit start-up.
+# ---------------------------------------------------------------------------
+
+title:
+  en_us: "Clash Detector"
+
+tooltip: >
+  Detects hard clashes of Cable Trays, Ducts, Pipes and their fittings in the
+  ACTIVE FLOOR PLAN view - against each other and against the Architecture /
+  Structure categories you choose - in the host model and in Revit links.
+
+  A Clash Scope dialog lets you pick, per model, whether its MEP and/or its
+  Arch/Struct elements are used. Host elements are highlighted (Red = Cable
+  Tray, Blue = Duct, Green = Pipe, Magenta = Fitting, Orange = Arch/Struct);
+  linked elements are selected on click. Clashes at the same location are
+  grouped into clash sets in a modeless window, exportable to XLSX and
+  savable as Revit Selection Filters.
+
+author: BHEEM
+
+# Shown in the extended tooltip and opened by F1 on the button
+help_url: https://pyrevitlabs.notion.site/pyRevit-bundles
+
+# Revit compatibility - the button is hidden outside this range
+min_revit_version: 2023
+max_revit_version: 2026
+
+# Uncomment on pyRevit builds that support view-type contexts so the button
+# is greyed out when the active view is not a floor plan. The same check is
+# performed inside script.py, so leaving it commented is safe.
+# context: active-floor-plan
+
+
+# Engine options.
+#   persistent MUST be true: the results window is MODELESS, so its event
+#   handlers and the ExternalEvent handler run after the command returned.
+#   A disposed engine at that point crashes Revit on the first click.
+#   (script.py also sets __persistentengine__ = True.)
+# Keep the default IronPython engine - do not add a '#! python3' shebang.
+# Close the results window before using pyRevit > Reload.
+engine:
+  clean: false
+  full_frame: false
+  persistent: true

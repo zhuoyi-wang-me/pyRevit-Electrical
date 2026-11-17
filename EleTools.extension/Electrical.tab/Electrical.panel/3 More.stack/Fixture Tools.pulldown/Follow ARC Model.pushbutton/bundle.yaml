@@ -1,0 +1,4 @@
+title: "Follow ARC Model"
+tooltip: "The architectural (ARC) link moved or rotated? Measures the move (matching grids by name, or picked points) and applies the same move + rotation to all electrical elements, cable trays, conduits, spaces, their tags, plan annotations, plan dimensions, view crop regions, scope boxes and (optionally) this model's grids. Pre-select elements to move only those. One undo step."
+context: doc-project
+author: BHEEM

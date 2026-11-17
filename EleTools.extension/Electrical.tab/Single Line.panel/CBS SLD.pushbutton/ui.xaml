@@ -1,0 +1,266 @@
+<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="CBS Single Line Diagram" Height="760" Width="1040" MinHeight="560" MinWidth="860"
+        WindowStartupLocation="CenterScreen" ResizeMode="CanResize" Background="#F4F4F4">
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Padding" Value="12,5"/>
+            <Setter Property="Margin" Value="4"/>
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="Margin" Value="0,2,0,6"/>
+            <Setter Property="Padding" Value="3"/>
+        </Style>
+        <Style TargetType="ComboBox">
+            <Setter Property="Margin" Value="0,2,0,6"/>
+        </Style>
+        <Style x:Key="Cap" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="Foreground" Value="#555555"/>
+        </Style>
+        <Style x:Key="Head" TargetType="TextBlock">
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="#00695C"/>
+            <Setter Property="Margin" Value="0,0,0,6"/>
+        </Style>
+        <Style x:Key="Card" TargetType="Border">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#DDDDDD"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="Margin" Value="0,0,0,8"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Margin="0,0,0,8">
+            <TextBlock Text="CBS Single Line Diagram" FontSize="20" FontWeight="Bold"/>
+            <TextBlock Text="Draws the SLD of each selected central battery panel from its circuits (panel schedule) - detail lines and text in a drafting view. Read-only on the panels; it only adds lines and text."
+                       FontSize="12" Foreground="#777777" TextWrapping="Wrap"/>
+        </StackPanel>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="300"/>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- panels -->
+            <Border Grid.Column="0" Style="{StaticResource Card}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="160"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Text="PANELS (Ctrl / Shift for several)" Style="{StaticResource Head}"/>
+                    <TextBox Grid.Row="1" x:Name="txtSearch" ToolTip="Filter the list, e.g. CBS"/>
+                    <ListBox Grid.Row="2" x:Name="lstPanels" SelectionMode="Extended"/>
+                    <TextBlock Grid.Row="3" x:Name="txtCircuitsHead" Text="Circuits" Style="{StaticResource Head}" Margin="0,8,0,4"/>
+                    <ListBox Grid.Row="4" x:Name="lstCircuits" FontFamily="Consolas" FontSize="11"/>
+                </Grid>
+            </Border>
+
+            <!-- settings -->
+            <ScrollViewer Grid.Column="2" VerticalScrollBarVisibility="Auto">
+                <StackPanel>
+                    <Border Style="{StaticResource Card}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/><ColumnDefinition Width="12"/>
+                                <ColumnDefinition Width="*"/><ColumnDefinition Width="12"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Grid.ColumnSpan="5" Text="TEXT AND LINES (existing types of the model)" Style="{StaticResource Head}"/>
+                            <StackPanel Grid.Row="1" Grid.Column="0">
+                                <TextBlock Text="Device text (EM, module)" Style="{StaticResource Cap}"/>
+                                <ComboBox x:Name="cmbDevText" ToolTip="Sets the size of the whole diagram: the boxes are sized to this text."/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="1" Grid.Column="2">
+                                <TextBlock Text="Label text (circuit, NOS., interfaces)" Style="{StaticResource Cap}"/>
+                                <ComboBox x:Name="cmbLblText"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="1" Grid.Column="4">
+                                <TextBlock Text="Title text (panel name)" Style="{StaticResource Cap}"/>
+                                <ComboBox x:Name="cmbTitleText"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="2" Grid.Column="0">
+                                <TextBlock Text="Line style" Style="{StaticResource Cap}"/>
+                                <ComboBox x:Name="cmbLine"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="2" Grid.Column="2">
+                                <TextBlock Text="Panel box line style" Style="{StaticResource Cap}"/>
+                                <ComboBox x:Name="cmbBoxLine"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="2" Grid.Column="4">
+                                <TextBlock Text="View scale  1 :" Style="{StaticResource Cap}"/>
+                                <TextBox x:Name="txtScale" Text="50" ToolTip="Scale of a NEW drafting view. A view that is redrawn keeps its scale."/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <Border Style="{StaticResource Card}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/><ColumnDefinition Width="12"/>
+                                <ColumnDefinition Width="*"/><ColumnDefinition Width="12"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Grid.ColumnSpan="5" Text="CONTENT" Style="{StaticResource Head}"/>
+                            <StackPanel Grid.Row="4" Grid.Column="0" VerticalAlignment="Center">
+                                <CheckBox x:Name="chkLevels" Content="Group circuits by fixture level" IsChecked="True" Margin="0,8,0,0"
+                                          ToolTip="A circuit whose fittings are on another level than the panel is drawn in that level's band (above or below), with its line running out to its own riser and past a LEVEL line - the circuit number stays at the panel."/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="4" Grid.Column="2">
+                                <TextBlock Text="Level label prefix" Style="{StaticResource Cap}"/>
+                                <TextBox x:Name="txtLevelPrefix" Text="LEVEL " ToolTip="Put before the level name (left out when the name already starts with it)."/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="4" Grid.Column="4">
+                                <TextBlock Text="Level line style" Style="{StaticResource Cap}"/>
+                                <ComboBox x:Name="cmbLevelLine"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="1" Grid.Column="0">
+                                <TextBlock Text="Exit sign keywords (family / type)" Style="{StaticResource Cap}"/>
+                                <TextBox x:Name="txtExitWords" Text="EXIT" ToolTip="Comma separated. A fixture whose family or type name contains one of these is an exit sign; every other fixture is an emergency light (EM)."/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="1" Grid.Column="2">
+                                <TextBlock Text="Exit sign label" Style="{StaticResource Cap}"/>
+                                <TextBox x:Name="txtExitLabel" Text="EXIT"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="1" Grid.Column="4">
+                                <TextBlock Text="Emergency light label" Style="{StaticResource Cap}"/>
+                                <TextBox x:Name="txtEmLabel" Text="EM"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="2" Grid.Column="0">
+                                <TextBlock Text="Module text ( | = new line, empty = none)" Style="{StaticResource Cap}"/>
+                                <TextBox x:Name="txtModule" Text="ADDRESSABLE|MODULE"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="2" Grid.Column="2">
+                                <TextBlock Text="Data text under the module" Style="{StaticResource Cap}"/>
+                                <TextBox x:Name="txtData" Text="D +/- IN/OUT"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="2" Grid.Column="4">
+                                <TextBlock Text="Circuit prefix / count suffix" Style="{StaticResource Cap}"/>
+                                <Grid>
+                                    <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="6"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                                    <TextBox x:Name="txtPrefix" Text="CKT NO. "/>
+                                    <TextBox Grid.Column="2" x:Name="txtSuffix" Text=" NOS."/>
+                                </Grid>
+                            </StackPanel>
+                            <StackPanel Grid.Row="3" Grid.Column="0">
+                                <TextBlock Text="Circuits left / right" Style="{StaticResource Cap}"/>
+                                <ComboBox x:Name="cmbSides"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="3" VerticalAlignment="Center">
+                                <CheckBox x:Name="chkSpares" Content="Show spare / space circuits (as SPARE)" Margin="0,8,0,0"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <Border Style="{StaticResource Card}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/><ColumnDefinition Width="12"/><ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+                            <TextBlock Grid.ColumnSpan="3" Text="INTERFACES UNDER THE PANEL (one per line)" Style="{StaticResource Head}"/>
+                            <StackPanel Grid.Row="1" Grid.Column="0">
+                                <TextBlock Text="Left side" Style="{StaticResource Cap}"/>
+                                <TextBox x:Name="txtLeftIf" AcceptsReturn="True" Height="86" VerticalScrollBarVisibility="Auto"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="1" Grid.Column="2">
+                                <TextBlock Text="Right side   [DLS] = box first, | = new line, {feed} = supply panel" Style="{StaticResource Cap}"/>
+                                <TextBox x:Name="txtRightIf" AcceptsReturn="True" Height="86" VerticalScrollBarVisibility="Auto"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <Border Style="{StaticResource Card}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/><ColumnDefinition Width="12"/><ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+                            <TextBlock Grid.ColumnSpan="3" Text="DRAFTING VIEW" Style="{StaticResource Head}"/>
+                            <Grid Grid.Row="3" Grid.ColumnSpan="3" Margin="0,8,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/><ColumnDefinition Width="12"/>
+                                    <ColumnDefinition Width="*"/><ColumnDefinition Width="8"/>
+                                    <ColumnDefinition Width="*"/><ColumnDefinition Width="8"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <CheckBox x:Name="chkNetwork" Content="Building data network" IsChecked="True" VerticalAlignment="Bottom" Margin="0,0,0,4"
+                                          ToolTip="All-panels / fitted views: a BUILDING DATA NETWORK bar left of the diagram and, from every panel, a dashed CAT 6 data line just under its level line to the bar."/>
+                                <StackPanel Grid.Column="2">
+                                    <TextBlock Text="Bar text type" Style="{StaticResource Cap}"/>
+                                    <ComboBox x:Name="cmbNetText" ToolTip="Text type of the vertical BUILDING DATA NETWORK text (a large one)."/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="4">
+                                    <TextBlock Text="Data line style" Style="{StaticResource Cap}"/>
+                                    <ComboBox x:Name="cmbDataLine" ToolTip="Line style of the CAT 6 data lines (dashed on the ECBS drawings)."/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="6">
+                                    <TextBlock Text="Details view (copied to the left)" Style="{StaticResource Cap}"/>
+                                    <ComboBox x:Name="cmbDetails" ToolTip="A drafting view holding the fixed details (CBS workstation, typical ECBS connection, switching scheme, notes, legend). Its contents are copied onto every all-panels / fitted view, left of the data network bar; the free left width grows to fit them."/>
+                                </StackPanel>
+                            </Grid>
+                            <StackPanel Grid.Row="2" Grid.Column="0">
+                                <TextBlock Text="Output" Style="{StaticResource Cap}"/>
+                                <ComboBox x:Name="cmbOutput" ToolTip="All in one view: the selected panels side by side, arranged by level, with one level line per level shared by all of them."/>
+                            </StackPanel>
+                            <Grid Grid.Row="2" Grid.Column="2">
+                                <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="8"/><ColumnDefinition Width="90"/><ColumnDefinition Width="8"/><ColumnDefinition Width="90"/></Grid.ColumnDefinitions>
+                                <StackPanel>
+                                    <TextBlock Text="Name of the view with all panels" Style="{StaticResource Cap}"/>
+                                    <TextBox x:Name="txtAllName" Text="CBS SLD - All Panels"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="4">
+                                    <TextBlock Text="Free left (mm)" Style="{StaticResource Cap}"/>
+                                    <TextBox x:Name="txtKeepLeft" Text="0" ToolTip="Paper width (mm) kept free on the LEFT of each sheet for legends, the typical connection details and the BUILDING DATA NETWORK bar. The diagram must fit in the rest of the sheet's drawing area. 0 = use the whole width."/>
+                                    <CheckBox x:Name="chkBorder" Content="Border" IsChecked="True" Margin="0,4,0,0"
+                                              ToolTip="Draw the outline of the sheet's drawing area (and the edge of the free left part) around the diagram, so you see what fits on the sheet."/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="2">
+                                    <TextBlock Text="Sheet size" Style="{StaticResource Cap}"/>
+                                    <ComboBox x:Name="cmbSheet" ToolTip="Output 'fitted to the sheet': the panels are split over as many views as needed so each fits the drawing area of this sheet size. Other outputs: the size on paper is only checked against it."/>
+                                </StackPanel>
+                            </Grid>
+                            <StackPanel Grid.Row="1" Grid.Column="0">
+                                <TextBlock Text="View name ({panel} = panel name)" Style="{StaticResource Cap}"/>
+                                <TextBox x:Name="txtViewName" Text="CBS SLD - {panel}"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="1" Grid.Column="2">
+                                <TextBlock Text="When the view already exists" Style="{StaticResource Cap}"/>
+                                <ComboBox x:Name="cmbExisting"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+            <TextBlock x:Name="txtStatus" VerticalAlignment="Center" TextWrapping="Wrap" Foreground="#333333"/>
+            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                <Button x:Name="btnClose" Content="Close" Width="90"/>
+                <Button x:Name="btnGenerate" Content="GENERATE SLD" Width="160" Background="#2E7D32" Foreground="White" FontWeight="Bold"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>

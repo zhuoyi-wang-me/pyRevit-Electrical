@@ -1,0 +1,280 @@
+<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="SLD Checker - QA/QC" Width="1420" Height="880" MinWidth="1080" MinHeight="620"
+        WindowStartupLocation="CenterScreen" ResizeMode="CanResizeWithGrip"
+        Background="#EEF4FF" FontFamily="Segoe UI" FontSize="12" ShowInTaskbar="True">
+
+  <Window.Resources>
+    <SolidColorBrush x:Key="Blue" Color="#1E88E5"/>
+    <SolidColorBrush x:Key="Green" Color="#00B85C"/>
+    <SolidColorBrush x:Key="Orange" Color="#FB8C00"/>
+    <SolidColorBrush x:Key="Red" Color="#E53935"/>
+    <SolidColorBrush x:Key="Muted" Color="#5C6B8A"/>
+
+    <Style TargetType="Button">
+      <Setter Property="Background" Value="White"/>
+      <Setter Property="Foreground" Value="#1565C0"/>
+      <Setter Property="BorderBrush" Value="#64B5F6"/>
+      <Setter Property="BorderThickness" Value="1.5"/>
+      <Setter Property="FontWeight" Value="SemiBold"/>
+      <Setter Property="Height" Value="32"/>
+      <Setter Property="Padding" Value="14,0"/>
+      <Setter Property="Margin" Value="0,0,8,0"/>
+      <Setter Property="Cursor" Value="Hand"/>
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="Button">
+            <Border x:Name="bd" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="6" SnapsToDevicePixels="True">
+              <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="{TemplateBinding Padding}"/>
+            </Border>
+            <ControlTemplate.Triggers>
+              <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="bd" Property="Opacity" Value="0.82"/></Trigger>
+              <Trigger Property="IsPressed" Value="True"><Setter TargetName="bd" Property="Opacity" Value="0.65"/></Trigger>
+              <Trigger Property="IsEnabled" Value="False"><Setter TargetName="bd" Property="Opacity" Value="0.4"/></Trigger>
+            </ControlTemplate.Triggers>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+    <Style x:Key="BlueBtn" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+      <Setter Property="Background" Value="{StaticResource Blue}"/>
+      <Setter Property="BorderBrush" Value="{StaticResource Blue}"/>
+      <Setter Property="Foreground" Value="White"/>
+    </Style>
+    <Style x:Key="OrangeBtn" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+      <Setter Property="Background" Value="{StaticResource Orange}"/>
+      <Setter Property="BorderBrush" Value="{StaticResource Orange}"/>
+      <Setter Property="Foreground" Value="White"/>
+    </Style>
+    <Style x:Key="RedBtn" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+      <Setter Property="Background" Value="{StaticResource Red}"/>
+      <Setter Property="BorderBrush" Value="{StaticResource Red}"/>
+      <Setter Property="Foreground" Value="White"/>
+    </Style>
+
+    <Style x:Key="Card" TargetType="Border">
+      <Setter Property="Background" Value="White"/>
+      <Setter Property="BorderBrush" Value="#C5D5F0"/>
+      <Setter Property="BorderThickness" Value="1"/>
+      <Setter Property="CornerRadius" Value="8"/>
+      <Setter Property="Padding" Value="12,8"/>
+    </Style>
+    <Style x:Key="Tile" TargetType="Border">
+      <Setter Property="Background" Value="White"/>
+      <Setter Property="CornerRadius" Value="8"/>
+      <Setter Property="Margin" Value="0,0,8,0"/>
+      <Setter Property="Padding" Value="12,8"/>
+      <Setter Property="BorderThickness" Value="0,0,0,4"/>
+      <Setter Property="Cursor" Value="Hand"/>
+    </Style>
+    <Style x:Key="TileValue" TargetType="TextBlock">
+      <Setter Property="FontSize" Value="24"/>
+      <Setter Property="FontWeight" Value="Bold"/>
+      <Setter Property="Text" Value="-"/>
+    </Style>
+    <Style x:Key="TileLabel" TargetType="TextBlock">
+      <Setter Property="FontSize" Value="11"/>
+      <Setter Property="Foreground" Value="{StaticResource Muted}"/>
+      <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+    </Style>
+    <Style x:Key="FieldLabel" TargetType="TextBlock">
+      <Setter Property="FontSize" Value="11"/>
+      <Setter Property="FontWeight" Value="Bold"/>
+      <Setter Property="Foreground" Value="#1E88E5"/>
+      <Setter Property="VerticalAlignment" Value="Center"/>
+      <Setter Property="Margin" Value="0,0,10,0"/>
+    </Style>
+
+    <Style x:Key="SevCell" TargetType="DataGridCell">
+      <Setter Property="FontWeight" Value="Bold"/>
+      <Setter Property="BorderThickness" Value="0"/>
+      <Style.Triggers>
+        <DataTrigger Binding="{Binding Severity}" Value="ERROR">
+          <Setter Property="Background" Value="#FFC7CE"/><Setter Property="Foreground" Value="#9C0006"/>
+        </DataTrigger>
+        <DataTrigger Binding="{Binding Severity}" Value="WARNING">
+          <Setter Property="Background" Value="#FFD9A8"/><Setter Property="Foreground" Value="#8A4B00"/>
+        </DataTrigger>
+        <DataTrigger Binding="{Binding Severity}" Value="INFO">
+          <Setter Property="Background" Value="#DCE6F2"/><Setter Property="Foreground" Value="#37474F"/>
+        </DataTrigger>
+      </Style.Triggers>
+    </Style>
+    <Style x:Key="Wrap" TargetType="TextBlock">
+      <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+      <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+  </Window.Resources>
+
+  <Grid Margin="14">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="*"/>
+      <RowDefinition Height="Auto"/>
+    </Grid.RowDefinitions>
+
+    <!-- ================= HEADER ================= -->
+    <Border Grid.Row="0" Padding="18,12" CornerRadius="10" Margin="0,0,0,10">
+      <Border.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+          <GradientStop Color="#1E88E5" Offset="0"/>
+          <GradientStop Color="#00ACC1" Offset="0.55"/>
+          <GradientStop Color="#00B85C" Offset="1"/>
+        </LinearGradientBrush>
+      </Border.Background>
+      <DockPanel>
+        <TextBlock x:Name="model_tb" DockPanel.Dock="Right" VerticalAlignment="Center" Foreground="White"
+                   TextAlignment="Right" FontSize="12"/>
+        <StackPanel>
+          <TextBlock Text="SLD Checker - QA/QC" Foreground="White" FontSize="21" FontWeight="Bold"/>
+          <TextBlock Text="Single line diagram (Detail Items) checked against the electrical model. Read-only: selecting and opening views is all this window does."
+                     Foreground="#EAF7FF" Margin="0,2,0,0"/>
+        </StackPanel>
+      </DockPanel>
+    </Border>
+
+    <!-- ================= RUN INFO ================= -->
+    <Border Grid.Row="1" Style="{StaticResource Card}" Margin="0,0,0,10">
+      <StackPanel>
+        <DockPanel>
+          <TextBlock Text="RUN" Style="{StaticResource FieldLabel}" Width="80"/>
+          <TextBlock x:Name="run_tb" TextWrapping="Wrap" Foreground="#1F2D3D"/>
+        </DockPanel>
+        <DockPanel Margin="0,6,0,0">
+          <TextBlock Text="MAPPING" Style="{StaticResource FieldLabel}" Width="80"/>
+          <TextBlock x:Name="mapping_tb" TextWrapping="Wrap" Foreground="#1F2D3D"/>
+        </DockPanel>
+        <DockPanel x:Name="warn_panel" Margin="0,6,0,0">
+          <TextBlock Text="NOTE" Style="{StaticResource FieldLabel}" Width="80" Foreground="#E53935"/>
+          <TextBlock x:Name="warn_tb" TextWrapping="Wrap" Foreground="#9C0006" FontWeight="SemiBold"/>
+        </DockPanel>
+      </StackPanel>
+    </Border>
+
+    <!-- ================= SUMMARY TILES (click = filter) ================= -->
+    <UniformGrid Grid.Row="2" Rows="1" Margin="0,0,-8,10">
+      <Border x:Name="tile_sld" Style="{StaticResource Tile}" BorderBrush="#1E88E5" Tag="ALL" ToolTip="Boards / equipment symbols on the SLD">
+        <StackPanel><TextBlock x:Name="t_sld" Style="{StaticResource TileValue}" Foreground="#1E88E5"/>
+          <TextBlock Text="SLD boards" Style="{StaticResource TileLabel}"/></StackPanel>
+      </Border>
+      <Border x:Name="tile_feed" Style="{StaticResource Tile}" BorderBrush="#1E88E5" Tag="ALL" ToolTip="Breaker / cable symbols on the SLD">
+        <StackPanel><TextBlock x:Name="t_feed" Style="{StaticResource TileValue}" Foreground="#1E88E5"/>
+          <TextBlock Text="SLD feeders" Style="{StaticResource TileLabel}"/></StackPanel>
+      </Border>
+      <Border x:Name="tile_model" Style="{StaticResource Tile}" BorderBrush="#00ACC1" Tag="ALL" ToolTip="Electrical equipment in the model (and links)">
+        <StackPanel><TextBlock x:Name="t_model" Style="{StaticResource TileValue}" Foreground="#00ACC1"/>
+          <TextBlock Text="Model boards" Style="{StaticResource TileLabel}"/></StackPanel>
+      </Border>
+      <Border x:Name="tile_cct" Style="{StaticResource Tile}" BorderBrush="#00ACC1" Tag="ALL" ToolTip="Power circuits in the model (and links)">
+        <StackPanel><TextBlock x:Name="t_cct" Style="{StaticResource TileValue}" Foreground="#00ACC1"/>
+          <TextBlock Text="Model circuits" Style="{StaticResource TileLabel}"/></StackPanel>
+      </Border>
+      <Border x:Name="tile_matched" Style="{StaticResource Tile}" BorderBrush="#00B85C" Tag="ALL" ToolTip="Boards matched 1:1 by name">
+        <StackPanel><TextBlock x:Name="t_matched" Style="{StaticResource TileValue}" Foreground="#00B85C"/>
+          <TextBlock Text="Boards matched" Style="{StaticResource TileLabel}"/></StackPanel>
+      </Border>
+      <Border x:Name="tile_fmatched" Style="{StaticResource Tile}" BorderBrush="#00B85C" Tag="ALL" ToolTip="SLD feeders matched 1:1 to a circuit">
+        <StackPanel><TextBlock x:Name="t_fmatched" Style="{StaticResource TileValue}" Foreground="#00B85C"/>
+          <TextBlock Text="Feeders matched" Style="{StaticResource TileLabel}"/></StackPanel>
+      </Border>
+      <Border x:Name="tile_missing" Style="{StaticResource Tile}" BorderBrush="#E53935" Tag="ISSUE:Missing" ToolTip="Missing model element + missing Detail Item - click to show">
+        <StackPanel><TextBlock x:Name="t_missing" Style="{StaticResource TileValue}" Foreground="#E53935"/>
+          <TextBlock Text="Missing" Style="{StaticResource TileLabel}"/></StackPanel>
+      </Border>
+      <Border x:Name="tile_dup" Style="{StaticResource Tile}" BorderBrush="#F9A825" Tag="ISSUE:Dup" ToolTip="Duplicates + ambiguous names - click to show">
+        <StackPanel><TextBlock x:Name="t_dup" Style="{StaticResource TileValue}" Foreground="#C17900"/>
+          <TextBlock Text="Duplicate / ambiguous" Style="{StaticResource TileLabel}"/></StackPanel>
+      </Border>
+      <Border x:Name="tile_warn" Style="{StaticResource Tile}" BorderBrush="#FB8C00" Tag="WARNING" ToolTip="Click to show the warnings">
+        <StackPanel><TextBlock x:Name="t_warn" Style="{StaticResource TileValue}" Foreground="#FB8C00"/>
+          <TextBlock Text="Warnings" Style="{StaticResource TileLabel}"/></StackPanel>
+      </Border>
+      <Border x:Name="tile_info" Style="{StaticResource Tile}" BorderBrush="#607D8B" Tag="INFO" ToolTip="Click to show the info rows">
+        <StackPanel><TextBlock x:Name="t_info" Style="{StaticResource TileValue}" Foreground="#607D8B"/>
+          <TextBlock Text="Info" Style="{StaticResource TileLabel}"/></StackPanel>
+      </Border>
+      <Border x:Name="errors_tile" Style="{StaticResource Tile}" BorderBrush="#1F2D3D" Background="#1F2D3D" Tag="ERROR" ToolTip="Click to show the errors">
+        <StackPanel><TextBlock x:Name="t_errors" Style="{StaticResource TileValue}" Foreground="White"/>
+          <TextBlock Text="Overall errors" Style="{StaticResource TileLabel}" Foreground="#C9D6EA"/></StackPanel>
+      </Border>
+    </UniformGrid>
+
+    <!-- ================= FILTER ================= -->
+    <StackPanel Grid.Row="3" Margin="0,0,0,8">
+      <DockPanel Margin="0,0,0,8">
+        <TextBlock Text="CHECKS" Style="{StaticResource FieldLabel}"/>
+        <WrapPanel x:Name="group_panel" VerticalAlignment="Center"/>
+      </DockPanel>
+      <DockPanel>
+        <TextBlock Text="Show" VerticalAlignment="Center" Foreground="{StaticResource Muted}" Margin="0,0,6,0"/>
+        <ComboBox x:Name="sev_cb" Width="150" Height="28" VerticalContentAlignment="Center" Margin="0,0,8,0"/>
+        <ComboBox x:Name="issue_cb" Width="300" Height="28" VerticalContentAlignment="Center"/>
+        <TextBlock x:Name="shown_tb" DockPanel.Dock="Right" VerticalAlignment="Center" Margin="12,0,0,0"
+                   Foreground="#283593" FontWeight="SemiBold"/>
+        <Button x:Name="btn_reset" DockPanel.Dock="Right" Content="Reset filters" Height="28" Margin="10,0,0,0"/>
+        <Border BorderBrush="#90CAF9" BorderThickness="1.5" CornerRadius="5" Background="White" Margin="10,0,0,0">
+          <Grid>
+            <TextBlock x:Name="search_hint" Text="Search panel, feeder, details, value or view..."
+                       Foreground="#9AA5B1" Margin="9,0,0,0" VerticalAlignment="Center" IsHitTestVisible="False"/>
+            <TextBox x:Name="search_tb" Height="26" BorderThickness="0" Background="Transparent"
+                     VerticalContentAlignment="Center" Padding="6,0"/>
+          </Grid>
+        </Border>
+      </DockPanel>
+    </StackPanel>
+
+    <!-- ================= RESULTS ================= -->
+    <DataGrid x:Name="grid" Grid.Row="4" AutoGenerateColumns="False" IsReadOnly="True"
+              CanUserAddRows="False" CanUserDeleteRows="False" SelectionMode="Extended" SelectionUnit="FullRow"
+              HeadersVisibility="Column" GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="#E3EAF5"
+              BorderBrush="#C5D5F0" Background="White" RowHeight="26" AlternatingRowBackground="#F8FAFF"
+              EnableRowVirtualization="True" VirtualizingPanel.IsVirtualizing="True"
+              VirtualizingPanel.VirtualizationMode="Recycling">
+      <DataGrid.ColumnHeaderStyle>
+        <Style TargetType="DataGridColumnHeader">
+          <Setter Property="Background" Value="#1F3A5F"/>
+          <Setter Property="Foreground" Value="White"/>
+          <Setter Property="FontWeight" Value="SemiBold"/>
+          <Setter Property="Padding" Value="8,6"/>
+          <Setter Property="BorderBrush" Value="#3B5B86"/>
+          <Setter Property="BorderThickness" Value="0,0,1,0"/>
+        </Style>
+      </DataGrid.ColumnHeaderStyle>
+      <DataGrid.Columns>
+        <DataGridTextColumn Header="SEVERITY" Binding="{Binding Severity}" Width="82" CellStyle="{StaticResource SevCell}" ElementStyle="{StaticResource Wrap}"/>
+        <DataGridTextColumn Header="CHECK" Binding="{Binding Check}" Width="150" ElementStyle="{StaticResource Wrap}"/>
+        <DataGridTextColumn Header="ISSUE" Binding="{Binding Issue}" Width="190" ElementStyle="{StaticResource Wrap}"/>
+        <DataGridTextColumn Header="PANEL / FEEDER" Binding="{Binding Panel}" Width="180" ElementStyle="{StaticResource Wrap}"/>
+        <DataGridTextColumn Header="DETAILS" Binding="{Binding Details}" Width="2.6*" MinWidth="200" ElementStyle="{StaticResource Wrap}"/>
+        <DataGridTextColumn Header="SLD VALUE" Binding="{Binding Sld}" Width="1.1*" MinWidth="100" ElementStyle="{StaticResource Wrap}"/>
+        <DataGridTextColumn Header="MODEL VALUE" Binding="{Binding Model}" Width="1.1*" MinWidth="100" ElementStyle="{StaticResource Wrap}"/>
+        <DataGridTextColumn Header="VIEW" Binding="{Binding View}" Width="1.4*" MinWidth="120" ElementStyle="{StaticResource Wrap}"/>
+        <DataGridTextColumn Header="SLD IDS" Binding="{Binding SldIds}" Width="90" ElementStyle="{StaticResource Wrap}"/>
+        <DataGridTextColumn Header="MODEL IDS" Binding="{Binding ModelIds}" Width="90" ElementStyle="{StaticResource Wrap}"/>
+      </DataGrid.Columns>
+    </DataGrid>
+
+    <!-- ================= ACTIONS ================= -->
+    <DockPanel Grid.Row="5" Margin="0,10,0,0">
+      <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+        <Button x:Name="btn_highlight" Content="Highlight shown errors" Style="{StaticResource RedBtn}"
+                ToolTip="Selects, in Revit, the SLD items and model elements of the ERROR rows shown in the list. Selection only - nothing is changed."/>
+        <Button x:Name="btn_clear" Content="Clear selection"/>
+        <Button x:Name="btn_sld" Content="Show on SLD" Style="{StaticResource BlueBtn}"
+                ToolTip="Opens the SLD view of the selected row, selects its Detail Items and zooms to them. Double-click a row does the same."/>
+        <Button x:Name="btn_model" Content="Show in model"
+                ToolTip="Selects the model element(s) of the selected row and zooms to them (Revit picks a view that shows them)."/>
+        <Button x:Name="btn_export" Content="Export CSV" Style="{StaticResource OrangeBtn}"
+                ToolTip="Exports the rows shown in the list (after filters) to CSV."/>
+        <Button x:Name="btn_log" Content="Open log"
+                ToolTip="Opens last_run.txt with every row, the mapping used and the counts."/>
+        <Button x:Name="btn_close" Content="Close" Margin="0"/>
+      </StackPanel>
+      <TextBlock x:Name="status_tb" VerticalAlignment="Center" Foreground="#283593" TextWrapping="Wrap" Margin="0,0,12,0"/>
+    </DockPanel>
+  </Grid>
+</Window>

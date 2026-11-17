@@ -1,0 +1,24 @@
+title: Update 3-Phase
+  Circuit Length
+tooltip: >-
+  UPDATE 3-PHASE CIRCUIT LENGTH. Routes each 3-phase power circuit along the
+  connected cable tray network (trays, elbows, tees, crosses, transitions,
+  vertical risers) from the panel to the farthest device, and writes that
+  route into the circuit as a Custom circuit path, so Revit's own circuit
+  Length follows the tray. Length is NOT multiplied by 3.
+  HOW TO USE: in the window tick the panels (search box; panels selected in
+  Revit are pre-ticked), tick the model with the cable trays (host or a linked
+  MEP / containment model - remembered), set the options and Run. Results
+  (horizontal tray, riser, drops, total, Revit length before/after, status)
+  are listed in the window - double-click a row to select the circuit in
+  Revit - and saved to %APPDATA%\EleTools\CircuitLength\last_run.txt.
+  Electrical room rule: vertical trays inside the panel's room (rooms from the
+  ARC links) are the risers to the other levels.
+  Trays are never modified. Tray ends that butt into another tray without a
+  fitting (up to 500 mm) are joined. Circuits with no connected tray route are
+  reported as FAILED with the tray Ids near the panel and device. Safe to run
+  again. To undo: Revit Undo, or set the circuit Path Mode back to Farthest
+  Device / All Devices.
+  SETTINGS (top of script.py): drop distance 3000 mm plan / 8000 mm height,
+  gap join 500 mm, joint tolerance 10 mm, report-only mode.
+author: BHEEM

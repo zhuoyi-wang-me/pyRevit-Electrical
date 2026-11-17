@@ -1,0 +1,7 @@
+title: Auto Number
+tooltip: >
+  Select circuit breaker detail items / family instances (in the order you
+  want, or box-select them) and automatically write sequential CB numbers
+  (e.g. CB-01, CB-02, ...) into a chosen parameter such as MEE-CBRef.
+  Includes a live preview before anything is written to the model.
+author: BHEEM

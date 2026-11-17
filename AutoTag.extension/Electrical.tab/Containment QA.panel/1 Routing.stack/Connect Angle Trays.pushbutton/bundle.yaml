@@ -1,0 +1,28 @@
+title: Connect Offset Trays
+tooltip: >
+  Connects parallel cable trays (or conduits) that sit at different levels,
+  a whole bank at a time.
+
+  Window select the trays on both levels and the tool pairs them up
+  automatically, then builds every transition: cuts each tray back to the
+  kink points, adds the sloped segment and creates both elbows.
+
+  Angle: choose Auto and each pair gets the first angle from your preference
+  list that its own space allows - 45 by default, stepping to 60 or 90 only
+  where it is genuinely tight. Or force a fixed angle on every pair.
+
+  Like connecting by hand, the offset may cut back into the trays to reach a
+  flatter angle. Turn that off in the settings if the tray ends must stay put.
+
+  Elbow sizes are reserved before an angle is chosen, so a pair with no room
+  for fittings is flattened, or skipped with the reason. If Revit still
+  refuses a fitting, that pair is rolled back rather than left with open
+  tray ends.
+
+  Everything lands under one undo step, and the output lists the angle used
+  and the room it had for each pair.
+
+  Shift+Click for the pairing mode, trimming, offset placement, angle
+  preference list and pairing distance.
+author: BHEEM
+min_revit_version: 2021

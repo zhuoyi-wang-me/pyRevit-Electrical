@@ -1,0 +1,6 @@
+title: Cross Check MEP
+tooltip: >-
+  Compare MEP model elements (Electrical, Mechanical, Plumbing) against Detail Item
+  parameters in both directions. Reports MATCH / PARTIAL / NOT MATCH / NO MATCH /
+  AMBIGUOUS / ORPHAN DETAIL ITEM, with select, zoom, isolate, CSV export and templates.
+author: BHEEM

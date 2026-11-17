@@ -1,0 +1,7 @@
+title: 3D Section Box
+tooltip: >
+  Select elements (host model or a linked model) and automatically create
+  or update an oriented 3D Section Box around them. Supports automatic
+  orientation from the selected element(s), manual orientation from any
+  other element, and a percentage-based offset.
+author: BHEEM

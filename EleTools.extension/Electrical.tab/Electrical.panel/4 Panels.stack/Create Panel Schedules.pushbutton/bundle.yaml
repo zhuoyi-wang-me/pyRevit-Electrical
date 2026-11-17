@@ -1,0 +1,14 @@
+title: Create Panel
+  Schedules
+tooltip: >-
+  CREATE PANEL SCHEDULES. Lists every electrical panel of this model (Electrical
+  Equipment with Part Type Panelboard, Switchboard or Other Panel) with the
+  schedule it already has. Tick the panels to schedule (panels selected in Revit
+  are pre-ticked; search and filters) and choose the panel schedule template for
+  each kind of panel - branch panels, switchboards, data panels; each list shows
+  only the templates of that kind, or the Revit default. Panels that already have
+  a schedule are greyed out and skipped. One panel that fails does not stop the
+  others. Report: panels found, skipped, created and errors, with clickable ids.
+  Creates panel schedule views only; one Undo.
+author: BHEEM
+context: doc-project

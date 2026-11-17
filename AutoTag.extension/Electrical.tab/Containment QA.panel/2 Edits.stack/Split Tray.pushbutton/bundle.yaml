@@ -1,0 +1,16 @@
+title: Split with Gap
+tooltip: >
+  Batch-splits cable trays / conduits and leaves a gap at the split.
+
+  One pick cuts every parallel tray in the bank at the same station, so a
+  stacked run crossing a wall, sleeve or road is done in one go. Keep picking
+  to cut at more stations, ESC to finish.
+
+  Gap modes: centred on one picked point, between two picked points, or none.
+  Target modes: auto-detect parallel trays, window-select them first, all
+  trays in the view, or just the one you click. A pre-selection always wins.
+
+  Shift+Click this button to change the gap and the targeting. Settings are
+  remembered between runs.
+author: BHEEM
+min_revit_version: 2021

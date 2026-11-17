@@ -1,0 +1,7 @@
+{
+  "type": "extension",
+  "name": "CadDetails",
+  "description": "CAD Details: typical installation details from DWG sheets -> native Revit drafting views (detail lines, text notes, filled regions).",
+  "author": "Bheem",
+  "rocket_mode_compatible": "False"
+}

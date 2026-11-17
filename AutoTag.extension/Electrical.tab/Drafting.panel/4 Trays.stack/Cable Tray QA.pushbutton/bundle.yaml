@@ -1,0 +1,10 @@
+title: "Cable Tray QA/QC"
+tooltip: >-
+  Checks the cable tray calculation list (Excel: Calculation_Tag, Width,
+  Height) against the cable tray annotations on the Revit sheets. Reports
+  correct, missing and extra tags, width / height mismatches, duplicate and
+  invalid annotations. Highlights errors, opens the sheet of an error and
+  exports a coloured Excel QA report. Read-only: the model is never changed.
+author: BHEEM
+context: doc-project
+min_revit_version: 2022

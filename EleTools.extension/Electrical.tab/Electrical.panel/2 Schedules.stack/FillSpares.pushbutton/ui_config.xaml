@@ -1,0 +1,288 @@
+<Window
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="Fill Spare / Space - Step 2: Configure &amp; fill" Height="820" Width="1280"
+    MinHeight="620" MinWidth="1040"
+    WindowStartupLocation="CenterScreen" ResizeMode="CanResizeWithGrip"
+    Background="#EEF4FF" FontFamily="Segoe UI" FontSize="12">
+
+    <!-- script.py replaces the token below with the Window.Resources of
+         ui_select.xaml, so both steps share one look. -->
+    <Window.Resources>
+        {{RESOURCES}}
+    </Window.Resources>
+
+    <Grid Margin="14">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="130"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- header -->
+        <Border Grid.Row="0" Background="{StaticResource HeaderBrush}" CornerRadius="10"
+                Padding="18,12" Margin="0,0,0,12">
+            <DockPanel>
+                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Border Background="#33FFFFFF" CornerRadius="14" Padding="4,4,14,4">
+                        <StackPanel Orientation="Horizontal">
+                            <Border Width="22" Height="22" CornerRadius="11" Background="#55FFFFFF">
+                                <TextBlock Text="&#xE73E;" FontFamily="Segoe MDL2 Assets" FontSize="11" Foreground="White"
+                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <TextBlock Text="Select panels" Margin="8,0,0,0" FontWeight="SemiBold"
+                                       Foreground="White" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+                    <Rectangle Width="26" Height="2" Fill="#99FFFFFF" VerticalAlignment="Center"/>
+                    <Border Background="White" CornerRadius="14" Padding="4,4,14,4">
+                        <StackPanel Orientation="Horizontal">
+                            <Border Width="22" Height="22" CornerRadius="11" Background="#1565C0">
+                                <TextBlock Text="2" Foreground="White" FontWeight="Bold"
+                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <TextBlock Text="Configure &amp; fill" Margin="8,0,0,0" FontWeight="SemiBold"
+                                       Foreground="#1565C0" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+                <Border DockPanel.Dock="Left" Width="46" Height="46" CornerRadius="23"
+                        Background="#33FFFFFF" Margin="0,0,14,0" VerticalAlignment="Center">
+                    <TextBlock Text="&#xE945;" FontFamily="Segoe MDL2 Assets" FontSize="22"
+                               Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Border>
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock Text="Fill Spare / Space" Foreground="White" FontSize="22" FontWeight="Bold"/>
+                    <TextBlock Text="The blue numbers are suggestions from the rules: double-click one to change it. Nothing is changed until you click Fill / Update."
+                               Foreground="#F3F0FF" Margin="0,3,0,0"/>
+                </StackPanel>
+            </DockPanel>
+        </Border>
+
+        <!-- options -->
+        <Grid Grid.Row="1" Margin="0,0,0,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- totals -->
+            <StackPanel Grid.Column="0" Orientation="Horizontal">
+                <Border Style="{StaticResource Tile}" Background="{StaticResource Blue}">
+                    <StackPanel>
+                        <TextBlock x:Name="tilePanels" Text="0" Style="{StaticResource TileNumber}"/>
+                        <TextBlock Text="PANELS" Style="{StaticResource TileLabel}"/>
+                    </StackPanel>
+                </Border>
+                <Border Style="{StaticResource Tile}" Background="{StaticResource Orange}">
+                    <StackPanel>
+                        <TextBlock x:Name="tileSpares" Text="0" Style="{StaticResource TileNumber}"/>
+                        <TextBlock Text="SPARES" Style="{StaticResource TileLabel}"/>
+                    </StackPanel>
+                </Border>
+                <Border Style="{StaticResource Tile}" Background="{StaticResource Violet}">
+                    <StackPanel>
+                        <TextBlock x:Name="tileSpaces" Text="0" Style="{StaticResource TileNumber}"/>
+                        <TextBlock Text="SPACES" Style="{StaticResource TileLabel}"/>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+
+            <!-- what the run does -->
+            <Border Grid.Column="1" Background="White" BorderBrush="#A5D6A7" BorderThickness="1.5"
+                    CornerRadius="8" Padding="12,6" Margin="0,0,8,0">
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock Text="WHAT FILL / UPDATE DOES" Style="{StaticResource Label}" Foreground="#2E7D32"/>
+                    <CheckBox x:Name="chkRemove" Margin="0,1" Click="option_changed">
+                        <TextBlock TextWrapping="Wrap" Text="Remove existing Spare / Space first, then rebuild (off = keep them, add only what is missing)"/>
+                    </CheckBox>
+                    <CheckBox x:Name="chkResize" Margin="0,1" Click="option_changed">
+                        <TextBlock Text="Set the panel's number of ways to the standard size that fits"/>
+                    </CheckBox>
+                    <CheckBox x:Name="chkLeftover" Margin="0,1" Click="option_changed">
+                        <TextBlock Text="Mark every way that is still empty as Space (no blank rows)"/>
+                    </CheckBox>
+                </StackPanel>
+            </Border>
+
+            <!-- set many rows at once -->
+            <Border Grid.Column="2" Background="White" BorderBrush="#90CAF9" BorderThickness="1.5"
+                    CornerRadius="8" Padding="12,6">
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock Text="SET FOR THE HIGHLIGHTED ROWS (ALL ROWS IF NONE)" Style="{StaticResource Label}"/>
+                    <StackPanel Orientation="Horizontal">
+                        <StackPanel Margin="0,0,6,0">
+                            <TextBlock Text="Spare" FontSize="11" Foreground="{StaticResource Muted}"/>
+                            <TextBox x:Name="txtBulkSpare" Width="52"/>
+                        </StackPanel>
+                        <StackPanel Margin="0,0,6,0">
+                            <TextBlock Text="Space" FontSize="11" Foreground="{StaticResource Muted}"/>
+                            <TextBox x:Name="txtBulkSpace" Width="52"/>
+                        </StackPanel>
+                        <StackPanel Margin="0,0,6,0">
+                            <TextBlock Text="Rating (A)" FontSize="11" Foreground="{StaticResource Muted}"/>
+                            <ComboBox x:Name="cbBulkRating" Width="70" IsEditable="True">
+                                <ComboBoxItem Content="16"/>
+                                <ComboBoxItem Content="20"/>
+                                <ComboBoxItem Content="25"/>
+                                <ComboBoxItem Content="32"/>
+                                <ComboBoxItem Content="40"/>
+                                <ComboBoxItem Content="50"/>
+                                <ComboBoxItem Content="63"/>
+                            </ComboBox>
+                        </StackPanel>
+                        <StackPanel Margin="0,0,8,0">
+                            <TextBlock Text="Poles" FontSize="11" Foreground="{StaticResource Muted}"/>
+                            <ComboBox x:Name="cbBulkPoles" Width="56" IsEditable="True">
+                                <ComboBoxItem Content="1"/>
+                                <ComboBoxItem Content="2"/>
+                                <ComboBoxItem Content="3"/>
+                            </ComboBox>
+                        </StackPanel>
+                        <Button x:Name="btnBulk" Content="Apply" Style="{StaticResource BlueBtn}" Height="26"
+                                VerticalAlignment="Bottom" Margin="0" Click="bulk_click"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </Grid>
+
+        <!-- panels -->
+        <GroupBox Grid.Row="2" Header="PANELS TO UPDATE">
+            <DataGrid x:Name="dgConfig" IsReadOnly="False" SelectionMode="Extended" SelectionUnit="FullRow">
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn Header="" Width="36" CanUserResize="False">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox IsChecked="{Binding Include, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                          HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="Panel" Binding="{Binding Name}" Width="1.6*" IsReadOnly="True">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock" BasedOn="{StaticResource CellText}">
+                                <Setter Property="FontWeight" Value="SemiBold"/>
+                                <Setter Property="Foreground" Value="{StaticResource Ink}"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTemplateColumn Header="Type" Width="72" IsReadOnly="True" SortMemberPath="Type">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Border Background="#E8EAF6" CornerRadius="9" Padding="8,1"
+                                        HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <TextBlock Text="{Binding Type}" FontSize="11" FontWeight="SemiBold" Foreground="#303F9F"/>
+                                </Border>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="Circuits" Binding="{Binding ConnectedWays}" Width="70" IsReadOnly="True"
+                                        ElementStyle="{StaticResource CellNumber}"/>
+                    <DataGridTextColumn Header="Ways now" Binding="{Binding WaysNow}" Width="78" IsReadOnly="True"
+                                        ElementStyle="{StaticResource CellNumber}"/>
+                    <DataGridTextColumn Header="Ways after" Binding="{Binding WaysAfter}" Width="82" IsReadOnly="True">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock" BasedOn="{StaticResource CellNumber}">
+                                <Setter Property="FontWeight" Value="Bold"/>
+                                <Setter Property="Foreground" Value="#2E7D32"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+
+                    <DataGridTextColumn Header="Spare needed" Binding="{Binding SpareNeeded}" Width="96"
+                                        ElementStyle="{StaticResource CellEdit}"/>
+                    <DataGridTextColumn Header="Space needed" Binding="{Binding SpaceNeeded}" Width="96"
+                                        ElementStyle="{StaticResource CellEdit}"/>
+
+                    <DataGridTemplateColumn Header="Spare rating (A)" Width="112">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding SpareRating}" Style="{StaticResource CellEdit}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                        <DataGridTemplateColumn.CellEditingTemplate>
+                            <DataTemplate>
+                                <ComboBox IsEditable="True" Height="Auto"
+                                          Text="{Binding SpareRating, UpdateSourceTrigger=PropertyChanged}">
+                                    <ComboBoxItem Content="16"/>
+                                    <ComboBoxItem Content="20"/>
+                                    <ComboBoxItem Content="25"/>
+                                    <ComboBoxItem Content="32"/>
+                                    <ComboBoxItem Content="40"/>
+                                    <ComboBoxItem Content="50"/>
+                                    <ComboBoxItem Content="63"/>
+                                </ComboBox>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellEditingTemplate>
+                    </DataGridTemplateColumn>
+
+                    <DataGridTemplateColumn Header="Poles" Width="64">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Poles}" Style="{StaticResource CellEdit}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                        <DataGridTemplateColumn.CellEditingTemplate>
+                            <DataTemplate>
+                                <ComboBox IsEditable="True" Height="Auto"
+                                          Text="{Binding Poles, UpdateSourceTrigger=PropertyChanged}">
+                                    <ComboBoxItem Content="1"/>
+                                    <ComboBoxItem Content="2"/>
+                                    <ComboBoxItem Content="3"/>
+                                </ComboBox>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellEditingTemplate>
+                    </DataGridTemplateColumn>
+
+                    <DataGridTemplateColumn Header="Result" Width="2.4*" IsReadOnly="True" SortMemberPath="Status">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Border x:Name="pill" CornerRadius="9" Padding="9,2" Margin="6,0"
+                                        HorizontalAlignment="Left" VerticalAlignment="Center" Background="#ECEFF1">
+                                    <TextBlock x:Name="pillText" Text="{Binding Status}" FontSize="11" FontWeight="SemiBold"
+                                               Foreground="#546E7A" TextTrimming="CharacterEllipsis"
+                                               ToolTip="{Binding Status}"/>
+                                </Border>
+                                <DataTemplate.Triggers>
+                                    <DataTrigger Binding="{Binding StatusKind}" Value="ok">
+                                        <Setter TargetName="pill" Property="Background" Value="#C8F2DA"/>
+                                        <Setter TargetName="pillText" Property="Foreground" Value="#0B6B37"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding StatusKind}" Value="warn">
+                                        <Setter TargetName="pill" Property="Background" Value="#FFE4B8"/>
+                                        <Setter TargetName="pillText" Property="Foreground" Value="#8A4B00"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding StatusKind}" Value="error">
+                                        <Setter TargetName="pill" Property="Background" Value="#FFCDD2"/>
+                                        <Setter TargetName="pillText" Property="Foreground" Value="#9C0006"/>
+                                    </DataTrigger>
+                                </DataTemplate.Triggers>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </GroupBox>
+
+        <!-- log -->
+        <TextBox x:Name="txtLog" Grid.Row="3" Style="{StaticResource LogBox}" Height="Auto"/>
+
+        <!-- buttons -->
+        <DockPanel Grid.Row="4" Margin="0,10,0,0">
+            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                <Button x:Name="btnRecalc" Content="Recalculate" Style="{StaticResource GreyBtn}" Click="recalc_click"
+                        ToolTip="Updates 'Ways after' and the totals from the numbers in the list."/>
+                <Button x:Name="btnClose" Content="Close" Style="{StaticResource GreyBtn}" Width="90" Click="close_click"/>
+                <Button x:Name="btnFill" Content="Fill / Update" Style="{StaticResource GreenBtn}" MinWidth="180"
+                        Margin="0" Click="fill_click"/>
+            </StackPanel>
+            <Button x:Name="btnBack" DockPanel.Dock="Left" Content="&lt;  Back to panel selection"
+                    Style="{StaticResource GreyBtn}" Click="back_click"/>
+            <ProgressBar x:Name="pbar" Height="10" Margin="12,0" Visibility="Collapsed" VerticalAlignment="Center"
+                         Foreground="#00B85C" Background="#E3E9F3" BorderThickness="0"/>
+        </DockPanel>
+    </Grid>
+</Window>

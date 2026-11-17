@@ -1,0 +1,410 @@
+{
+  "mode": "Sheets", 
+  "items": [
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL 00 ZONE Z0A", 
+      "id": 6174791, 
+      "number": "KSS-KS01-POP-1000-Z0A-00-1EA-02-610301"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL 01 ZONE Z0A", 
+      "id": 6174995, 
+      "number": "KSS-KS01-POP-1000-Z0A-01-1EA-02-610401"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL 02 ZONE Z0A", 
+      "id": 6175199, 
+      "number": "KSS-KS01-POP-1000-Z0A-02-1EA-02-610501"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL 03 ZONE Z0A", 
+      "id": 6175420, 
+      "number": "KSS-KS01-POP-1000-Z0A-03-1EA-02-610601"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL 04 ZONE Z0A", 
+      "id": 6175505, 
+      "number": "KSS-KS01-POP-1000-Z0A-04-1EA-02-610701"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL L05 ZONE Z0A", 
+      "id": 6175709, 
+      "number": "KSS-KS01-POP-1000-Z0A-05-1EA-02-610801"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL L06 ZONE Z0A", 
+      "id": 6175777, 
+      "number": "KSS-KS01-POP-1000-Z0A-06-1EA-02-610901"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL L07 ZONE Z0A", 
+      "id": 6175845, 
+      "number": "KSS-KS01-POP-1000-Z0A-07-1EA-02-611001"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL B1 ZONE Z0A", 
+      "id": 6175573, 
+      "number": "KSS-KS01-POP-1000-Z0A-B1-1EA-02-610201"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL B2 ZONE Z0A", 
+      "id": 6175641, 
+      "number": "KSS-KS01-POP-1000-Z0A-B2-1EA-02-610101"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL RF ZONE Z0A", 
+      "id": 6175913, 
+      "number": "KSS-KS01-POP-1000-Z0A-RF-1EA-02-611201"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL 00 ZONE Z0B", 
+      "id": 6174808, 
+      "number": "KSS-KS01-POP-1000-Z0B-00-1EA-02-610302"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL 01 ZONE Z0B", 
+      "id": 6175012, 
+      "number": "KSS-KS01-POP-1000-Z0B-01-1EA-02-610402"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL 02 ZONE Z0B", 
+      "id": 6175216, 
+      "number": "KSS-KS01-POP-1000-Z0B-02-1EA-02-610502"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL 03 ZONE Z0B", 
+      "id": 6175437, 
+      "number": "KSS-KS01-POP-1000-Z0B-03-1EA-02-610602"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL 04 ZONE Z0B", 
+      "id": 6175522, 
+      "number": "KSS-KS01-POP-1000-Z0B-04-1EA-02-610702"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL L05 ZONE Z0B", 
+      "id": 6175726, 
+      "number": "KSS-KS01-POP-1000-Z0B-05-1EA-02-610802"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL L06 ZONE Z0B", 
+      "id": 6175794, 
+      "number": "KSS-KS01-POP-1000-Z0B-06-1EA-02-610902"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL L07 ZONE Z0B", 
+      "id": 6175862, 
+      "number": "KSS-KS01-POP-1000-Z0B-07-1EA-02-611002"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL B1 ZONE Z0B", 
+      "id": 6175590, 
+      "number": "KSS-KS01-POP-1000-Z0B-B1-1EA-02-610202"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL B2 ZONE Z0B", 
+      "id": 6175658, 
+      "number": "KSS-KS01-POP-1000-Z0B-B2-1EA-02-610102"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL RF ZONE Z0B", 
+      "id": 6175930, 
+      "number": "KSS-KS01-POP-1000-Z0B-RF-1EA-02-611202"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL 00 ZONE Z0C", 
+      "id": 6174825, 
+      "number": "KSS-KS01-POP-1000-Z0C-00-1EA-02-610303"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL 01 ZONE Z0C", 
+      "id": 6175029, 
+      "number": "KSS-KS01-POP-1000-Z0C-01-1EA-02-610403"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL 02 ZONE Z0C", 
+      "id": 6175233, 
+      "number": "KSS-KS01-POP-1000-Z0C-02-1EA-02-610503"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL 03 ZONE Z0C", 
+      "id": 6175454, 
+      "number": "KSS-KS01-POP-1000-Z0C-03-1EA-02-610603"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL 04 ZONE Z0C", 
+      "id": 6175539, 
+      "number": "KSS-KS01-POP-1000-Z0C-04-1EA-02-610703"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL L05 ZONE Z0C", 
+      "id": 6175743, 
+      "number": "KSS-KS01-POP-1000-Z0C-05-1EA-02-610803"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL L06 ZONE Z0C", 
+      "id": 6175811, 
+      "number": "KSS-KS01-POP-1000-Z0C-06-1EA-02-610903"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL L07 ZONE Z0C", 
+      "id": 6175879, 
+      "number": "KSS-KS01-POP-1000-Z0C-07-1EA-02-611003"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL B1 ZONE Z0C", 
+      "id": 6175607, 
+      "number": "KSS-KS01-POP-1000-Z0C-B1-1EA-02-610203"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL B2 ZONE Z0C", 
+      "id": 6175675, 
+      "number": "KSS-KS01-POP-1000-Z0C-B2-1EA-02-610103"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL RF ZONE Z0C", 
+      "id": 6175947, 
+      "number": "KSS-KS01-POP-1000-Z0C-RF-1EA-02-611203"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL 00 ZONE Z0D", 
+      "id": 6174842, 
+      "number": "KSS-KS01-POP-1000-Z0D-00-1EA-02-610304"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL 01 ZONE Z0D", 
+      "id": 6175046, 
+      "number": "KSS-KS01-POP-1000-Z0D-01-1EA-02-610404"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL 02 ZONE Z0D", 
+      "id": 6175250, 
+      "number": "KSS-KS01-POP-1000-Z0D-02-1EA-02-610504"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL 03 ZONE Z0D", 
+      "id": 6175471, 
+      "number": "KSS-KS01-POP-1000-Z0D-03-1EA-02-610604"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL 04 ZONE Z0D", 
+      "id": 6175556, 
+      "number": "KSS-KS01-POP-1000-Z0D-04-1EA-02-610704"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL L05 ZONE Z0D", 
+      "id": 6175760, 
+      "number": "KSS-KS01-POP-1000-Z0D-05-1EA-02-610804"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL L06 ZONE Z0D", 
+      "id": 6175828, 
+      "number": "KSS-KS01-POP-1000-Z0D-06-1EA-02-610904"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL L07 ZONE Z0D", 
+      "id": 6175896, 
+      "number": "KSS-KS01-POP-1000-Z0D-07-1EA-02-611004"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL B1 ZONE Z0D", 
+      "id": 6175624, 
+      "number": "KSS-KS01-POP-1000-Z0D-B1-1EA-02-610204"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL B2 ZONE Z0D", 
+      "id": 6175692, 
+      "number": "KSS-KS01-POP-1000-Z0D-B2-1EA-02-610104"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL RF ZONE Z0D", 
+      "id": 6175964, 
+      "number": "KSS-KS01-POP-1000-Z0D-RF-1EA-02-611204"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL 00 ZONE Z0E", 
+      "id": 6174859, 
+      "number": "KSS-KS01-POP-1000-Z0E-00-1EA-02-610305"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL 01 ZONE Z0E", 
+      "id": 6175063, 
+      "number": "KSS-KS01-POP-1000-Z0E-01-1EA-02-610405"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL 02 ZONE Z0E", 
+      "id": 6175267, 
+      "number": "KSS-KS01-POP-1000-Z0E-02-1EA-02-610505"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL 00 ZONE Z0F", 
+      "id": 6174876, 
+      "number": "KSS-KS01-POP-1000-Z0F-00-1EA-02-610306"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL 01 ZONE Z0F", 
+      "id": 6175080, 
+      "number": "KSS-KS01-POP-1000-Z0F-01-1EA-02-610406"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL 02 ZONE Z0F", 
+      "id": 6175284, 
+      "number": "KSS-KS01-POP-1000-Z0F-02-1EA-02-610506"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL 00 ZONE Z0G", 
+      "id": 6174893, 
+      "number": "KSS-KS01-POP-1000-Z0G-00-1EA-02-610307"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL 01 ZONE Z0G", 
+      "id": 6175097, 
+      "number": "KSS-KS01-POP-1000-Z0G-01-1EA-02-610407"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL 02 ZONE Z0G", 
+      "id": 6175301, 
+      "number": "KSS-KS01-POP-1000-Z0G-02-1EA-02-610507"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL 00 ZONE Z0H", 
+      "id": 6174910, 
+      "number": "KSS-KS01-POP-1000-Z0H-00-1EA-02-610308"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL 01 ZONE Z0H", 
+      "id": 6175114, 
+      "number": "KSS-KS01-POP-1000-Z0H-01-1EA-02-610408"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL 02 ZONE Z0H", 
+      "id": 6175318, 
+      "number": "KSS-KS01-POP-1000-Z0H-02-1EA-02-610508"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL 00 ZONE Z0J", 
+      "id": 6174927, 
+      "number": "KSS-KS01-POP-1000-Z0J-00-1EA-02-610309"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL 01 ZONE Z0J", 
+      "id": 6175131, 
+      "number": "KSS-KS01-POP-1000-Z0J-01-1EA-02-610409"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL 02 ZONE Z0J", 
+      "id": 6175335, 
+      "number": "KSS-KS01-POP-1000-Z0J-02-1EA-02-610509"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL 00 ZONE Z0K", 
+      "id": 6174944, 
+      "number": "KSS-KS01-POP-1000-Z0K-00-1EA-02-610310"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL 01 ZONE Z0K", 
+      "id": 6175148, 
+      "number": "KSS-KS01-POP-1000-Z0K-01-1EA-02-610410"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL 02 ZONE Z0K", 
+      "id": 6175352, 
+      "number": "KSS-KS01-POP-1000-Z0K-02-1EA-02-610510"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL 00 ZONE Z0L", 
+      "id": 6174961, 
+      "number": "KSS-KS01-POP-1000-Z0L-00-1EA-02-610311"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL 01 ZONE Z0L", 
+      "id": 6175165, 
+      "number": "KSS-KS01-POP-1000-Z0L-01-1EA-02-610411"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL 02 ZONE Z0L", 
+      "id": 6175369, 
+      "number": "KSS-KS01-POP-1000-Z0L-02-1EA-02-610511"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL 00 ZONE Z0M", 
+      "id": 6174978, 
+      "number": "KSS-KS01-POP-1000-Z0M-00-1EA-02-610312"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL 01 ZONE Z0M", 
+      "id": 6175182, 
+      "number": "KSS-KS01-POP-1000-Z0M-01-1EA-02-610412"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL 02 ZONE Z0M", 
+      "id": 6175386, 
+      "number": "KSS-KS01-POP-1000-Z0M-02-1EA-02-610512"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL 02 ZONE Z0R", 
+      "id": 6175403, 
+      "number": "KSS-KS01-POP-1000-Z0R-02-1EA-02-610514"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL 03 ZONE Z0R", 
+      "id": 6175488, 
+      "number": "KSS-KS01-POP-1000-Z0R-03-1EA-02-610614"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL 00 OVERALL", 
+      "id": 1648300, 
+      "number": "KSS-KS01-POP-1000-ZZZ-00-1EA-02-610300"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL 01 OVERALL", 
+      "id": 1648317, 
+      "number": "KSS-KS01-POP-1000-ZZZ-01-1EA-02-610400"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL 02 OVERALL", 
+      "id": 1648334, 
+      "number": "KSS-KS01-POP-1000-ZZZ-02-1EA-02-610500"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL 03 OVERALL", 
+      "id": 1648351, 
+      "number": "KSS-KS01-POP-1000-ZZZ-03-1EA-02-610600"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL 04 OVERALL", 
+      "id": 1648368, 
+      "number": "KSS-KS01-POP-1000-ZZZ-04-1EA-02-610700"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL 05 OVERALL", 
+      "id": 1648385, 
+      "number": "KSS-KS01-POP-1000-ZZZ-05-1EA-02-610800"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL 06 OVERALL", 
+      "id": 1648402, 
+      "number": "KSS-KS01-POP-1000-ZZZ-06-1EA-02-610900"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL 07 OVERALL", 
+      "id": 1708492, 
+      "number": "KSS-KS01-POP-1000-ZZZ-07-1EA-02-611000"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL B1 OVERALL", 
+      "id": 1648419, 
+      "number": "KSS-KS01-POP-1000-ZZZ-B1-1EA-02-610200"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL B2 OVERALL", 
+      "id": 1648436, 
+      "number": "KSS-KS01-POP-1000-ZZZ-B2-1EA-02-610100"
+    }, 
+    {
+      "name": "CONTAINMENT LAYOUT LEVEL RF OVERALL", 
+      "id": 1648453, 
+      "number": "KSS-KS01-POP-1000-ZZZ-RF-1EA-02-611200"
+    }
+  ]
+}

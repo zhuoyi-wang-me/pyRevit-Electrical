@@ -1,0 +1,307 @@
+<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Adjust Grids" Width="1040" Height="760" MinWidth="900" MinHeight="640"
+        WindowStartupLocation="CenterScreen" FontFamily="Segoe UI Variable Text, Segoe UI" FontSize="13"
+        Background="#F3F3F3" Foreground="#1B1B1B" UseLayoutRounding="True" TextOptions.TextFormattingMode="Display">
+    <Window.Resources>
+        <!-- ============ Windows 11 look: buttons ============ -->
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="#FBFBFB"/>
+            <Setter Property="Foreground" Value="#1B1B1B"/>
+            <Setter Property="BorderBrush" Value="#D6D6D6"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="16,0"/>
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="b" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="4">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="b" Property="Background" Value="#F2F2F2"/></Trigger>
+                            <Trigger Property="IsPressed" Value="True"><Setter TargetName="b" Property="Background" Value="#E9E9E9"/></Trigger>
+                            <Trigger Property="IsEnabled" Value="False"><Setter Property="Opacity" Value="0.45"/></Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="Accent" TargetType="Button">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Padding" Value="18,0"/>
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="b" Background="#005FB8" CornerRadius="4">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="b" Property="Background" Value="#1A6FBF"/></Trigger>
+                            <Trigger Property="IsPressed" Value="True"><Setter TargetName="b" Property="Background" Value="#3380C6"/></Trigger>
+                            <Trigger Property="IsEnabled" Value="False"><Setter TargetName="b" Property="Background" Value="#BDBDBD"/></Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- ============ text field: rounded, accent line when in use ============ -->
+        <Style x:Key="Field" TargetType="TextBox">
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="Padding" Value="8,0"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Foreground" Value="#1B1B1B"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border x:Name="b" Background="White" BorderBrush="#D6D6D6" BorderThickness="1" CornerRadius="4">
+                            <Grid>
+                                <ScrollViewer x:Name="PART_ContentHost" Margin="{TemplateBinding Padding}" VerticalAlignment="Center"/>
+                                <Border x:Name="line" Height="1" VerticalAlignment="Bottom" Background="#8A8A8A" CornerRadius="0,0,4,4" Margin="1,0"/>
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="b" Property="Background" Value="#F9F9F9"/></Trigger>
+                            <Trigger Property="IsKeyboardFocused" Value="True">
+                                <Setter TargetName="line" Property="Background" Value="#005FB8"/>
+                                <Setter TargetName="line" Property="Height" Value="2"/>
+                                <Setter TargetName="b" Property="Background" Value="White"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- ============ check box ============ -->
+        <Style TargetType="CheckBox">
+            <Setter Property="Foreground" Value="#1B1B1B"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="CheckBox">
+                        <StackPanel Orientation="Horizontal" Background="Transparent">
+                            <Border x:Name="box" Width="18" Height="18" CornerRadius="4" BorderThickness="1" BorderBrush="#8A8A8A" Background="White" VerticalAlignment="Center">
+                                <Path x:Name="tick" Data="M 3,8 L 6.5,11.5 L 13,4.5" Stroke="White" StrokeThickness="1.6" Visibility="Collapsed"
+                                      StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeLineJoin="Round"/>
+                            </Border>
+                            <ContentPresenter Margin="8,0,0,0" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="box" Property="BorderBrush" Value="#005FB8"/></Trigger>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="box" Property="Background" Value="#005FB8"/>
+                                <Setter TargetName="box" Property="BorderBrush" Value="#005FB8"/>
+                                <Setter TargetName="tick" Property="Visibility" Value="Visible"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- ============ cards ============ -->
+        <Style x:Key="Card" TargetType="Border">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#E5E5E5"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="8"/>
+        </Style>
+        <Style x:Key="Stat" TargetType="Border" BasedOn="{StaticResource Card}">
+            <Setter Property="Padding" Value="16,10"/>
+            <Setter Property="Margin" Value="0,0,10,0"/>
+            <Setter Property="MinWidth" Value="140"/>
+        </Style>
+        <Style x:Key="StatNumber" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="26"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontFamily" Value="Segoe UI Variable Display, Segoe UI"/>
+        </Style>
+        <Style x:Key="Caption" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#5C5C5C"/>
+            <Setter Property="FontSize" Value="12"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="20,16,20,16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="420"/>
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Grid.Row="0" Grid.ColumnSpan="2">
+            <TextBlock Text="Adjust Grids" FontSize="22" FontWeight="SemiBold" FontFamily="Segoe UI Variable Display, Segoe UI"/>
+            <TextBlock x:Name="lblScope" Style="{StaticResource Caption}" Margin="0,2,0,0" TextWrapping="Wrap"/>
+        </StackPanel>
+
+        <!-- ============ the views ============ -->
+        <Border Grid.Row="1" Grid.Column="0" Style="{StaticResource Card}" Padding="14,12" Margin="0,14,12,0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0" Text="Views" FontWeight="SemiBold" Margin="0,0,0,8"/>
+                <Grid Grid.Row="1" Margin="0,0,0,8">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="150"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Search" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                    <TextBox x:Name="txtSearch" Grid.Column="1" Style="{StaticResource Field}" Margin="0,0,8,0"
+                             ToolTip="Part of the view name or of the sheet number"/>
+                    <ComboBox x:Name="cmbKind" Grid.Column="2" Height="32" VerticalContentAlignment="Center"/>
+                </Grid>
+                <Grid Grid.Row="2" Margin="6,0,6,4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="110"/>
+                        <ColumnDefinition Width="90"/>
+                    </Grid.ColumnDefinitions>
+                    <CheckBox x:Name="chkOnSheets" Content="Only views placed on sheets"/>
+                    <TextBlock Grid.Column="1" Text="Type" Style="{StaticResource Caption}" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Column="2" Text="Sheet" Style="{StaticResource Caption}" VerticalAlignment="Center"/>
+                </Grid>
+                <Border Grid.Row="3" BorderBrush="#E5E5E5" BorderThickness="1" CornerRadius="4" Background="#FFFFFF">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                        <StackPanel x:Name="lstViews" Margin="6,4,6,4"/>
+                    </ScrollViewer>
+                </Border>
+                <Grid Grid.Row="4" Margin="0,8,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Horizontal">
+                        <Button x:Name="btnAll" Content="Tick shown"/>
+                        <Button x:Name="btnNone" Content="Untick all" Margin="6,0,0,0"/>
+                        <Button x:Name="btnPick" Content="Active / selected" Margin="6,0,0,0"
+                                ToolTip="Tick the active view - or the views of the active sheet, or of the sheets / views selected in the Project Browser"/>
+                    </StackPanel>
+                    <TextBlock x:Name="lblCount" Grid.Column="1" Style="{StaticResource Caption}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                </Grid>
+            </Grid>
+        </Border>
+
+        <!-- ============ settings ============ -->
+        <ScrollViewer Grid.Row="1" Grid.Column="1" VerticalScrollBarVisibility="Auto" Margin="0,14,0,0">
+            <StackPanel>
+                <Border Style="{StaticResource Card}" Padding="16,12">
+                    <StackPanel>
+                        <CheckBox x:Name="chkAdjust" Content="Adjust the grids of this model" FontWeight="SemiBold" Margin="0,0,0,10"/>
+                        <StackPanel x:Name="panAdjust">
+                            <CheckBox x:Name="chkBubbles" Content="Switch the bubbles on and off as well" Margin="0,0,0,8"/>
+                            <TextBlock x:Name="lblSides" Margin="0,0,0,6" TextWrapping="Wrap"/>
+                            <Grid HorizontalAlignment="Center">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="80"/>
+                                    <ColumnDefinition Width="150"/>
+                                    <ColumnDefinition Width="80"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="28"/>
+                                    <RowDefinition Height="60"/>
+                                    <RowDefinition Height="28"/>
+                                </Grid.RowDefinitions>
+                                <CheckBox x:Name="chkTop" Content="Top" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <CheckBox x:Name="chkLeft" Content="Left" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                <Border Grid.Row="1" Grid.Column="1" BorderBrush="#8A8A8A" BorderThickness="1" Background="#FAFAFA">
+                                    <TextBlock Text="crop region" Foreground="#8A8A8A" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <CheckBox x:Name="chkRight" Content="Right" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                                <CheckBox x:Name="chkBottom" Content="Bottom" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Grid>
+                            <Grid Margin="0,10,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="80"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Grid.Row="0" Text="Ticked sides: grids end this far outside the crop (mm on the sheet)" VerticalAlignment="Center" TextWrapping="Wrap" Margin="0,0,8,0"/>
+                                <TextBox x:Name="txtBubble" Grid.Row="0" Grid.Column="1" Style="{StaticResource Field}" Margin="0,0,0,8" HorizontalContentAlignment="Center"/>
+                                <TextBlock Grid.Row="1" Text="Other sides (mm on the sheet)" VerticalAlignment="Center" TextWrapping="Wrap" Margin="0,0,8,0"/>
+                                <TextBox x:Name="txtPlain" Grid.Row="1" Grid.Column="1" Style="{StaticResource Field}" Margin="0,0,0,8" HorizontalContentAlignment="Center"/>
+                                <CheckBox x:Name="chkLengthen" Grid.Row="2" Grid.ColumnSpan="2" Content="Line up ALL grid ends on one line (also ends that stop inside the view)"
+                                          ToolTip="On: every grid shown in the view ends on the frame, so all ends on one side stand on one line. Off: an end that stops inside the view stays where it is. Grids hidden from the view (dragged out of it) are never pulled in."/>
+                                <CheckBox x:Name="chkFromModel" Grid.Row="3" Grid.ColumnSpan="2" Margin="0,8,0,0"
+                                          Content="Start from each grid as drawn in the model (3D extents)"
+                                          ToolTip="Repairs grids whose 2D ends were stretched by an earlier run: the inner end comes back to where the grid really starts. Grids hidden in the view (2D ends dragged out of it) stay hidden."/>
+                                <CheckBox x:Name="chkToGrids" Grid.Row="4" Grid.ColumnSpan="2" Margin="0,8,0,0"
+                                          ToolTip="Off: the ends stand the distances above outside the crop region. On: they stand those distances outside the last vertical grid (left / right) and the last horizontal grid (bottom / top) shown in the view - a side without such a grid keeps the crop edge.">
+                                    <TextBlock Text="Measure the distances from the outermost grids instead of the crop edge" TextWrapping="Wrap"/>
+                                </CheckBox>
+                            </Grid>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <Border Style="{StaticResource Card}" Padding="16,12" Margin="0,12,0,0">
+                    <StackPanel>
+                        <CheckBox x:Name="chkHideLinked" Content="Turn off the grids of linked models" FontWeight="SemiBold"
+                                  ToolTip="In the ticked views (or their view templates) - by a view filter, this model's own grids stay"/>
+                        <TextBlock x:Name="lblLinks" Style="{StaticResource Caption}" Margin="26,4,0,8" TextWrapping="Wrap"/>
+                        <CheckBox x:Name="chkOwnType" Margin="26,0,0,0"
+                                  ToolTip="The filter tells the grids apart by their type name. Copy/Monitor copies the type of the link, so the names are often the same: then this model's grids get a copy of their type called '... - Host'.">
+                            <TextBlock Text="Give this model's grids their own type when a link uses the same type name" TextWrapping="Wrap"/>
+                        </CheckBox>
+                        <Button x:Name="btnShowLinked" Content="Turn linked grids on again" HorizontalAlignment="Left" Margin="26,10,0,0"
+                                ToolTip="Removes the filter from the ticked views (or their view templates)"/>
+                    </StackPanel>
+                </Border>
+
+                <Border Style="{StaticResource Card}" Padding="16,12" Margin="0,12,0,0">
+                    <StackPanel>
+                        <TextBlock Text="Align grid ends to detail line(s)" FontWeight="SemiBold"/>
+                        <TextBlock Style="{StaticResource Caption}" Margin="0,4,0,8" TextWrapping="Wrap"
+                                   Text="Draw a detail line - straight, a circle or an arc - where the grid ends should be (e.g. one across the top, or a circle round a fan of radial grids), then pick it. Every grid that meets it gets its end moved onto it - longer or shorter; radial grids keep their inner end. Select grids together with the lines to align only those."/>
+                        <CheckBox x:Name="chkLineBubble" Content="Bubble on at the aligned end"
+                                  ToolTip="The other end of the grid keeps its bubble as it is"/>
+                        <CheckBox x:Name="chkLineTicked" Margin="0,6,0,0"
+                                  ToolTip="The same line position in the ticked views that look the same way (e.g. the plans of the other floors)">
+                            <TextBlock Text="Also in the ticked views (same line position)" TextWrapping="Wrap"/>
+                        </CheckBox>
+                        <CheckBox x:Name="chkLineDelete" Content="Delete the detail line(s) afterwards" Margin="0,6,0,0"/>
+                        <CheckBox x:Name="chkLineMulti" Margin="0,6,0,0"
+                                  ToolTip="Off (default): multi-segment grids (rings round the bowl) are left as they are. On: their free ends are aligned too - their joints never move.">
+                            <TextBlock Text="Also multi-segment grids (their free ends only)" TextWrapping="Wrap"/>
+                        </CheckBox>
+                        <Button x:Name="btnAlignLines" Content="Pick detail line(s) and align" HorizontalAlignment="Left" Margin="0,10,0,0"
+                                ToolTip="Uses the detail lines already selected in the active view - otherwise asks you to pick them (Finish / Esc)"/>
+                    </StackPanel>
+                </Border>            </StackPanel>
+        </ScrollViewer>
+
+        <Border x:Name="barMessages" Grid.Row="2" Grid.ColumnSpan="2" CornerRadius="6" Padding="14,8" Margin="0,12,0,0" Background="#F9F9F9" BorderBrush="#E5E5E5" BorderThickness="1">
+            <TextBox x:Name="txtMessages" IsReadOnly="True" TextWrapping="Wrap" MaxHeight="130" VerticalScrollBarVisibility="Auto"
+                     BorderThickness="0" Background="Transparent"/>
+        </Border>
+
+        <Grid Grid.Row="3" Grid.ColumnSpan="2" Margin="0,12,0,0">
+            <Button x:Name="btnRefresh" Content="Refresh" HorizontalAlignment="Left"
+                    ToolTip="Read the views of the active model again (after switching model or adding views)"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button x:Name="btnApply" Content="Apply to ticked views" Style="{StaticResource Accent}"/>
+                <Button x:Name="btnClose" Content="Close" Margin="8,0,0,0" IsCancel="True"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>

@@ -1,0 +1,120 @@
+<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Feed From Panel" Height="640" Width="820"
+        WindowStartupLocation="CenterScreen" ResizeMode="CanResize"
+        Background="#F4F4F4">
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Padding" Value="12,6"/>
+            <Setter Property="Margin" Value="4"/>
+            <Setter Property="FontSize" Value="13"/>
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="Margin" Value="4,2"/>
+            <Setter Property="Padding" Value="4"/>
+        </Style>
+        <Style TargetType="ComboBox">
+            <Setter Property="Margin" Value="4,2"/>
+            <Setter Property="Padding" Value="4"/>
+        </Style>
+        <Style TargetType="Label">
+            <Setter Property="Margin" Value="4,4,4,0"/>
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#555555"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="14">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Text="Feed From Panel" FontSize="20" FontWeight="Bold" Margin="0,0,0,4"/>
+        <TextBlock Grid.Row="1" Text="One source panel/board feeds many targets - the same value is written into every target's parameter."
+                   FontSize="12" Foreground="#777777" Margin="0,0,0,10" TextWrapping="Wrap"/>
+
+        <Border Grid.Row="2" BorderBrush="#DDDDDD" BorderThickness="1" Background="White"
+                Padding="10" Margin="0,0,0,10" CornerRadius="4">
+            <StackPanel>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0">
+                        <TextBlock Text="SOURCE PANEL (one element)" FontWeight="Bold" Foreground="#00695C" Margin="0,0,0,4"/>
+                        <TextBlock x:Name="txtSourceInfo" Text="No source selected yet" FontSize="12" Foreground="#777777"/>
+                    </StackPanel>
+                    <Button Grid.Column="1" x:Name="btnPickSource" Content="Pick Source Panel" Click="btnPickSource_Click"
+                            Background="#00695C" Foreground="White" VerticalAlignment="Bottom"/>
+                </Grid>
+
+                <Grid Margin="0,10,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0">
+                        <TextBlock Text="TARGETS (all connected cables/breakers/isolators/sub-panels)" FontWeight="Bold" Foreground="#1565C0" Margin="0,0,0,4"/>
+                        <TextBlock x:Name="txtTargetInfo" Text="0 target(s) selected" FontSize="12" Foreground="#777777"/>
+                    </StackPanel>
+                    <Button Grid.Column="1" x:Name="btnPickTargets" Content="Pick Target Elements" Click="btnPickTargets_Click"
+                            Background="#1565C0" Foreground="White" VerticalAlignment="Bottom"/>
+                </Grid>
+
+                <Grid Margin="0,12,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0" Margin="0,0,8,0">
+                        <Label Content="Source Parameter(s) - comma separated, tried in order"/>
+                        <ComboBox x:Name="cmbSourceParam" IsEditable="True"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" Margin="8,0,0,0">
+                        <Label Content="Target Parameter"/>
+                        <ComboBox x:Name="cmbTargetParam" IsEditable="True"/>
+                    </StackPanel>
+                </Grid>
+
+                <Grid Margin="0,10,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <CheckBox Grid.Column="0" x:Name="chkOverwrite" Content="Overwrite existing target values (uncheck to only fill blanks)"
+                              IsChecked="True" VerticalAlignment="Center"/>
+                    <Button Grid.Column="1" Content="Update Preview" x:Name="btnRefresh" Click="btnRefresh_Click"/>
+                </Grid>
+            </StackPanel>
+        </Border>
+
+        <DataGrid Grid.Row="3" x:Name="dgPreview" AutoGenerateColumns="False"
+                   CanUserAddRows="False" IsReadOnly="True" Margin="0,0,0,10"
+                   AlternatingRowBackground="#F7F7F7" GridLinesVisibility="Horizontal"
+                   HeadersVisibility="Column" RowHeaderWidth="0">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="#" Binding="{Binding Order}" Width="35"/>
+                <DataGridTextColumn Header="Target Id" Binding="{Binding TargetId}" Width="70"/>
+                <DataGridTextColumn Header="Target Category" Binding="{Binding TargetCategory}" Width="140"/>
+                <DataGridTextColumn Header="Target Type" Binding="{Binding TargetType}" Width="*"/>
+                <DataGridTextColumn Header="Current Value" Binding="{Binding CurrentValue}" Width="140"/>
+                <DataGridTextColumn Header="New Value" Binding="{Binding NewValue}" Width="160"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <TextBlock Grid.Row="4" x:Name="txtStatus" Text="" Foreground="#B00020" Margin="0,0,0,6" TextWrapping="Wrap"/>
+
+        <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button x:Name="btnCancel" Content="Cancel" Width="100" Click="btnCancel_Click"/>
+            <Button x:Name="btnApply" Content="Apply to All Targets" Width="170" Click="btnApply_Click"
+                    Background="#2E7D32" Foreground="White" FontWeight="Bold"/>
+        </StackPanel>
+    </Grid>
+</Window>

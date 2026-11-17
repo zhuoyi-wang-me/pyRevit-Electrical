@@ -1,0 +1,8 @@
+title: "Auto-Place Fixtures"
+tooltip: >-
+  Places electrical, mechanical and plumbing families on the walls of rooms
+  read from a linked architectural model. Quantities can be fixed or based on
+  room size (wall length, floor area, area bands), on the wall next to
+  equipment and dampers (MSFD), or hosted on FCUs / BCUs with offsets. Single window with rules, live preview,
+  options and templates. SHIFT+CLICK opens the classic settings dialog.
+author: BHEEM

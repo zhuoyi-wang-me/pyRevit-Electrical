@@ -1,0 +1,12 @@
+title: Load Transfer
+tooltip: >
+  Opens a window to choose source categories (Electrical Equipment /
+  Fixtures - with an Electrical Fixture family : type filter to use only
+  the ticked fixture types), the source models (this model and / or
+  linked models - linked elements are only read), the target Detail Item
+  family, and the
+  matching parameter;
+  preview matched/ambiguous pairs, filter down to only the elements you
+  want (e.g. AHU, HRU), then review a full OLD vs NEW table of every
+  value before committing the transfer.
+author: BHEEM

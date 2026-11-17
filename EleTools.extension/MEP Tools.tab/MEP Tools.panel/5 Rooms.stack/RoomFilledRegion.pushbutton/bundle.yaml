@@ -1,0 +1,8 @@
+title: Room Filled Regions
+tooltip: >
+  Create Filled Region elements from Room boundaries found in a linked
+  model, in the active plan view or in several floor plans at once (each
+  room goes to the plan whose level matches its own). Handles the
+  coordinate transform between the link and the host model automatically,
+  including links placed higher / lower or with a different elevation base.
+author: BHEEM

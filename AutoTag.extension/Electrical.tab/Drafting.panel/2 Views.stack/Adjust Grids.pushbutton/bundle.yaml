@@ -1,0 +1,11 @@
+title: Adjust
+  Grids
+tooltip: >-
+  ADJUST GRIDS. Lines up the grids of the views you tick: every grid drawn in
+  the crop region ends on a frame around it, with its bubbles on the sides you
+  choose. Can also turn off the grids of linked models in those views (by a
+  view filter; this model's grids stay). Modeless window with a view list
+  (search, view type, only views on sheets). Changes the 2D extents in those
+  views only; one Undo puts everything back.
+author: BHEEM
+min_revit_version: 2024

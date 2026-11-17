@@ -1,0 +1,360 @@
+<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Electrical Calculator" Width="600" Height="760" MinWidth="480" MinHeight="520"
+        ResizeMode="CanResizeWithGrip" WindowStartupLocation="CenterScreen"
+        ShowInTaskbar="True" FontFamily="Segoe UI" FontSize="12" Background="#FAFAFA">
+    <Window.Resources>
+        <Style TargetType="{x:Type TextBlock}">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="0,3,8,3"/>
+        </Style>
+        <Style TargetType="{x:Type TextBox}">
+            <Setter Property="Margin" Value="0,3"/>
+            <Setter Property="Padding" Value="3,2"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+        <Style TargetType="{x:Type ComboBox}">
+            <Setter Property="Margin" Value="0,3"/>
+            <Setter Property="Padding" Value="4,2"/>
+        </Style>
+        <Style x:Key="Result" TargetType="{x:Type TextBox}">
+            <Setter Property="Margin" Value="0,10,0,0"/>
+            <Setter Property="Padding" Value="8"/>
+            <Setter Property="IsReadOnly" Value="True"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="FontFamily" Value="Consolas"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Background" Value="#EEF4FB"/>
+            <Setter Property="BorderBrush" Value="#B8CCE4"/>
+            <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
+        </Style>
+        <Style x:Key="Note" TargetType="{x:Type TextBlock}">
+            <Setter Property="Foreground" Value="#666666"/>
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="Margin" Value="0,6,0,0"/>
+        </Style>
+    </Window.Resources>
+
+    <DockPanel Margin="10">
+        <!-- footer -->
+        <DockPanel DockPanel.Dock="Bottom" Margin="0,8,0,0" LastChildFill="True">
+            <CheckBox x:Name="cb_topmost" Content="Keep on top of all windows" VerticalAlignment="Center"/>
+            <Button x:Name="btn_close" Content="Close" DockPanel.Dock="Right" Width="70" Margin="6,0,0,0"/>
+            <Button x:Name="btn_copy" Content="Copy result" DockPanel.Dock="Right" Width="90"/>
+            <TextBlock x:Name="txt_status" Foreground="#2E7D32" HorizontalAlignment="Right" Margin="0,0,8,0"/>
+        </DockPanel>
+
+        <TabControl x:Name="tabs">
+            <!-- 0 FROM MODEL (selected Revit elements) -->
+            <TabItem Header="From model">
+                <DockPanel Margin="10">
+                    <WrapPanel DockPanel.Dock="Top">
+                        <Button x:Name="btn_use_selection" Content="Use current selection" Padding="10,3" Margin="0,0,6,0"
+                                ToolTip="Select electrical fixtures / equipment in Revit first, then click"/>
+                        <Button x:Name="btn_pick" Content="Pick in model..." Padding="10,3" Margin="0,0,6,0"
+                                ToolTip="Window hides - pick loads, then Finish (or Esc to cancel)"/>
+                        <Button x:Name="btn_show_in_model" Content="Show in model" Padding="10,3" Margin="0,0,6,0"
+                                ToolTip="Select the listed elements in Revit"/>
+                        <Button x:Name="btn_clear_model" Content="Clear" Padding="10,3"/>
+                    </WrapPanel>
+
+                    <Grid DockPanel.Dock="Top" Margin="0,8,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions><RowDefinition/><RowDefinition/><RowDefinition/></Grid.RowDefinitions>
+                        <TextBlock Text="Supply"/>
+                        <ComboBox x:Name="md_supply" Grid.Column="1" Margin="0,3,12,3"/>
+                        <TextBlock Grid.Column="2" Text="Voltage (V)"/>
+                        <TextBox x:Name="md_volts" Grid.Column="3" ToolTip="Blank = taken from the elements"/>
+                        <TextBlock Grid.Row="2" Text="Demand"/>
+                        <ComboBox x:Name="md_demand_mode" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3"
+                                  ToolTip="Revit: each element's Load Classification -> its Demand Factor (Manage > MEP Settings)"/>
+                        <TextBlock x:Name="md_demand_label" Grid.Row="1" Text="Fallback demand (%)"/>
+                        <TextBox x:Name="md_demand" Grid.Row="1" Grid.Column="1" Text="100" Margin="0,3,12,3"
+                                 ToolTip="Classification mode: used for loads whose classification has no demand factor. Manual mode: applied to everything."/>
+                        <TextBlock Grid.Row="1" Grid.Column="2" Text="Default pf"/>
+                        <TextBox x:Name="md_pf" Grid.Row="1" Grid.Column="3" Text="0.9"
+                                 ToolTip="Used for elements without a Power Factor"/>
+                    </Grid>
+
+                    <WrapPanel DockPanel.Dock="Bottom" Margin="0,8,0,0">
+                        <Button x:Name="btn_to_cable" Content="Size cable for this load  →" Padding="10,3" Margin="0,0,6,0"/>
+                        <Button x:Name="btn_to_load" Content="Open in Load current  →" Padding="10,3"/>
+                    </WrapPanel>
+                    <TextBox x:Name="md_result" DockPanel.Dock="Bottom" Style="{StaticResource Result}" MinHeight="150"
+                             Text="Select electrical fixtures or equipment in Revit, then click 'Use current selection'."/>
+
+                    <DataGrid x:Name="md_grid" Margin="0,8,0,0" IsReadOnly="True" AutoGenerateColumns="True"
+                              HeadersVisibility="Column" CanUserAddRows="False" SelectionMode="Extended"
+                              GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="#E0E0E0"
+                              Background="White" MinHeight="90"/>
+                </DockPanel>
+            </TabItem>
+
+            <!-- 1 LOAD CURRENT -->
+            <TabItem Header="Load current">
+                <StackPanel Margin="10">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="140"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="70"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/><RowDefinition/><RowDefinition/><RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="Supply"/>
+                        <ComboBox x:Name="lc_phase" Grid.Column="1" Grid.ColumnSpan="2"/>
+                        <TextBlock Grid.Row="1" Text="Voltage (V)"/>
+                        <TextBox x:Name="lc_volts" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Text="400"/>
+                        <TextBlock Grid.Row="2" Text="Value"/>
+                        <TextBox x:Name="lc_value" Grid.Row="2" Grid.Column="1" Text="10"/>
+                        <ComboBox x:Name="lc_unit" Grid.Row="2" Grid.Column="2" Margin="6,3,0,3"/>
+                        <TextBlock Grid.Row="3" Text="Power factor"/>
+                        <TextBox x:Name="lc_pf" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Text="0.85"/>
+                    </Grid>
+                    <TextBox x:Name="lc_result" Style="{StaticResource Result}" MinHeight="110"/>
+                    <TextBlock Style="{StaticResource Note}"
+                               Text="1-ph: I = P / (V x pf)    3-ph: I = P / (√3 x VL x pf). Enter kW, kVA or A - the others are calculated."/>
+                </StackPanel>
+            </TabItem>
+
+            <!-- 2 VOLTAGE DROP -->
+            <TabItem Header="Volt drop">
+                <StackPanel Margin="10">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="140"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/><RowDefinition/><RowDefinition/><RowDefinition/>
+                            <RowDefinition/><RowDefinition/><RowDefinition/><RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="Supply"/>
+                        <ComboBox x:Name="vd_phase" Grid.Column="1"/>
+                        <TextBlock Grid.Row="1" Text="Voltage (V)"/>
+                        <TextBox x:Name="vd_volts" Grid.Row="1" Grid.Column="1" Text="400"/>
+                        <TextBlock Grid.Row="2" Text="Design current Ib (A)"/>
+                        <TextBox x:Name="vd_current" Grid.Row="2" Grid.Column="1" Text="32"/>
+                        <TextBlock Grid.Row="3" Text="Length (m)"/>
+                        <TextBox x:Name="vd_length" Grid.Row="3" Grid.Column="1" Text="50"/>
+                        <TextBlock Grid.Row="4" Text="Cable"/>
+                        <ComboBox x:Name="vd_insulation" Grid.Row="4" Grid.Column="1"/>
+                        <TextBlock Grid.Row="5" Text="Size (mm²)"/>
+                        <ComboBox x:Name="vd_size" Grid.Row="5" Grid.Column="1"/>
+                        <TextBlock Grid.Row="6" Text="mV/A/m"/>
+                        <TextBox x:Name="vd_mv" Grid.Row="6" Grid.Column="1"/>
+                        <TextBlock Grid.Row="7" Text="Limit (%)"/>
+                        <TextBox x:Name="vd_limit" Grid.Row="7" Grid.Column="1" Text="5"/>
+                    </Grid>
+                    <TextBox x:Name="vd_result" Style="{StaticResource Result}" MinHeight="90"/>
+                    <TextBlock Style="{StaticResource Note}"
+                               Text="Vd = mV/A/m x Ib x L / 1000. Choose 'Manual' to type mV/A/m from a manufacturer's datasheet. Typical limits: 3% lighting, 5% other (BS 7671 App. 4)."/>
+                </StackPanel>
+            </TabItem>
+
+            <!-- 3 CABLE & BREAKER -->
+            <TabItem Header="Cable &amp; breaker">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel Margin="10">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="170"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/><RowDefinition/><RowDefinition/><RowDefinition/><RowDefinition/>
+                                <RowDefinition/><RowDefinition/><RowDefinition/><RowDefinition/><RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Text="Supply"/>
+                            <ComboBox x:Name="cs_phase" Grid.Column="1"/>
+                            <TextBlock Grid.Row="1" Text="Voltage (V)"/>
+                            <TextBox x:Name="cs_volts" Grid.Row="1" Grid.Column="1" Text="400"/>
+                            <TextBlock Grid.Row="2" Text="Design current Ib (A)"/>
+                            <TextBox x:Name="cs_ib" Grid.Row="2" Grid.Column="1" Text="45"/>
+                            <TextBlock Grid.Row="3" Text="Length (m)"/>
+                            <TextBox x:Name="cs_length" Grid.Row="3" Grid.Column="1" Text="60"/>
+                            <TextBlock Grid.Row="4" Text="Cable (Cu SWA, method C)"/>
+                            <ComboBox x:Name="cs_insulation" Grid.Row="4" Grid.Column="1"/>
+                            <TextBlock Grid.Row="5" Text="Ca  ambient temp."/>
+                            <TextBox x:Name="cs_ca" Grid.Row="5" Grid.Column="1" Text="1.0"/>
+                            <TextBlock Grid.Row="6" Text="Cg  grouping"/>
+                            <TextBox x:Name="cs_cg" Grid.Row="6" Grid.Column="1" Text="1.0"/>
+                            <TextBlock Grid.Row="7" Text="Ci  thermal insulation"/>
+                            <TextBox x:Name="cs_ci" Grid.Row="7" Grid.Column="1" Text="1.0"/>
+                            <TextBlock Grid.Row="8" Text="Volt drop limit (%)"/>
+                            <TextBox x:Name="cs_vdlimit" Grid.Row="8" Grid.Column="1" Text="5"/>
+                            <TextBlock Grid.Row="9" Text="Breaker In (A) - blank = auto"/>
+                            <TextBox x:Name="cs_breaker" Grid.Row="9" Grid.Column="1"/>
+                        </Grid>
+                        <TextBox x:Name="cs_result" Style="{StaticResource Result}" MinHeight="120"/>
+                        <TextBlock Style="{StaticResource Note}"
+                                   Text="Ib ≤ In ≤ Iz,  It ≥ In / (Ca x Cg x Ci), then volt drop. Typical BS 7671 Tables 4D4A/B (PVC 70°C) and 4E4A/B (XLPE 90°C), 30°C ambient. Check fault protection / disconnection time separately and verify against your project's edition."/>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <!-- 4 PF CORRECTION -->
+            <TabItem Header="PF correction">
+                <StackPanel Margin="10">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="140"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/><RowDefinition/><RowDefinition/><RowDefinition/><RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="Supply"/>
+                        <ComboBox x:Name="pf_phase" Grid.Column="1"/>
+                        <TextBlock Grid.Row="1" Text="Voltage (V)"/>
+                        <TextBox x:Name="pf_volts" Grid.Row="1" Grid.Column="1" Text="400"/>
+                        <TextBlock Grid.Row="2" Text="Active power (kW)"/>
+                        <TextBox x:Name="pf_kw" Grid.Row="2" Grid.Column="1" Text="250"/>
+                        <TextBlock Grid.Row="3" Text="Existing pf"/>
+                        <TextBox x:Name="pf_now" Grid.Row="3" Grid.Column="1" Text="0.80"/>
+                        <TextBlock Grid.Row="4" Text="Target pf"/>
+                        <TextBox x:Name="pf_target" Grid.Row="4" Grid.Column="1" Text="0.95"/>
+                    </Grid>
+                    <TextBox x:Name="pf_result" Style="{StaticResource Result}" MinHeight="110"/>
+                    <TextBlock Style="{StaticResource Note}" Text="Qc = P x (tan φ1 − tan φ2). Choose the next standard capacitor bank step above the result."/>
+                </StackPanel>
+            </TabItem>
+
+            <!-- 5 SHORT CIRCUIT -->
+            <TabItem Header="Fault level">
+                <StackPanel Margin="10">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="170"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/><RowDefinition/><RowDefinition/><RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="Transformer (kVA)"/>
+                        <TextBox x:Name="sc_kva" Grid.Column="1" Text="1500"/>
+                        <TextBlock Grid.Row="1" Text="Secondary voltage (V)"/>
+                        <TextBox x:Name="sc_volts" Grid.Row="1" Grid.Column="1" Text="400"/>
+                        <TextBlock Grid.Row="2" Text="Impedance %Z"/>
+                        <TextBox x:Name="sc_z" Grid.Row="2" Grid.Column="1" Text="6"/>
+                        <TextBlock Grid.Row="3" Text="Source fault level (MVA)"/>
+                        <TextBox x:Name="sc_source" Grid.Row="3" Grid.Column="1" ToolTip="Blank or 0 = infinite source"/>
+                    </Grid>
+                    <TextBox x:Name="sc_result" Style="{StaticResource Result}" MinHeight="110"/>
+                    <TextBlock Style="{StaticResource Note}"
+                               Text="Symmetrical 3-phase fault at the LV terminals: Isc = Ifl / (Zt + Zsource) in per unit. Leave the source blank for an infinite bus (worst case). Cable impedance downstream is not included."/>
+                </StackPanel>
+            </TabItem>
+
+            <!-- 6 ISOLATOR RATING -->
+            <TabItem Header="Isolator">
+                <DockPanel Margin="10">
+                    <!-- quick single-load check -->
+                    <GroupBox DockPanel.Dock="Top" Header="Single load" Padding="6,4">
+                        <StackPanel>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions><RowDefinition/><RowDefinition/></Grid.RowDefinitions>
+                                <TextBlock Text="Supply"/>
+                                <ComboBox x:Name="iso_phase" Grid.Column="1" Margin="0,3,12,3"/>
+                                <TextBlock Grid.Column="2" Text="Voltage (V)"/>
+                                <TextBox x:Name="iso_volts" Grid.Column="3" Text="400"/>
+                                <TextBlock Grid.Row="1" Text="Load"/>
+                                <DockPanel Grid.Row="1" Grid.Column="1" Margin="0,0,12,0">
+                                    <ComboBox x:Name="iso_unit" DockPanel.Dock="Right" Width="60" Margin="4,3,0,3"/>
+                                    <TextBox x:Name="iso_value" Text="7.5"/>
+                                </DockPanel>
+                                <TextBlock Grid.Row="1" Grid.Column="2" Text="Power factor"/>
+                                <TextBox x:Name="iso_pf" Grid.Row="1" Grid.Column="3" Text="0.85"/>
+                            </Grid>
+                            <CheckBox x:Name="iso_motor" Content="Motor load (pump / fan / AHU / compressor...)" IsChecked="True" Margin="0,4,0,0"/>
+                            <TextBox x:Name="iso_quick_result" Style="{StaticResource Result}" MinHeight="60" Margin="0,6,0,0"/>
+                        </StackPanel>
+                    </GroupBox>
+
+                    <!-- rules -->
+                    <Grid DockPanel.Dock="Top" Margin="0,8,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions><RowDefinition/><RowDefinition/><RowDefinition/></Grid.RowDefinitions>
+                        <TextBlock Text="Motor margin (%)"/>
+                        <TextBox x:Name="iso_motor_margin" Grid.Column="1" Text="125" Margin="0,3,12,3"
+                                 ToolTip="Isolator ≥ Ib x margin for motor loads (starting current)"/>
+                        <TextBlock Grid.Column="2" Text="Other loads margin (%)"/>
+                        <TextBox x:Name="iso_other_margin" Grid.Column="3" Text="100"/>
+                        <TextBlock Grid.Row="1" Text="Minimum rating (A)"/>
+                        <TextBox x:Name="iso_min" Grid.Row="1" Grid.Column="1" Text="20" Margin="0,3,12,3"/>
+                        <TextBlock Grid.Row="1" Grid.Column="2" Text="Motor loads"/>
+                        <ComboBox x:Name="iso_motor_mode" Grid.Row="1" Grid.Column="3"/>
+                        <CheckBox x:Name="iso_four_pole" Grid.Row="2" Grid.ColumnSpan="4" Margin="0,4,0,0"
+                                  Content="Switch the neutral on 3-phase loads (TP+N / 4-pole)"/>
+                    </Grid>
+
+                    <!-- selected Revit loads -->
+                    <WrapPanel DockPanel.Dock="Top" Margin="0,8,0,0">
+                        <Button x:Name="btn_iso_selection" Content="Use current selection" Padding="10,3" Margin="0,0,6,0"
+                                ToolTip="Select equipment / fixtures in Revit, then click - one isolator per element"/>
+                        <Button x:Name="btn_iso_pick" Content="Pick in model..." Padding="10,3"/>
+                    </WrapPanel>
+                    <TextBox x:Name="iso_result" DockPanel.Dock="Bottom" Style="{StaticResource Result}" MinHeight="70"
+                             Text="Select loads in Revit and click 'Use current selection' to rate an isolator for each one."/>
+
+                    <!-- transfer rating to the related fixture (isolator) -->
+                    <GroupBox DockPanel.Dock="Bottom" Header="Transfer rating to related fixture" Padding="6,4" Margin="0,8,0,0">
+                        <StackPanel>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions><RowDefinition/><RowDefinition/><RowDefinition/></Grid.RowDefinitions>
+                                <TextBlock Text="Fixture parameter"/>
+                                <ComboBox x:Name="iso_param" Grid.Column="1" IsEditable="True" Text="Rating" Margin="0,3,12,3"
+                                          ToolTip="Writable parameters of the isolator fixtures - filled when a selection is read. You can also type a name. Number / Current get 40, Text gets the text format."/>
+                                <TextBlock Grid.Column="2" Text="Tag parameter"/>
+                                <TextBox x:Name="iso_tag_param" Grid.Column="3" Text="MEE_ToServe"
+                                         ToolTip="Same value on equipment and fixture = related (type name when empty)"/>
+                                <TextBlock Grid.Row="1" Text="Max distance (mm)"/>
+                                <DockPanel Grid.Row="1" Grid.Column="1" Margin="0,0,12,0">
+                                    <TextBox x:Name="iso_height" DockPanel.Dock="Right" Width="60" Text="4000" Margin="4,3,0,3"
+                                             ToolTip="Max height difference (mm)"/>
+                                    <TextBox x:Name="iso_dist" Text="3000" ToolTip="Plan distance used when no tag matches"/>
+                                </DockPanel>
+                                <TextBlock Grid.Row="1" Grid.Column="2" Text="Text format"/>
+                                <TextBox x:Name="iso_text_fmt" Grid.Row="1" Grid.Column="3" Text="{}{0}A"
+                                         ToolTip="Only for Text parameters: {0} = rating, e.g. {0}A -> 40A, {0}A DP -> 40A DP"/>
+                                <TextBlock Grid.Row="2" Text="Fixture name has"/>
+                                <TextBox x:Name="iso_fx_filter" Grid.Row="2" Grid.Column="1" Margin="0,3,12,3"
+                                         ToolTip="Optional, comma separated, e.g. isolator, switch disconnector. Blank = every fixture with the parameter."/>
+                                <TextBlock Grid.Row="2" Grid.Column="2" Text="Ignore tags"/>
+                                <TextBox x:Name="iso_ignore" Grid.Row="2" Grid.Column="3" Text="GENERAL"/>
+                            </Grid>
+                            <WrapPanel Margin="0,6,0,0">
+                                <Button x:Name="btn_iso_write" Content="Write ratings to fixtures" Padding="10,3" Margin="0,0,6,0"
+                                        FontWeight="SemiBold"
+                                        ToolTip="Uses the selection already read. Selected isolators are written directly; for selected equipment the serving fixture is found (tag / nearest). Asks first, one Undo step."/>
+                                <Button x:Name="btn_iso_find" Content="Preview matches" Padding="10,3" Margin="0,0,6,0"
+                                        ToolTip="Optional, read-only: fill the Fixture / Match columns without writing"/>
+                                <Button x:Name="btn_iso_show_fx" Content="Show fixtures" Padding="10,3"/>
+                            </WrapPanel>
+                        </StackPanel>
+                    </GroupBox>
+
+                    <DataGrid x:Name="iso_grid" Margin="0,8,0,0" IsReadOnly="True" AutoGenerateColumns="True"
+                              HeadersVisibility="Column" CanUserAddRows="False" GridLinesVisibility="Horizontal"
+                              HorizontalGridLinesBrush="#E0E0E0" Background="White" MinHeight="90"/>
+                </DockPanel>
+            </TabItem>
+        </TabControl>
+    </DockPanel>
+</Window>

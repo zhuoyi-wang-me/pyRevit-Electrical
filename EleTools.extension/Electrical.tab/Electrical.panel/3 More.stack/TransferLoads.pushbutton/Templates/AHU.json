@@ -1,0 +1,18 @@
+{
+  "match_source_param": "MEE_ToServe", 
+  "match_target_param": "MEE-Component", 
+  "target_family_key": "MEE_DTI_S_EC_Isolator : Unknown Type", 
+  "filter_exclude": false, 
+  "include_fixtures": true, 
+  "filter_mode": "Contains", 
+  "filter_text": "AHU", 
+  "include_equipment": false, 
+  "filter_field": "Match Value", 
+  "mappings": [
+    {
+      "target": "MEE-TotalConnectedLoad", 
+      "source": "Elec Apparent Power", 
+      "multiplier": "0.001"
+    }
+  ]
+}

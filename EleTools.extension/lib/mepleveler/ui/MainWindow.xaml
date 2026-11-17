@@ -1,0 +1,330 @@
+<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MEP Level Fixer"
+        Height="780" Width="1000" MinHeight="660" MinWidth="880"
+        WindowStartupLocation="CenterScreen"
+        ShowInTaskbar="False"
+        SnapsToDevicePixels="True"
+        Background="#FFF4F5F7">
+
+    <Window.Resources>
+        <Style TargetType="GroupBox">
+            <Setter Property="Margin" Value="0,0,0,10"/>
+            <Setter Property="Padding" Value="8"/>
+            <Setter Property="BorderBrush" Value="#FFD0D4DA"/>
+            <Setter Property="Background" Value="White"/>
+        </Style>
+        <Style TargetType="RadioButton">
+            <Setter Property="Margin" Value="2,4,2,4"/>
+        </Style>
+        <Style TargetType="CheckBox">
+            <Setter Property="Margin" Value="2,3,2,3"/>
+        </Style>
+        <Style x:Key="ActionButton" TargetType="Button">
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="MinWidth" Value="110"/>
+            <Setter Property="Margin" Value="6,0,0,0"/>
+            <Setter Property="Padding" Value="12,0,12,0"/>
+        </Style>
+        <Style x:Key="SmallButton" TargetType="Button">
+            <Setter Property="Height" Value="24"/>
+            <Setter Property="MinWidth" Value="80"/>
+            <Setter Property="Margin" Value="0,0,6,0"/>
+        </Style>
+        <Style x:Key="Hint" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#FF6B7280"/>
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Border Grid.Row="0" Background="#FF2A3F5F" CornerRadius="3"
+                Padding="14,10,14,10" Margin="0,0,0,12">
+            <StackPanel>
+                <TextBlock Text="MEP Level Fixer"
+                           Foreground="White" FontSize="18" FontWeight="SemiBold"/>
+                <TextBlock Foreground="#FFCBD5E1" FontSize="11" TextWrapping="Wrap"
+                           Text="Re-associates MEP elements with the level that matches their real elevation. Offsets are recalculated so that nothing moves."/>
+                <TextBlock x:Name="lbl_model" Foreground="#FF93A5C0" FontSize="11" Margin="0,4,0,0"/>
+            </StackPanel>
+        </Border>
+
+        <!-- Body -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="340"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Left column: scope and options -->
+            <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto"
+                          Margin="0,0,12,0">
+                <StackPanel>
+
+                    <GroupBox Header="Processing scope">
+                        <StackPanel>
+                            <RadioButton x:Name="rb_selection" GroupName="scope"
+                                         Content="Selected elements only"
+                                         Checked="on_scope_changed"/>
+                            <RadioButton x:Name="rb_view" GroupName="scope"
+                                         Content="Current view only"
+                                         Checked="on_scope_changed"/>
+                            <RadioButton x:Name="rb_model" GroupName="scope"
+                                         Content="Entire model"
+                                         Checked="on_scope_changed"/>
+                            <TextBlock x:Name="lbl_scope_hint" Style="{StaticResource Hint}"
+                                       Margin="2,6,0,0"/>
+                        </StackPanel>
+                    </GroupBox>
+
+                    <GroupBox Header="Level matching">
+                        <StackPanel>
+                            <TextBlock Text="Strategy" Margin="2,0,0,3"/>
+                            <ComboBox x:Name="cmb_strategy" Height="24"
+                                      DisplayMemberPath="Label"
+                                      SelectionChanged="on_strategy_changed"/>
+
+                            <TextBlock Text="Elevation source" Margin="2,10,0,3"/>
+                            <ComboBox x:Name="cmb_elevation" Height="24"
+                                      DisplayMemberPath="Label"/>
+
+                            <Grid Margin="0,10,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" x:Name="lbl_snap"
+                                           Text="Snap tolerance" VerticalAlignment="Center"/>
+                                <TextBox Grid.Column="1" x:Name="txt_snap" Width="90"
+                                         Height="22" TextAlignment="Right"/>
+                            </Grid>
+
+                            <Grid Margin="0,6,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" x:Name="lbl_tolerance"
+                                           Text="Movement tolerance" VerticalAlignment="Center"/>
+                                <TextBox Grid.Column="1" x:Name="txt_tolerance" Width="90"
+                                         Height="22" TextAlignment="Right"/>
+                            </Grid>
+                            <TextBlock Style="{StaticResource Hint}" Margin="2,6,0,0"
+                                       Text="Any element that ends up further than the movement tolerance from its original position is rolled back and reported as failed."/>
+                        </StackPanel>
+                    </GroupBox>
+
+                    <GroupBox Header="Element filters">
+                        <StackPanel>
+                            <CheckBox x:Name="chk_skip_grouped"
+                                      Content="Skip elements inside groups"/>
+                            <CheckBox x:Name="chk_skip_design_options"
+                                      Content="Skip design option elements"/>
+                            <CheckBox x:Name="chk_skip_pinned"
+                                      Content="Skip pinned elements"/>
+                            <CheckBox x:Name="chk_skip_nested"
+                                      Content="Skip nested components"/>
+                            <CheckBox x:Name="chk_schedule_fallback"
+                                      Content="Use &quot;Schedule Level&quot; for face hosted elements"/>
+                            <CheckBox x:Name="chk_verify_connected"
+                                      Content="Verify connected elements did not move"/>
+                            <CheckBox x:Name="chk_debug"
+                                      Content="Verbose logging"/>
+                        </StackPanel>
+                    </GroupBox>
+
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- Right column: categories and target levels -->
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" MinHeight="180"/>
+                    <RowDefinition Height="6"/>
+                    <RowDefinition Height="300" MinHeight="150"/>
+                </Grid.RowDefinitions>
+
+                <GroupBox Grid.Row="0" Header="Categories to process" Margin="0">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <Grid Grid.Row="0" Margin="0,0,0,6">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox Grid.Column="0" x:Name="txt_search" Height="24"
+                                     TextChanged="on_search_changed"
+                                     ToolTip="Filter the category list"/>
+                            <Button Grid.Column="1" Content="Clear" Width="60" Height="24"
+                                    Margin="6,0,0,0" Click="on_clear_search"/>
+                        </Grid>
+
+                        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,6">
+                            <Button Content="Select all" Style="{StaticResource SmallButton}"
+                                    Click="on_select_all"/>
+                            <Button Content="Select none" Style="{StaticResource SmallButton}"
+                                    Click="on_select_none"/>
+                            <Button Content="Only with elements" Width="120"
+                                    Style="{StaticResource SmallButton}"
+                                    Click="on_select_nonempty"/>
+                            <Button Content="Refresh counts" Width="110"
+                                    Style="{StaticResource SmallButton}"
+                                    Click="on_refresh_counts"/>
+                        </StackPanel>
+
+                        <ListBox Grid.Row="2" x:Name="lst_categories"
+                                 BorderBrush="#FFD0D4DA"
+                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                 HorizontalContentAlignment="Stretch">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Margin="0,1,0,1">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <CheckBox Grid.Column="0"
+                                                  IsChecked="{Binding IsChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                  Content="{Binding DisplayName}"
+                                                  ToolTip="{Binding BicName}"/>
+                                        <TextBlock Grid.Column="1" Text="{Binding CountLabel}"
+                                                   Foreground="#FF6B7280" FontSize="11"
+                                                   VerticalAlignment="Center" Margin="8,0,4,0"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                            <ListBox.GroupStyle>
+                                <GroupStyle>
+                                    <GroupStyle.HeaderTemplate>
+                                        <DataTemplate>
+                                            <Border Background="#FFEDF1F6" Padding="6,3,6,3"
+                                                    Margin="0,6,0,3">
+                                                <TextBlock Text="{Binding Name}"
+                                                           FontWeight="SemiBold"
+                                                           Foreground="#FF2A3F5F"/>
+                                            </Border>
+                                        </DataTemplate>
+                                    </GroupStyle.HeaderTemplate>
+                                </GroupStyle>
+                            </ListBox.GroupStyle>
+                        </ListBox>
+
+                        <TextBlock Grid.Row="3" x:Name="lbl_cat_summary"
+                                   Style="{StaticResource Hint}" Margin="2,6,0,0"/>
+                    </Grid>
+                </GroupBox>
+
+                <GridSplitter Grid.Row="1" Height="6" HorizontalAlignment="Stretch"
+                              Background="Transparent" ResizeBehavior="PreviousAndNext"/>
+
+                <GroupBox Grid.Row="2" Header="Target levels (elements are allocated to these only)"
+                          Margin="0">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <Grid Grid.Row="0" Margin="0,0,0,6">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox Grid.Column="0" x:Name="txt_level_search" Height="24"
+                                     TextChanged="on_level_search_changed"
+                                     ToolTip="Filter the level list, e.g. type T.O.S to isolate non-storey levels"/>
+                            <Button Grid.Column="1" Content="Clear" Width="60" Height="24"
+                                    Margin="6,0,0,0" Click="on_clear_level_search"/>
+                        </Grid>
+
+                        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,6">
+                            <Button Content="Select all" Style="{StaticResource SmallButton}"
+                                    Click="on_levels_all"/>
+                            <Button Content="Select none" Style="{StaticResource SmallButton}"
+                                    Click="on_levels_none"/>
+                            <Button Content="Tick shown" Style="{StaticResource SmallButton}"
+                                    Click="on_levels_tick_shown"/>
+                            <Button Content="Untick shown" Style="{StaticResource SmallButton}"
+                                    Width="95" Click="on_levels_untick_shown"/>
+                            <Button Content="Invert" Style="{StaticResource SmallButton}"
+                                    Width="70" Click="on_levels_invert"/>
+                            <Button Content="Levels in use" Style="{StaticResource SmallButton}"
+                                    Width="100" Click="on_levels_in_use"
+                                    ToolTip="Tick only the levels currently referenced by elements in scope"/>
+                        </StackPanel>
+
+                        <ListBox Grid.Row="2" x:Name="lst_levels"
+                                 BorderBrush="#FFD0D4DA"
+                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                 HorizontalContentAlignment="Stretch">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Margin="0,1,0,1">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <CheckBox Grid.Column="0"
+                                                  IsChecked="{Binding IsChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                  Content="{Binding DisplayName}"
+                                                  ToolTip="{Binding ToolTipText}"/>
+                                        <TextBlock Grid.Column="1" Text="{Binding UsageLabel}"
+                                                   Foreground="#FF6B7280" FontSize="11"
+                                                   VerticalAlignment="Center" Margin="8,0,8,0"/>
+                                        <TextBlock Grid.Column="2" Text="{Binding ElevationLabel}"
+                                                   Foreground="#FF2A6099" FontSize="11"
+                                                   FontFamily="Consolas" TextAlignment="Right"
+                                                   MinWidth="90"
+                                                   VerticalAlignment="Center" Margin="0,0,4,0"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+
+                        <TextBlock Grid.Row="3" x:Name="lbl_level_summary"
+                                   Style="{StaticResource Hint}" Margin="2,6,0,0"/>
+                    </Grid>
+                </GroupBox>
+            </Grid>
+        </Grid>
+
+        <!-- Footer -->
+        <Grid Grid.Row="2" Margin="0,12,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Column="0" x:Name="lbl_status" VerticalAlignment="Center"
+                       Foreground="#FF374151" TextWrapping="Wrap"/>
+
+            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                <Button Content="Cancel" Style="{StaticResource ActionButton}"
+                        Click="on_cancel"/>
+                <Button Content="Preview..." Style="{StaticResource ActionButton}"
+                        Click="on_preview"/>
+                <Button x:Name="btn_execute" Content="Execute"
+                        Style="{StaticResource ActionButton}"
+                        Background="#FF2A6099" Foreground="White"
+                        FontWeight="SemiBold" Click="on_execute"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>

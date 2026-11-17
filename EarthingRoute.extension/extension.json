@@ -1,0 +1,7 @@
+{
+  "type": "extension",
+  "name": "EarthingRoute",
+  "description": "Earthing Route Generator: 2D earthing lines in a floor plan, from electrical panels to an earth bar, routed round columns, walls and MEP elements (host model and links).",
+  "author": "Bheem",
+  "rocket_mode_compatible": "False"
+}

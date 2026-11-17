@@ -1,0 +1,11 @@
+title: CAD
+  Details
+tooltip: >-
+  CAD DETAILS. Typical installation details from a DWG -> native Revit
+  drafting views. A DWG sheet with many details is split into one drafting
+  view per detail (by its frames, else by the gaps between them), named after
+  its title text. Lines become detail lines (one line style), text becomes
+  text notes, hatches become filled regions; blocks and dimensions are
+  exploded first. Uses AutoCAD's console engine in the background to read
+  the DWG - the DWG itself is not changed. Creates drafting views only.
+author: BHEEM

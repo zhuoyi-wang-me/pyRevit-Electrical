@@ -1,0 +1,13 @@
+title: "Rooms to Equipment"
+tooltip: >-
+  Writes the rooms each piece of equipment serves (Served Room Numbers / Names,
+  Total Served Area, flow or load totals, Number of Served Spaces) to the
+  equipment. One dedicated window per MEP system: Air (air terminals to
+  mechanical equipment), Plumbing (fixtures to plumbing equipment), Fire
+  Protection (sprinklers to pumps / valve sets) and Electrical (fixtures and
+  devices to panels). Ducts and pipes are traced through connectors, electrical
+  through circuits. Supports upstream cascades (VAV -> AHU, panel -> main
+  board), MEP Spaces and Rooms in linked architectural models. Report-only
+  mode available. Also: Room Data by Location, which writes the room each
+  electrical fixture or device sits in to the element itself.
+author: BHEEM

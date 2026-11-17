@@ -1,0 +1,533 @@
+<Window
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="Fill Spare / Space - Step 1: Select panels" Height="820" Width="1280"
+    MinHeight="620" MinWidth="1040"
+    WindowStartupLocation="CenterScreen" ResizeMode="CanResizeWithGrip"
+    Background="#EEF4FF" FontFamily="Segoe UI" FontSize="12">
+
+    <!-- These resources are shared with Step 2 (ui_config.xaml): script.py
+         copies everything between the Window.Resources tags into it. -->
+    <Window.Resources>
+        <SolidColorBrush x:Key="Blue" Color="#1E88E5"/>
+        <SolidColorBrush x:Key="Violet" Color="#7C4DFF"/>
+        <SolidColorBrush x:Key="Orange" Color="#FB8C00"/>
+        <SolidColorBrush x:Key="Teal" Color="#00ACC1"/>
+        <SolidColorBrush x:Key="Green" Color="#00B85C"/>
+        <SolidColorBrush x:Key="Red" Color="#E53935"/>
+        <SolidColorBrush x:Key="Ink" Color="#16264A"/>
+        <SolidColorBrush x:Key="Muted" Color="#5F6F8C"/>
+        <!-- how a panel's ways are used (bar in the list + legend) -->
+        <SolidColorBrush x:Key="UseConnected" Color="#1E88E5"/>
+        <SolidColorBrush x:Key="UseSpare" Color="#FB8C00"/>
+        <SolidColorBrush x:Key="UseSpace" Color="#B39DDB"/>
+        <SolidColorBrush x:Key="UseFree" Color="#E3E9F3"/>
+
+        <LinearGradientBrush x:Key="HeaderBrush" StartPoint="0,0" EndPoint="1,0">
+            <GradientStop Color="#1565C0" Offset="0"/>
+            <GradientStop Color="#7C4DFF" Offset="0.6"/>
+            <GradientStop Color="#EC407A" Offset="1"/>
+        </LinearGradientBrush>
+
+        <!-- Card with a coloured title band -->
+        <Style TargetType="GroupBox">
+            <Setter Property="BorderBrush" Value="{StaticResource Blue}"/>
+            <Setter Property="Margin" Value="0,0,0,10"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="GroupBox">
+                        <Border Background="White" BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="1.5" CornerRadius="8" SnapsToDevicePixels="True">
+                            <DockPanel>
+                                <Border DockPanel.Dock="Top" Background="{TemplateBinding BorderBrush}"
+                                        CornerRadius="6,6,0,0" Padding="10,6">
+                                    <ContentPresenter ContentSource="Header" RecognizesAccessKey="False"
+                                                      TextElement.Foreground="White"
+                                                      TextElement.FontWeight="SemiBold"
+                                                      TextElement.FontSize="13"/>
+                                </Border>
+                                <ContentPresenter Margin="8"/>
+                            </DockPanel>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Buttons: rounded; outlined by default, filled for the main actions -->
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="#1565C0"/>
+            <Setter Property="BorderBrush" Value="#64B5F6"/>
+            <Setter Property="BorderThickness" Value="1.5"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Height" Value="28"/>
+            <Setter Property="Margin" Value="0,0,6,0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="bd" Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="5" SnapsToDevicePixels="True">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"
+                                              Margin="12,0" RecognizesAccessKey="False"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="bd" Property="Opacity" Value="0.82"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="bd" Property="Opacity" Value="0.65"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="bd" Property="Opacity" Value="0.4"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="BlueBtn" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Background" Value="{StaticResource Blue}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource Blue}"/>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+        <Style x:Key="GreenBtn" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Background" Value="{StaticResource Green}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource Green}"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Height" Value="34"/>
+            <Setter Property="FontSize" Value="13"/>
+        </Style>
+        <Style x:Key="OrangeBtn" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Background" Value="{StaticResource Orange}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource Orange}"/>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+        <Style x:Key="GreyBtn" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Foreground" Value="#455A64"/>
+            <Setter Property="BorderBrush" Value="#B0BEC5"/>
+            <Setter Property="Height" Value="34"/>
+        </Style>
+        <Style x:Key="LinkBtn" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Height" Value="24"/>
+            <Setter Property="FontSize" Value="11"/>
+        </Style>
+
+        <!-- Grids -->
+        <Style TargetType="DataGrid">
+            <Setter Property="AutoGenerateColumns" Value="False"/>
+            <Setter Property="CanUserAddRows" Value="False"/>
+            <Setter Property="CanUserDeleteRows" Value="False"/>
+            <Setter Property="CanUserResizeRows" Value="False"/>
+            <Setter Property="GridLinesVisibility" Value="Horizontal"/>
+            <Setter Property="HorizontalGridLinesBrush" Value="#E3ECF8"/>
+            <Setter Property="HeadersVisibility" Value="Column"/>
+            <Setter Property="RowHeight" Value="28"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#BBDEFB"/>
+            <Setter Property="AlternatingRowBackground" Value="#F6FAFF"/>
+            <Setter Property="AlternationCount" Value="2"/>
+        </Style>
+        <Style TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="#E3F2FD"/>
+            <Setter Property="Foreground" Value="#0D47A1"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="8,7"/>
+            <Setter Property="BorderBrush" Value="#BBDEFB"/>
+            <Setter Property="BorderThickness" Value="0,0,1,1"/>
+        </Style>
+        <Style TargetType="DataGridCell">
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="#BBDEFB"/>
+                    <Setter Property="Foreground" Value="#0D2A4A"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="CellText" TargetType="TextBlock">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="8,0"/>
+            <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+        </Style>
+        <Style x:Key="CellNumber" TargetType="TextBlock" BasedOn="{StaticResource CellText}">
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+        </Style>
+        <Style x:Key="CellEdit" TargetType="TextBlock" BasedOn="{StaticResource CellNumber}">
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#1565C0"/>
+        </Style>
+
+        <Style TargetType="TextBox">
+            <Setter Property="BorderBrush" Value="#90CAF9"/>
+            <Setter Property="Height" Value="26"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="4,0"/>
+        </Style>
+        <Style TargetType="ComboBox">
+            <Setter Property="Height" Value="26"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+        <Style x:Key="Label" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="10.5"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="{StaticResource Muted}"/>
+            <Setter Property="Margin" Value="0,0,0,3"/>
+        </Style>
+        <!-- number tiles -->
+        <Style x:Key="Tile" TargetType="Border">
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="Padding" Value="14,7"/>
+            <Setter Property="Margin" Value="0,0,8,0"/>
+            <Setter Property="MinWidth" Value="104"/>
+        </Style>
+        <Style x:Key="TileNumber" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="22"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+        <Style x:Key="TileLabel" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="10.5"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#F0F4FF"/>
+        </Style>
+        <Style x:Key="LogBox" TargetType="TextBox">
+            <Setter Property="IsReadOnly" Value="True"/>
+            <Setter Property="FontFamily" Value="Consolas"/>
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="Background" Value="#F7FAFF"/>
+            <Setter Property="BorderBrush" Value="#BBDEFB"/>
+            <Setter Property="Foreground" Value="#263238"/>
+            <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="HorizontalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="TextWrapping" Value="NoWrap"/>
+            <Setter Property="Padding" Value="6,4"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="14">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="96"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- header -->
+        <Border Grid.Row="0" Background="{StaticResource HeaderBrush}" CornerRadius="10"
+                Padding="18,12" Margin="0,0,0,12">
+            <DockPanel>
+                <!-- step indicator -->
+                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Border Background="White" CornerRadius="14" Padding="4,4,14,4">
+                        <StackPanel Orientation="Horizontal">
+                            <Border Width="22" Height="22" CornerRadius="11" Background="#1565C0">
+                                <TextBlock Text="1" Foreground="White" FontWeight="Bold"
+                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <TextBlock Text="Select panels" Margin="8,0,0,0" FontWeight="SemiBold"
+                                       Foreground="#1565C0" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+                    <Rectangle Width="26" Height="2" Fill="#99FFFFFF" VerticalAlignment="Center"/>
+                    <Border Background="#33FFFFFF" CornerRadius="14" Padding="4,4,14,4">
+                        <StackPanel Orientation="Horizontal">
+                            <Border Width="22" Height="22" CornerRadius="11" Background="#55FFFFFF">
+                                <TextBlock Text="2" Foreground="White" FontWeight="Bold"
+                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <TextBlock Text="Configure &amp; fill" Margin="8,0,0,0" FontWeight="SemiBold"
+                                       Foreground="White" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+                <Border DockPanel.Dock="Left" Width="46" Height="46" CornerRadius="23"
+                        Background="#33FFFFFF" Margin="0,0,14,0" VerticalAlignment="Center">
+                    <TextBlock Text="&#xE945;" FontFamily="Segoe MDL2 Assets" FontSize="22"
+                               Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Border>
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock Text="Fill Spare / Space" Foreground="White" FontSize="22" FontWeight="Bold"/>
+                    <TextBlock Text="Filter the list and tick the panel schedules to update. Nothing is changed in this step."
+                               Foreground="#F3F0FF" Margin="0,3,0,0"/>
+                </StackPanel>
+            </DockPanel>
+        </Border>
+
+        <!-- body -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="330"/>
+                <ColumnDefinition Width="12"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- rules (left) -->
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <GroupBox Grid.Row="0" Header="RULE 1   Panel size  &#x2192;  spare / space"
+                          BorderBrush="{StaticResource Violet}">
+                    <DockPanel>
+                        <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Foreground="{StaticResource Muted}"
+                                   Margin="0,0,0,6" FontSize="11"
+                                   Text="A panel's circuits are rounded up to the next size in this list; that row gives the number of spares and spaces."/>
+                        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Margin="0,6,0,0">
+                            <Button x:Name="btnAddWaysRow" Content="+ Add" Style="{StaticResource LinkBtn}"
+                                    Click="add_ways_row_click"/>
+                            <Button x:Name="btnRemoveWaysRow" Content="Remove row" Style="{StaticResource LinkBtn}"
+                                    Click="remove_ways_row_click"/>
+                        </StackPanel>
+                        <DataGrid x:Name="dgWaysTable" RowHeight="24">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Ways" Binding="{Binding Ways}" Width="*"
+                                                    ElementStyle="{StaticResource CellNumber}"/>
+                                <DataGridTextColumn Header="Spare" Binding="{Binding Spare}" Width="*"
+                                                    ElementStyle="{StaticResource CellEdit}"/>
+                                <DataGridTextColumn Header="Space" Binding="{Binding Space}" Width="*"
+                                                    ElementStyle="{StaticResource CellEdit}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </DockPanel>
+                </GroupBox>
+
+                <GroupBox Grid.Row="1" Header="RULE 2   Panel name  &#x2192;  spare breaker"
+                          BorderBrush="{StaticResource Teal}">
+                    <DockPanel>
+                        <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Foreground="{StaticResource Muted}"
+                                   Margin="0,0,0,6" FontSize="11"
+                                   Text="A panel whose name starts with the prefix gets this rating and number of poles for its spares. Other panels get 20 A, 1 pole."/>
+                        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Margin="0,6,0,0">
+                            <Button x:Name="btnAddTypeRow" Content="+ Add" Style="{StaticResource LinkBtn}"
+                                    Click="add_type_row_click"/>
+                            <Button x:Name="btnRemoveTypeRow" Content="Remove row" Style="{StaticResource LinkBtn}"
+                                    Click="remove_type_row_click"/>
+                        </StackPanel>
+                        <DataGrid x:Name="dgTypeConfig" RowHeight="24">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Prefix" Binding="{Binding Prefix}" Width="*"
+                                                    ElementStyle="{StaticResource CellText}"/>
+                                <DataGridTextColumn Header="Rating (A)" Binding="{Binding SpareRating}" Width="*"
+                                                    ElementStyle="{StaticResource CellEdit}"/>
+                                <DataGridTextColumn Header="Poles" Binding="{Binding Poles}" Width="*"
+                                                    ElementStyle="{StaticResource CellEdit}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </DockPanel>
+                </GroupBox>
+
+                <DockPanel Grid.Row="2" Margin="2,0,0,10">
+                    <Button x:Name="btnResetTables" DockPanel.Dock="Right" Content="Reset rules"
+                            Style="{StaticResource LinkBtn}" Margin="0" Click="reset_tables_click"/>
+                    <TextBlock Text="Rules are remembered for next time." Foreground="{StaticResource Muted}"
+                               FontSize="11" VerticalAlignment="Center"/>
+                </DockPanel>
+            </Grid>
+
+            <!-- panels (right) -->
+            <GroupBox Grid.Column="2" Header="PANEL SCHEDULES IN THIS PROJECT">
+                <DockPanel>
+                    <!-- tiles + rescan -->
+                    <DockPanel DockPanel.Dock="Top" Margin="0,0,0,10">
+                        <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
+                            <Button x:Name="btnUseSelection" Content="Use Revit selection"
+                                    Style="{StaticResource OrangeBtn}" Click="use_selection_click"
+                                    ToolTip="Ticks the panels that are selected in Revit (panels, schedules in the Project Browser, or schedules on a sheet) and shows only those."/>
+                            <Button x:Name="btnScan" Content="Rescan" Margin="0" Click="scan_panels_click"
+                                    ToolTip="Read the panel schedules again. Ticks are kept."/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Border Style="{StaticResource Tile}" Background="{StaticResource Blue}">
+                                <StackPanel>
+                                    <TextBlock x:Name="tileTotal" Text="0" Style="{StaticResource TileNumber}"/>
+                                    <TextBlock Text="PANELS" Style="{StaticResource TileLabel}"/>
+                                </StackPanel>
+                            </Border>
+                            <Border Style="{StaticResource Tile}" Background="{StaticResource Violet}">
+                                <StackPanel>
+                                    <TextBlock x:Name="tileShown" Text="0" Style="{StaticResource TileNumber}"/>
+                                    <TextBlock Text="SHOWN" Style="{StaticResource TileLabel}"/>
+                                </StackPanel>
+                            </Border>
+                            <Border Style="{StaticResource Tile}" Background="{StaticResource Green}">
+                                <StackPanel>
+                                    <TextBlock x:Name="tileTicked" Text="0" Style="{StaticResource TileNumber}"/>
+                                    <TextBlock Text="TICKED" Style="{StaticResource TileLabel}"/>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </DockPanel>
+
+                    <!-- filters -->
+                    <Border DockPanel.Dock="Top" Background="#F3F8FF" BorderBrush="#BBDEFB" BorderThickness="1"
+                            CornerRadius="6" Padding="10,8" Margin="0,0,0,8">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="1.3*"/>
+                                <ColumnDefinition Width="1.3*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,8,0">
+                                <TextBlock Text="SEARCH" Style="{StaticResource Label}"/>
+                                <Grid>
+                                    <TextBox x:Name="txtPanelSearch" TextChanged="filter_changed"
+                                             ToolTip="Searches name, type, level, distribution system and supply. Several words = all must match."/>
+                                    <TextBlock x:Name="searchHint" Text="name, level, supply ..." Foreground="#9AA9C0"
+                                               Margin="8,0,0,0" VerticalAlignment="Center" IsHitTestVisible="False"/>
+                                </Grid>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Margin="0,0,8,0">
+                                <TextBlock Text="TYPE" Style="{StaticResource Label}"/>
+                                <ComboBox x:Name="cbType" SelectionChanged="filter_changed"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="2" Margin="0,0,8,0">
+                                <TextBlock Text="LEVEL" Style="{StaticResource Label}"/>
+                                <ComboBox x:Name="cbLevel" SelectionChanged="filter_changed"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="3" Margin="0,0,8,0">
+                                <TextBlock Text="DISTRIBUTION SYSTEM" Style="{StaticResource Label}"/>
+                                <ComboBox x:Name="cbSystem" SelectionChanged="filter_changed"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="4" Margin="0,0,8,0">
+                                <TextBlock Text="SHOW" Style="{StaticResource Label}"/>
+                                <ComboBox x:Name="cbShow" SelectionChanged="filter_changed"/>
+                            </StackPanel>
+                            <Button x:Name="btnClearFilters" Grid.Column="5" Content="Clear filters" Margin="0"
+                                    VerticalAlignment="Bottom" Height="26" Click="clear_filters_click"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- tick actions + legend -->
+                    <DockPanel DockPanel.Dock="Top" Margin="0,0,0,8">
+                        <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
+                            <Rectangle Width="11" Height="11" RadiusX="2" RadiusY="2" Fill="{StaticResource UseConnected}"/>
+                            <TextBlock Text="Connected" Margin="4,0,10,0" Foreground="{StaticResource Muted}" FontSize="11"/>
+                            <Rectangle Width="11" Height="11" RadiusX="2" RadiusY="2" Fill="{StaticResource UseSpare}"/>
+                            <TextBlock Text="Spare" Margin="4,0,10,0" Foreground="{StaticResource Muted}" FontSize="11"/>
+                            <Rectangle Width="11" Height="11" RadiusX="2" RadiusY="2" Fill="{StaticResource UseSpace}"/>
+                            <TextBlock Text="Space" Margin="4,0,10,0" Foreground="{StaticResource Muted}" FontSize="11"/>
+                            <Rectangle Width="11" Height="11" RadiusX="2" RadiusY="2" Fill="{StaticResource UseFree}"
+                                       Stroke="#B8C4D8" StrokeThickness="1"/>
+                            <TextBlock Text="Empty" Margin="4,0,0,0" Foreground="{StaticResource Muted}" FontSize="11"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Button x:Name="btnTickShown" Content="Tick all shown" Style="{StaticResource BlueBtn}"
+                                    Click="tick_shown_click"/>
+                            <Button x:Name="btnUntickShown" Content="Untick all shown" Click="untick_shown_click"/>
+                            <Button x:Name="btnInvert" Content="Invert" Click="invert_click"/>
+                            <TextBlock Text="Space bar ticks the highlighted rows" Foreground="{StaticResource Muted}"
+                                       FontSize="11" VerticalAlignment="Center" Margin="6,0,0,0"/>
+                        </StackPanel>
+                    </DockPanel>
+
+                    <DataGrid x:Name="dgPanels" IsReadOnly="True" SelectionMode="Extended"
+                              SelectionUnit="FullRow" PreviewKeyDown="grid_key">
+                        <DataGrid.RowStyle>
+                            <Style TargetType="DataGridRow">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsPicked}" Value="True">
+                                        <Setter Property="Background" Value="#FFF4C2"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGrid.RowStyle>
+                        <DataGrid.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Tick highlighted rows" Click="check_highlighted_click"/>
+                                <MenuItem Header="Untick highlighted rows" Click="uncheck_highlighted_click"/>
+                            </ContextMenu>
+                        </DataGrid.ContextMenu>
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Header="" Width="36" CanUserResize="False">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <CheckBox IsChecked="{Binding Selected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                  HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="Panel" Binding="{Binding Name}" Width="1.6*"
+                                                SortMemberPath="Name">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock" BasedOn="{StaticResource CellText}">
+                                        <Setter Property="FontWeight" Value="SemiBold"/>
+                                        <Setter Property="Foreground" Value="{StaticResource Ink}"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTemplateColumn Header="Type" Width="72" SortMemberPath="Type">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Border Background="#E8EAF6" CornerRadius="9" Padding="8,1"
+                                                HorizontalAlignment="Center" VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding Type}" FontSize="11" FontWeight="SemiBold"
+                                                       Foreground="#303F9F"/>
+                                        </Border>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="Level" Binding="{Binding Level}" Width="*"
+                                                ElementStyle="{StaticResource CellText}"/>
+                            <DataGridTextColumn Header="Distribution" Binding="{Binding System}" Width="1.3*"
+                                                ElementStyle="{StaticResource CellText}"/>
+                            <DataGridTextColumn Header="Fed from" Binding="{Binding SupplyFrom}" Width="*"
+                                                ElementStyle="{StaticResource CellText}"/>
+                            <DataGridTemplateColumn Header="Ways in use" Width="190" SortMemberPath="Free">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="8,0">
+                                            <Border Width="120" Height="10" CornerRadius="5" Background="{StaticResource UseFree}"
+                                                    BorderBrush="#C9D4E6" BorderThickness="0.5" ClipToBounds="True">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Rectangle Width="{Binding ConnPx}" Fill="{StaticResource UseConnected}"/>
+                                                    <Rectangle Width="{Binding SparePx}" Fill="{StaticResource UseSpare}"/>
+                                                    <Rectangle Width="{Binding SpacePx}" Fill="{StaticResource UseSpace}"/>
+                                                </StackPanel>
+                                            </Border>
+                                            <TextBlock Text="{Binding Usage}" Margin="8,0,0,0" FontSize="11"
+                                                       Foreground="{StaticResource Muted}"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="Circuits" Binding="{Binding Connected}" Width="62"
+                                                ElementStyle="{StaticResource CellNumber}"/>
+                            <DataGridTextColumn Header="Spare" Binding="{Binding Spares}" Width="52"
+                                                ElementStyle="{StaticResource CellNumber}"/>
+                            <DataGridTextColumn Header="Space" Binding="{Binding Spaces}" Width="52"
+                                                ElementStyle="{StaticResource CellNumber}"/>
+                            <DataGridTextColumn Header="Empty" Binding="{Binding Free}" Width="54"
+                                                ElementStyle="{StaticResource CellNumber}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </DockPanel>
+            </GroupBox>
+        </Grid>
+
+        <!-- log -->
+        <TextBox x:Name="txtLog" Grid.Row="2" Style="{StaticResource LogBox}" Height="Auto"/>
+
+        <!-- buttons -->
+        <DockPanel Grid.Row="3" Margin="0,10,0,0">
+            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                <Button x:Name="btnClose" Content="Close" Style="{StaticResource GreyBtn}" Width="90"
+                        Click="close_click"/>
+                <Button x:Name="btnNext" Content="Next: configure  &gt;" Style="{StaticResource GreenBtn}"
+                        MinWidth="220" Margin="0" Click="next_click"/>
+            </StackPanel>
+            <TextBlock x:Name="hintText" Text="Yellow rows = selected in Revit.   Right-click the list to tick or untick the highlighted rows."
+                       Foreground="{StaticResource Muted}" VerticalAlignment="Center" FontSize="11"/>
+        </DockPanel>
+    </Grid>
+</Window>

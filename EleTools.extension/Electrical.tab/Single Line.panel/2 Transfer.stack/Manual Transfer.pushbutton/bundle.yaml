@@ -1,0 +1,8 @@
+title: Manual Transfer
+tooltip: >
+  Click one source element, then its matching target element, one pair at
+  a time, and copy a parameter value between them. Use this for far-apart
+  or irregularly-routed elements (e.g. a panel fed via a bent/routed line
+  rather than a straight drop) where the automatic Transfer Parameter
+  matching modes can't reliably guess the pairing.
+author: BHEEM

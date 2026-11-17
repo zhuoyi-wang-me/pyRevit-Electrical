@@ -1,0 +1,177 @@
+{
+  "schema_version": 1,
+  "_comment": "Factory defaults. User/project settings are stored in %APPDATA%/ElecAutoCircuit and deep-merged over this file. classification_map is filled from the PROJECT's Electrical Load Classifications each time the tool opens; classification_suggestions only pre-fill panel type/rule for classifications seen for the first time.",
+  "scope": {
+    "_comment": "mode: 'all' = whole model | 'selected_regions' = ONLY elements inside the selected filled regions are read and circuited. inclusion: 'fixture' = device location decides | 'room' = room location point decides (keeps rooms whole).",
+    "mode": "all",
+    "selected_region_ids": [],
+    "inclusion": "fixture"
+  },
+  "general": {
+    "allow_room_merging": true,
+    "min_fixtures_before_merge": 3,
+    "merge_partial_tails": false,
+    "max_merge_distance_m": 15.0,
+    "allow_cross_region": false,
+    "prefer_same_level": false,
+    "max_panel_utilization_pct": 100,
+    "unassigned_region_name": "<No Region>",
+    "use_linked_rooms": true,
+    "use_spaces": true,
+    "room_probe_height_mm": 300,
+    "read_classification_from_family": false,
+    "fixture_categories": [
+      "OST_LightingFixtures",
+      "OST_ElectricalFixtures",
+      "OST_MechanicalEquipment",
+      "OST_ElectricalEquipment",
+      "OST_SpecialityEquipment",
+      "OST_FoodServiceEquipment"
+    ],
+    "classification_parameter_names": [
+      "Load Classification",
+      "Load Classification Name",
+      "Electrical Load Classification"
+    ],
+    "load_parameter_names": [
+      "Apparent Load",
+      "Apparent Power",
+      "Connected Load",
+      "Load"
+    ],
+    "voltage_parameter_names": [
+      "Voltage"
+    ],
+    "poles_parameter_names": [
+      "Number of Poles",
+      "Poles"
+    ],
+    "panel_type_parameter": "Panel Type",
+    "panel_name_prefix_map": {
+      "LP": "LP",
+      "ELP": "ELP",
+      "PP": "PP",
+      "ACP": "ACP",
+      "MCP": "ACP",
+      "SMDB-L": "LP",
+      "SMDB-P": "PP",
+      "SMDB-AC": "ACP"
+    },
+    "load_name_template": "{rule} - {rooms}",
+    "tag_circuits": true,
+    "transaction_batch_size": 50,
+    "all_or_nothing": false,
+    "auto_export_report": false,
+    "report_folder": "",
+    "use_category_fallback": false,
+    "probe_classification_from_project": true
+  },
+  "regions": {
+    "filled_region_type_prefix": "ELEC-ZONE",
+    "name_source": "comments",
+    "level_filter": true
+  },
+  "circuit_rules": {
+    "Lighting": {
+      "max_devices": 12,
+      "max_load_va": 1800,
+      "dedicated": false,
+      "dedicated_above_va": 0
+    },
+    "Receptacle": {
+      "max_devices": 10,
+      "max_load_va": 1800,
+      "dedicated": false,
+      "dedicated_above_va": 0
+    },
+    "HVAC": {
+      "max_devices": 1,
+      "max_load_va": 0,
+      "dedicated": true,
+      "dedicated_above_va": 0
+    },
+    "Equipment": {
+      "max_devices": 0,
+      "max_load_va": 1800,
+      "dedicated": false,
+      "dedicated_above_va": 1500
+    }
+  },
+  "classification_map": [],
+  "classification_suggestions": [
+    {
+      "match": "*emergency*",
+      "panel_type": "ELP",
+      "rule": "Lighting"
+    },
+    {
+      "match": "*light*",
+      "panel_type": "LP",
+      "rule": "Lighting"
+    },
+    {
+      "match": "hvac*",
+      "panel_type": "ACP",
+      "rule": "HVAC"
+    },
+    {
+      "match": "*heat*",
+      "panel_type": "ACP",
+      "rule": "HVAC"
+    },
+    {
+      "match": "*cool*",
+      "panel_type": "ACP",
+      "rule": "HVAC"
+    },
+    {
+      "match": "*mechanical*",
+      "panel_type": "ACP",
+      "rule": "HVAC"
+    },
+    {
+      "match": "*motor*",
+      "panel_type": "ACP",
+      "rule": "HVAC"
+    },
+    {
+      "match": "*fan*",
+      "panel_type": "ACP",
+      "rule": "HVAC"
+    },
+    {
+      "match": "*pump*",
+      "panel_type": "ACP",
+      "rule": "HVAC"
+    },
+    {
+      "match": "*receptacle*",
+      "panel_type": "PP",
+      "rule": "Receptacle"
+    },
+    {
+      "match": "*socket*",
+      "panel_type": "PP",
+      "rule": "Receptacle"
+    },
+    {
+      "match": "*power*",
+      "panel_type": "PP",
+      "rule": "Receptacle"
+    },
+    {
+      "match": "*",
+      "panel_type": "PP",
+      "rule": "Equipment"
+    }
+  ],
+  "category_fallback_classification": {
+    "OST_LightingFixtures": "Lighting",
+    "OST_ElectricalFixtures": "Power",
+    "OST_MechanicalEquipment": "HVAC",
+    "OST_ElectricalEquipment": "Other",
+    "OST_SpecialityEquipment": "Other",
+    "OST_FoodServiceEquipment": "Kitchen Equipment"
+  },
+  "region_panel_overrides": {}
+}

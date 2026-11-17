@@ -1,0 +1,12 @@
+title: SLD Checker
+tooltip: >-
+  Read-only review of single line diagrams drawn with Detail Items against the
+  electrical model. The setup window maps every field to a parameter (drop-downs show
+  the parameters really found in the model, with a live preview and Auto-detect),
+  switches checks on/off and saves it all as a reusable template (Import / Export to share).
+  Matches boards by Panel / Equipment name and reports missing, duplicate and ambiguous
+  items, classification (TX / MDB / SMDB / DB), connectivity, breakers, spares, cables
+  and loads. Grouped report with clickable links and CSV export.
+  Shift+Click: open the templates folder.
+author: BHEEM
+context: doc-project

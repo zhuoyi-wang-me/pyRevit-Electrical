@@ -1,0 +1,386 @@
+<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Rooms to Equipment"
+        Width="1320" Height="860" MinWidth="1080" MinHeight="680"
+        WindowStartupLocation="CenterScreen"
+        Background="#F3F5F8" FontFamily="Segoe UI" FontSize="12"
+        ShowInTaskbar="False" ResizeMode="CanResizeWithGrip">
+
+    <Window.Resources>
+        <!-- Buttons -->
+        <Style x:Key="Btn" TargetType="Button">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="#1F2D3D"/>
+            <Setter Property="BorderBrush" Value="#C9D1DA"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="12,5"/>
+            <Setter Property="Margin" Value="0,0,6,0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="bd" Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="4" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="bd" Property="BorderBrush" Value="#0B6FB8"/>
+                                <Setter TargetName="bd" Property="Opacity" Value="0.9"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="bd" Property="Opacity" Value="0.45"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="PrimaryBtn" TargetType="Button" BasedOn="{StaticResource Btn}">
+            <Setter Property="Background" Value="#0B6FB8"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="#0B6FB8"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="22,6"/>
+        </Style>
+
+        <!-- Cards and headings -->
+        <Style x:Key="Card" TargetType="Border">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#DDE3EA"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="Padding" Value="14"/>
+        </Style>
+        <Style x:Key="StepBadge" TargetType="Border">
+            <Setter Property="Width" Value="22"/>
+            <Setter Property="Height" Value="22"/>
+            <Setter Property="CornerRadius" Value="11"/>
+            <Setter Property="Background" Value="#0B6FB8"/>
+            <Setter Property="Margin" Value="0,0,8,0"/>
+        </Style>
+        <Style x:Key="StepTitle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#1F2D3D"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+        <Style x:Key="Hint" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#6B7785"/>
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+        </Style>
+        <Style TargetType="CheckBox">
+            <Setter Property="Margin" Value="0,4,0,4"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+        <Style TargetType="ComboBox">
+            <Setter Property="Height" Value="26"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- ================= HEADER ================= -->
+        <!-- Title, subtitle and colour are set per MEP system (script.py: _apply_profile) -->
+        <Border x:Name="header_bd" Grid.Row="0" Background="#1F3A5F" Padding="18,12">
+            <Grid>
+                <StackPanel>
+                    <TextBlock x:Name="title_tb" Text="Rooms to Equipment" FontSize="18" FontWeight="SemiBold" Foreground="White"/>
+                    <TextBlock x:Name="subtitle_tb" Text="Transfer Room / Space data from Air Terminals to the Mechanical Equipment that serves them"
+                               Foreground="#D5DEE8" Margin="0,2,0,0"/>
+                </StackPanel>
+                <TextBlock x:Name="summary_tb" HorizontalAlignment="Right" VerticalAlignment="Center"
+                           Foreground="White" FontSize="12" TextAlignment="Right"/>
+            </Grid>
+        </Border>
+
+        <!-- ================= CONTENT ================= -->
+        <Grid Grid.Row="1" Margin="14">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="14"/>
+                <ColumnDefinition Width="430"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- STEP 1: scan scope -->
+            <Border Grid.Row="0" Grid.ColumnSpan="3" Style="{StaticResource Card}" Margin="0,0,0,12">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0">
+                        <StackPanel Orientation="Horizontal">
+                            <Border Style="{StaticResource StepBadge}">
+                                <TextBlock Text="1" Foreground="White" FontWeight="Bold"
+                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <TextBlock Text="Scan scope" Style="{StaticResource StepTitle}"/>
+                            <RadioButton x:Name="scope_all_rb" GroupName="scope" Content="Entire model"
+                                         Margin="24,0,0,0" VerticalAlignment="Center"/>
+                            <RadioButton x:Name="scope_view_rb" GroupName="scope" Content="Active view"
+                                         Margin="18,0,0,0" VerticalAlignment="Center"
+                                         ToolTip="Air Terminals visible in the active plan, section, elevation or 3D view (section box respected)"/>
+                            <RadioButton x:Name="scope_levels_rb" GroupName="scope" Content="Selected levels"
+                                         Margin="18,0,0,0" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <Grid x:Name="levels_panel" Margin="30,8,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <ListBox x:Name="levels_list" MaxHeight="62" BorderBrush="#DDE3EA"
+                                     ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                                <ListBox.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel/>
+                                    </ItemsPanelTemplate>
+                                </ListBox.ItemsPanel>
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <CheckBox IsChecked="{Binding Sel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                  Content="{Binding Label}" Margin="2,1,10,1"/>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                            <StackPanel Grid.Column="1" Margin="8,0,0,0">
+                                <Button x:Name="btn_levels_all" Content="All levels" Style="{StaticResource Btn}" Margin="0,0,0,4"/>
+                                <Button x:Name="btn_levels_none" Content="No levels" Style="{StaticResource Btn}" Margin="0"/>
+                            </StackPanel>
+                        </Grid>
+                        <CheckBox x:Name="complete_cb" Margin="30,8,0,0"
+                                  Content="Complete totals: also trace terminals outside the scope that are on the same duct systems (recommended)"
+                                  ToolTip="Without this, equipment serving several floors would only receive the rooms and airflow of the scanned floors."/>
+                        <TextBlock x:Name="scope_hint_tb" Margin="30,4,0,0" Foreground="#B45F06" FontWeight="SemiBold"
+                                   TextWrapping="Wrap"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="16,0,0,0" MinWidth="230">
+                        <Button x:Name="btn_scan" Content="Scan" Style="{StaticResource PrimaryBtn}" Margin="0,0,0,6"
+                                HorizontalAlignment="Stretch"/>
+                        <TextBlock x:Name="scan_info_tb" Style="{StaticResource Hint}" TextAlignment="Right"
+                                   MaxWidth="260"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- STEP 2: equipment -->
+            <Border Grid.Row="1" Grid.Column="0" Style="{StaticResource Card}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Grid.Row="0" Orientation="Horizontal">
+                        <Border Style="{StaticResource StepBadge}">
+                            <TextBlock Text="2" Foreground="White" FontWeight="Bold"
+                                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <TextBlock x:Name="step2_title_tb" Text="Select the Mechanical Equipment to update" Style="{StaticResource StepTitle}"/>
+                    </StackPanel>
+
+                    <Grid Grid.Row="1" Margin="0,12,0,8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Border BorderBrush="#C9D1DA" BorderThickness="1" CornerRadius="4" Background="White">
+                            <Grid>
+                                <TextBlock x:Name="search_hint" Text="Search mark, family, system, level, room number or ID..."
+                                           Foreground="#9AA5B1" Margin="9,0,0,0" VerticalAlignment="Center"
+                                           IsHitTestVisible="False"/>
+                                <TextBox x:Name="search_tb" Height="28" BorderThickness="0" Background="Transparent"
+                                         VerticalContentAlignment="Center" Padding="6,0"/>
+                            </Grid>
+                        </Border>
+                        <CheckBox x:Name="only_served_cb" Grid.Column="1" Margin="12,0,0,0"
+                                  Content="Only equipment serving scanned terminals" IsChecked="True"/>
+                    </Grid>
+
+                    <WrapPanel Grid.Row="2" Margin="0,0,0,8">
+                        <Button x:Name="btn_all" Content="Check all visible" Style="{StaticResource Btn}"/>
+                        <Button x:Name="btn_none" Content="Uncheck all" Style="{StaticResource Btn}"/>
+                        <Button x:Name="btn_invert" Content="Invert visible" Style="{StaticResource Btn}"/>
+                        <Button x:Name="btn_check_hl" Content="Check highlighted rows" Style="{StaticResource Btn}"
+                                ToolTip="Highlight rows with Ctrl / Shift + click, then check them all at once"/>
+                        <Button x:Name="btn_from_sel" Content="Use Revit selection" Style="{StaticResource Btn}"
+                                ToolTip="Checks equipment selected in Revit, and equipment serving selected Air Terminals"/>
+                        <Button x:Name="btn_pick" Content="Pick in model..." Style="{StaticResource Btn}"
+                                ToolTip="Temporarily closes this window so you can pick equipment in the model"/>
+                    </WrapPanel>
+
+                    <DataGrid x:Name="equip_grid" Grid.Row="3"
+                              AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False"
+                              SelectionMode="Extended" SelectionUnit="FullRow"
+                              HeadersVisibility="Column" GridLinesVisibility="Horizontal"
+                              HorizontalGridLinesBrush="#EEF1F4" BorderBrush="#DDE3EA"
+                              RowHeight="26" AlternatingRowBackground="#FAFBFC"
+                              EnableRowVirtualization="True" EnableColumnVirtualization="True"
+                              VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.VirtualizationMode="Recycling">
+                        <DataGrid.ColumnHeaderStyle>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="Background" Value="#F3F5F8"/>
+                                <Setter Property="FontWeight" Value="SemiBold"/>
+                                <Setter Property="Padding" Value="6,5"/>
+                                <Setter Property="BorderBrush" Value="#DDE3EA"/>
+                                <Setter Property="BorderThickness" Value="0,0,1,1"/>
+                            </Style>
+                        </DataGrid.ColumnHeaderStyle>
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Header="Update" Width="58" SortMemberPath="Update">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <CheckBox IsChecked="{Binding Update, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                  HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="Mark" Binding="{Binding Mark}" Width="90" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Family : Type" Binding="{Binding Equipment}" Width="2*" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="System" Binding="{Binding System}" Width="*" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Level" Binding="{Binding Level}" Width="80" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Terminals" Binding="{Binding Terminals}" Width="72" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Spaces" Binding="{Binding Spaces}" Width="60" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Served rooms" Binding="{Binding Rooms}" Width="2*" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Supply" Binding="{Binding Supply, StringFormat=N1}" Width="80" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Return" Binding="{Binding Return, StringFormat=N1}" Width="80" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Exhaust" Binding="{Binding Exhaust, StringFormat=N1}" Width="80" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="80" IsReadOnly="True"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                    <Grid Grid.Row="4" Margin="0,8,0,0">
+                        <TextBlock x:Name="sel_count_tb" FontWeight="SemiBold" Foreground="#0B6FB8" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="visible_count_tb" HorizontalAlignment="Right" Style="{StaticResource Hint}"
+                                   VerticalAlignment="Center"/>
+                    </Grid>
+                </Grid>
+            </Border>
+
+            <!-- STEPS 3 & 4: mapping + options -->
+            <ScrollViewer Grid.Row="1" Grid.Column="2" VerticalScrollBarVisibility="Auto">
+                <StackPanel>
+                    <Border Style="{StaticResource Card}">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Border Style="{StaticResource StepBadge}">
+                                    <TextBlock Text="3" Foreground="White" FontWeight="Bold"
+                                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <TextBlock Text="Choose target parameters" Style="{StaticResource StepTitle}"/>
+                            </StackPanel>
+                            <TextBlock x:Name="mapping_hint_tb" Style="{StaticResource Hint}" Margin="0,6,0,10"
+                                       Text="Writable instance parameters found on Mechanical Equipment. [Text · 12/14 types] = storage type and how many equipment types have the parameter. Leave a row on &lt;Do not write&gt; to skip it."/>
+                            <StackPanel x:Name="mapping_panel">
+                                {{MAPPING_ROWS}}
+                            </StackPanel>
+                            <WrapPanel Margin="0,4,0,0">
+                                <Button x:Name="btn_automatch" Content="Auto-match by name" Style="{StaticResource Btn}"/>
+                                <Button x:Name="btn_clearmap" Content="Clear mapping" Style="{StaticResource Btn}"/>
+                            </WrapPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Style="{StaticResource Card}" Margin="0,12,0,0">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                                <Border Style="{StaticResource StepBadge}">
+                                    <TextBlock Text="4" Foreground="White" FontWeight="Bold"
+                                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <TextBlock Text="Options" Style="{StaticResource StepTitle}"/>
+                            </StackPanel>
+                            <CheckBox x:Name="cascade_cb" Content="Also credit upstream equipment (terminal → VAV → AHU)"/>
+                            <CheckBox x:Name="clear_cb" Content="Clear mapped parameters on checked equipment with no terminals"/>
+                            <CheckBox x:Name="dryrun_cb" Content="Report only - do not modify the model"/>
+                            <CheckBox x:Name="csv_cb" Content="Export CSV files after the run"/>
+                            <CheckBox x:Name="detail_cb" Content="Detailed per-equipment report"/>
+                            <Grid Margin="0,8,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="8"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="8"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock x:Name="flow_unit_label_tb" Text="Airflow unit" Style="{StaticResource Hint}" Margin="0,0,0,3"/>
+                                    <ComboBox x:Name="airflow_unit_cb"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="2">
+                                    <TextBlock Text="Area unit" Style="{StaticResource Hint}" Margin="0,0,0,3"/>
+                                    <ComboBox x:Name="area_unit_cb"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="4">
+                                    <TextBlock Text="List separator" Style="{StaticResource Hint}" Margin="0,0,0,3"/>
+                                    <ComboBox x:Name="sep_cb"/>
+                                </StackPanel>
+                            </Grid>
+                            <TextBlock Text="Room Number + Name format" Style="{StaticResource Hint}" Margin="0,8,0,3"/>
+                            <ComboBox x:Name="room_format_cb" MaxDropDownHeight="420"
+                                      ToolTip="How each room is written in the 'Room Number + Name' parameter. Rooms are joined with the list separator."/>
+                            <Grid Margin="0,6,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Custom" Style="{StaticResource Hint}" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                <TextBox x:Name="room_format_tb" Grid.Column="1" Height="26" VerticalContentAlignment="Center"
+                                         FontFamily="Consolas" Padding="4,0"
+                                         ToolTip="Select 'Custom template...' above to edit. Example: {level} / {number} - {name} ({occupancy} pax)"/>
+                            </Grid>
+                            <TextBlock x:Name="room_format_example_tb" Margin="0,5,0,0" FontFamily="Consolas" FontSize="11"
+                                       Foreground="#0B6FB8" TextWrapping="Wrap"/>
+                            <TextBlock Style="{StaticResource Hint}" Margin="0,3,0,0"
+                                       Text="{}Tokens: {number} {name} {NAME} {Name} {level} {department} {area} {occupancy}. Empty tokens and leftover brackets / separators are removed automatically."/>
+                            <TextBlock x:Name="units_hint_tb" Style="{StaticResource Hint}" Margin="0,6,0,0"
+                                       Text="Units apply to Number / Integer / Text parameters and the report. Air Flow and Area parameters always follow the project units."/>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Style="{StaticResource Card}" Margin="0,12,0,0">
+                        <StackPanel>
+                            <TextBlock Text="Preview - highlighted equipment" Style="{StaticResource StepTitle}" Margin="0,0,0,6"/>
+                            <TextBlock x:Name="preview_tb" TextWrapping="Wrap" FontFamily="Consolas" FontSize="11"
+                                       Foreground="#1F2D3D"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+
+        <!-- ================= FOOTER ================= -->
+        <Border Grid.Row="2" Background="White" BorderBrush="#DDE3EA" BorderThickness="0,1,0,0" Padding="14,10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Button x:Name="btn_back" Grid.Column="0" Content="◀  Systems" Style="{StaticResource Btn}" Margin="0,0,12,0"
+                        ToolTip="Back to the system picker (air, plumbing, fire protection, electrical). Settings of this window are saved."/>
+                <TextBlock x:Name="status_tb" Grid.Column="1" VerticalAlignment="Center" Style="{StaticResource Hint}" FontSize="12"/>
+                <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button x:Name="btn_cancel" Content="Cancel" Style="{StaticResource Btn}" IsCancel="True"/>
+                    <Button x:Name="btn_run" Content="Update Equipment" Style="{StaticResource PrimaryBtn}" Margin="0"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

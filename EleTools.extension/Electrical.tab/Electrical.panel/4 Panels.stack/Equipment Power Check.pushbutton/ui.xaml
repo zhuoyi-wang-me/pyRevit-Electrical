@@ -1,0 +1,112 @@
+<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Equipment Power Check" Width="620" SizeToContent="Height"
+        WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Background="#F5F7FA">
+    <Window.Resources>
+        <Style TargetType="GroupBox">
+            <Setter Property="Margin" Value="0,0,0,10"/>
+            <Setter Property="Padding" Value="8,6"/>
+        </Style>
+        <Style TargetType="CheckBox">
+            <Setter Property="Margin" Value="0,3"/>
+        </Style>
+        <Style x:Key="Label" TargetType="TextBlock">
+            <Setter Property="Width" Value="190"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+        <Style x:Key="Hint" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#6B7785"/>
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="Margin" Value="190,2,0,4"/>
+        </Style>
+    </Window.Resources>
+    <StackPanel Margin="14">
+        <TextBlock Text="Checks that every mechanical equipment item has an electrical fixture (isolator, spur, socket...). Read-only: the model is not changed."
+                   TextWrapping="Wrap" Margin="0,0,0,10"/>
+
+        <GroupBox Header="Equipment to check">
+            <StackPanel>
+                <DockPanel Margin="0,2">
+                    <TextBlock Text="Equipment from" Style="{StaticResource Label}"/>
+                    <ComboBox x:Name="cbSource"/>
+                </DockPanel>
+                <DockPanel Margin="0,2">
+                    <TextBlock Text="Categories" Style="{StaticResource Label}"/>
+                    <StackPanel>
+                        <CheckBox x:Name="chkMech" Content="Mechanical Equipment" IsChecked="True"/>
+                        <CheckBox x:Name="chkPlumbEq" Content="Plumbing Equipment (pumps, water heaters)"/>
+                        <CheckBox x:Name="chkVertCirc" Content="Vertical Circulation (lifts, escalators)"/>
+                    </StackPanel>
+                </DockPanel>
+                <DockPanel Margin="0,2">
+                    <TextBlock Text="Family/type name contains" Style="{StaticResource Label}"/>
+                    <TextBox x:Name="txtEquipKeywords"/>
+                </DockPanel>
+                <TextBlock Style="{StaticResource Hint}" Text="Optional, comma separated, e.g. AHU, FCU, EF. Empty = every item."/>
+                <DockPanel Margin="0,2">
+                    <TextBlock Text="Exclude names containing" Style="{StaticResource Label}"/>
+                    <TextBox x:Name="txtEquipExclude"/>
+                </DockPanel>
+                <TextBlock Style="{StaticResource Hint}" Text="Items that need no power, e.g. plinth, chamber, thermostat, attenuator, damper."/>
+                <CheckBox x:Name="chkOnlyConnector" Margin="190,2,0,2"
+                          Content="Only equipment that has an electrical connector"/>
+            </StackPanel>
+        </GroupBox>
+
+        <GroupBox Header="Electrical fixtures that count">
+            <StackPanel>
+                <DockPanel Margin="0,2">
+                    <TextBlock Text="Categories" Style="{StaticResource Label}"/>
+                    <StackPanel>
+                        <CheckBox x:Name="chkElecFix" Content="Electrical Fixtures" IsChecked="True"/>
+                        <CheckBox x:Name="chkElecEq" Content="Electrical Equipment (if isolators are modelled as equipment)"/>
+                    </StackPanel>
+                </DockPanel>
+                <DockPanel Margin="0,2">
+                    <TextBlock Text="Family/type name contains" Style="{StaticResource Label}"/>
+                    <TextBox x:Name="txtFixKeywords"/>
+                </DockPanel>
+                <TextBlock Style="{StaticResource Hint}" Text="Optional, e.g. isolator, spur, socket, DP. Empty = every fixture."/>
+                <DockPanel Margin="0,2">
+                    <TextBlock Text="Ignore fixtures tagged" Style="{StaticResource Label}"/>
+                    <TextBox x:Name="txtIgnoreTags" Text="GENERAL"/>
+                </DockPanel>
+                <TextBlock Style="{StaticResource Hint}" Text="Fixtures whose tag (fixture parameter below) is one of these are left out completely - e.g. GENERAL sockets do not make a unit OK and are not listed."/>
+                <CheckBox x:Name="chkFixLinks" Margin="190,2,0,2" Content="Also fixtures in linked models"/>
+            </StackPanel>
+        </GroupBox>
+
+        <GroupBox Header="How a fixture is matched to its equipment">
+            <StackPanel>
+                <CheckBox x:Name="chkTag" Content="By tag parameter (same value on both)" IsChecked="True"/>
+                <DockPanel Margin="0,2">
+                    <TextBlock Text="Equipment parameter" Style="{StaticResource Label}"/>
+                    <TextBox x:Name="txtEquipParam" Text="MEE_ToServe"/>
+                </DockPanel>
+                <DockPanel Margin="0,2">
+                    <TextBlock Text="Fixture parameter" Style="{StaticResource Label}"/>
+                    <TextBox x:Name="txtFixParam" Text="MEE_ToServe"/>
+                </DockPanel>
+                <CheckBox x:Name="chkTypeFallback" Margin="190,2,0,2" IsChecked="True"
+                          Content="When the equipment parameter is empty, use the type name (e.g. FCU-14A)"/>
+                <TextBlock Style="{StaticResource Hint}" Text="Units sharing a tag: each tagged fixture counts only for the nearest of them."/>
+                <CheckBox x:Name="chkDistance" Content="By distance (a fixture near the equipment)" IsChecked="True" Margin="0,8,0,3"/>
+                <DockPanel Margin="0,2">
+                    <TextBlock Text="Max. plan distance (mm)" Style="{StaticResource Label}"/>
+                    <TextBox x:Name="txtMaxPlan" Text="3000" Width="100" HorizontalAlignment="Left"/>
+                </DockPanel>
+                <DockPanel Margin="0,2">
+                    <TextBlock Text="Max. height difference (mm)" Style="{StaticResource Label}"/>
+                    <TextBox x:Name="txtMaxHeight" Text="4000" Width="100" HorizontalAlignment="Left"/>
+                </DockPanel>
+                <TextBlock Style="{StaticResource Hint}" Text="Height difference covers units in the ceiling void with the isolator on the wall below."/>
+            </StackPanel>
+        </GroupBox>
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button x:Name="btnRun" Content="Run check" Width="110" Height="28" Margin="0,0,8,0" IsDefault="True"/>
+            <Button x:Name="btnClose" Content="Close" Width="90" Height="28" IsCancel="True"/>
+        </StackPanel>
+    </StackPanel>
+</Window>
